@@ -16,7 +16,7 @@
         </q-toolbar-title>
 
         <div>v1.0 
-          <q-btn to='/settings' class="flat" label='登陆/注册' />
+          <q-btn to='/setting' class="flat" label='登陆/注册' />
         </div>
         
       </q-toolbar>
