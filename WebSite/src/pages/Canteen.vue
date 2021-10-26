@@ -5,7 +5,7 @@
 <script>
 export default {
   name: "Canteen",
-  title:"Hi"
+  title:"Hello"
 }
 </script>
 
