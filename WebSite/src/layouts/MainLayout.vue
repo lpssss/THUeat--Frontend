@@ -1,117 +1,109 @@
+<!-- Pending task: Styling, Button Click routing-->
+
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh LpR fFf">
+
+    <q-header class="bg-primary text-white" elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn dense flat icon="menu" round @click="toggleLeftDrawer"/>
 
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title id="main-title">
+          乐吃
         </q-toolbar-title>
+        <q-space/>
+        <q-btn v-if="!loginStatus" color="secondary" label="登入" @click="loginBtnClick"/>
+        <template v-else>
+          <q-chip>
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" alt="userAvatar">
+            </q-avatar>
+            用户名
+          </q-chip>
+          <q-btn-dropdown color="primary">
+            <q-list>
+              <q-item v-close-popup clickable @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>设置</q-item-label>
+                </q-item-section>
+              </q-item>
 
-        <div>Quasar v{{ $q.version }}</div>
+              <q-item v-close-popup clickable @click="loginBtnClick">
+                <q-item-section>
+                  <q-item-label>登出</q-item-label>
+                </q-item-section>
+              </q-item>
+
+            </q-list>
+          </q-btn-dropdown>
+        </template>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+    <q-drawer v-model="leftDrawerOpen" bordered elevated show-if-above>
+      <!-- drawer content -->
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+      <q-list bordered separator>
+        <NavbarFirstOrderItem v-for="item in firstOrderTitle" :key="item.titleId" v-bind="item"/>
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
+
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import {defineComponent, ref} from 'vue'
+import NavbarFirstOrderItem from "components/Layout/NavbarFirstOrderItem";
 
-const linksList = [
+const firstOrderTitle = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    titleId: 'f1',
+    title: "教工餐厅",
+    titleEng: "teacher-canteen",
+    secondOrderStatus: true
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    titleId: 'f2',
+    title: "学生餐厅",
+    titleEng: "student-canteen",
+    secondOrderStatus: true
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    titleId: 'f3',
+    title: "某页面",
+    titleEng: "Some page",
+    secondOrderStatus: false
   }
-];
+]
 
-import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
-  setup () {
+  components: {NavbarFirstOrderItem},
+  setup() {
     const leftDrawerOpen = ref(false)
+    const loginStatus = ref(false)
 
     return {
-      essentialLinks: linksList,
+      firstOrderTitle,
+      loginStatus,
       leftDrawerOpen,
-      toggleLeftDrawer () {
+      toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
+      },
+      loginBtnClick() {
+        loginStatus.value = !loginStatus.value
       }
     }
   }
 })
 </script>
+
+<style>
+#main-title {
+  font-weight: bold;
+}
+</style>

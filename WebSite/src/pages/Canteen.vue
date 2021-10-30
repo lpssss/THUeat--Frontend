@@ -4,7 +4,8 @@
 
 <script>
 export default {
-  name: "Comment"
+  name: "Canteen",
+  title:"Hello"
 }
 </script>
 
