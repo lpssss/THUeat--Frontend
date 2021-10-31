@@ -1,0 +1,59 @@
+{
+  "canteens": [
+    {
+      "canteenID": "c1",
+      "canteenName": "玉树园1",
+      "canteenType": "student_canteen"
+    },
+    {
+      "canteenID": "c2",
+      "canteenName": "玉树园2",
+      "canteenType": "student_canteen"
+    },
+    {
+      "canteenID": "c3",
+      "canteenName": "玉树园3",
+      "canteenType": "teacher_canteen"
+    },
+    {
+      "canteenID": "c4",
+      "canteenName": "玉树园4",
+      "canteenType": "teacher_canteen"
+    }
+  ],
+  "canteenData": [
+    {
+      "canteenID": "c1",
+      "canteenName": "清芬园",
+      "operationTime": "12pm-7pm",
+      "contacts": "01231243",
+      "canteenAddress": "学清路",
+      "intro": "asdafewfwfwfwfw",
+      "rating": 4,
+      "canteenImg": "http://localhost:3000/favicon.ico",
+      "stall": [
+        {
+          "stallID": "s1",
+          "stallName": "Stall 1"
+        },
+        {
+          "stallID": "s2",
+          "stallName": "Stall 2"
+        },
+        {
+          "stallID": "s3",
+          "stallName": "Stall 3"
+        },
+        {
+          "stallID": "s4",
+          "stallName": "Stall 4"
+        },
+        {
+          "stallID": "s5",
+          "stallName": "Stall 5"
+        }
+      ]
+    }
+  ]
+}
+
