@@ -42,7 +42,7 @@
               />
             </div>
             <div>
-              <router-link to="/Register">还没有账号？点我注册</router-link>
+              <router-link to="/register">还没有账号？点我注册</router-link>
               <router-view></router-view>
             </div>
           </div>
@@ -100,7 +100,8 @@ export default {
           message: "登录成功",
           timeout: 500,
         });
-        this.$router.push("/index"); //编程式导航
+        this.$store.commit("login/updateLoginStatus", true);
+        this.$router.push({ name: "Index" }); //编程式导航
       }
     },
   },

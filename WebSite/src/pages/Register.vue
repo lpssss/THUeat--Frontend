@@ -5,12 +5,12 @@
       <h5 align="center">让我们加入吧!</h5>
 
       <div class="q-pa-md">
-        <q-form @submit="onSubmit" class="q-gutter-md">
+        <q-form class="q-gutter-md" @submit="onSubmit">
           <q-input
             v-model="model.nickname"
+            :rules="[(val) => (val && val.length > 0) || '请输入你的昵称']"
             label="昵称"
             lazy-rules
-            :rules="[(val) => (val && val.length > 0) || '请输入你的昵称']"
           />
           <!--          <q-input
             v-model="model.username"
@@ -33,12 +33,12 @@
 
           <q-input
             v-model="model.password"
-            :type="isPwd ? 'password' : 'text'"
-            label="密码"
-            lazy-rules
             :rules="[
               (val) => (val && val.length >= 6) || '密码长度不能少于6位',
             ]"
+            :type="isPwd ? 'password' : 'text'"
+            label="密码"
+            lazy-rules
           >
             <template v-slot:append>
               <q-icon
@@ -50,10 +50,10 @@
           </q-input>
           <q-input
             v-model="password"
+            :rules="[(val) => val === model.password || '两次输入密码不一致']"
             :type="isPwd ? 'password' : 'text'"
             label="确认密码"
             lazy-rules
-            :rules="[(val) => val === model.password || '两次输入密码不一致']"
           >
             <template v-slot:append>
               <q-icon
@@ -69,9 +69,11 @@
 
           <div class="row justify-evenly">
             <div>
-              <q-btn align="right" label="注册" type="submit" color="primary" />
+              <q-btn align="right" color="primary" label="注册" type="submit" />
             </div>
-            <div><router-link to="/Login">已有账号？点击登录</router-link></div>
+            <div>
+              <router-link to="/login">已有账号？点击登录</router-link>
+            </div>
           </div>
         </q-form>
       </div>
@@ -125,7 +127,7 @@ export default {
           timeout: 1000,
         });
         setTimeout(() => {
-          this.$router.push("/Login");
+          this.$router.push("/login");
         }, 3000);
       }
     },
@@ -157,11 +159,12 @@ export default {
   background-repeat: no-repeat
   background-size: cover
   background-image: url("../assets/background.svg")
+
 .register-card
   position: absolute
   left: 50%
   top: 50%
-  transform: translate(-50%,-50%)
+  transform: translate(-50%, -50%)
   width: 28rem
   height: 32rem
   border-radius: 10px
