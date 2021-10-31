@@ -1,9 +1,10 @@
 <template>
   <q-item
     clickable
-    tag="a"
-    target="_blank"
+    tag="b"
+    exact
     :href="link"
+    :to="to"
   >
     <q-item-section
       v-if="icon"
@@ -14,9 +15,6 @@
 
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>
-        {{ caption }}
-      </q-item-label>
     </q-item-section>
   </q-item>
 </template>
@@ -32,19 +30,14 @@ export default defineComponent({
       required: true
     },
 
-    caption: {
-      type: String,
-      default: ''
-    },
-
-    link: {
-      type: String,
-      default: '#'
-    },
-
     icon: {
       type: String,
       default: ''
+    },
+
+    to: {
+      type: String,
+      required: true
     }
   }
 })
