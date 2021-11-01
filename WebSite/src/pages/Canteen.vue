@@ -4,7 +4,8 @@
 
 <script>
 export default {
-  name: "Stall"
+  name: "Canteen",
+  title:"Hello"
 }
 </script>
 
