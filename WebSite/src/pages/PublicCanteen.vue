@@ -20,6 +20,8 @@ import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetail
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
 import CanteenStallSection from "components/CanteenPage/CanteenStallSection";
+import { watch, watchEffect } from 'vue';
+import {useRoute} from 'vue-router'
 
 export default defineComponent({
   name: "PublicCanteen",
@@ -31,12 +33,19 @@ export default defineComponent({
   },
   setup() {
     const canteenData = ref({});
-    const getCanteenData = async () => {
-      const response = await axios.get("http://localhost:3000/canteenData/c1");
-      canteenData.value = response.data;
-      //console.log(canteenData)
-    };
-    getCanteenData();
+    const route=useRoute();
+
+    // const getCanteenData = async () => {
+    //   const response = await axios.get("http://localhost:3000/canteenData/c1");
+    //   canteenData.value = response.data;
+    //   //console.log(canteenData)
+    // };
+    // getCanteenData();
+    watch(()=>route.query,()=>{
+      console.log(route.query)
+    },{
+      immediate:true
+    })
 
     return {
       canteenData,
