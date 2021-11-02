@@ -1,10 +1,13 @@
 <template>
-
+  <div>Dishpage</div>
 </template>
 
 <script>
 export default {
-  name: "Dish"
+  name: "Dish",
+  setup(){
+
+  }
 }
 </script>
 

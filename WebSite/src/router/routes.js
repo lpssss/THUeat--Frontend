@@ -10,6 +10,11 @@ const routes = [
         name: "Canteen",
         component: () => import("pages/PublicCanteen.vue"),
       },
+      {
+        path: "dish",
+        name: "Dish",
+        component: () => import("pages/Dish.vue"),
+      },
     ],
   },
   {
