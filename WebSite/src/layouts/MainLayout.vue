@@ -6,7 +6,9 @@
       <q-toolbar>
         <q-btn dense flat icon="menu" round @click="toggleLeftDrawer" />
 
-        <q-toolbar-title id="main-title"> 乐吃 </q-toolbar-title>
+        <q-toolbar-title id="main-title"> 
+          <q-btn flat to='/' label='乐吃' id="main-title"/>
+        </q-toolbar-title>
         <q-space />
         <q-btn
           v-if="!loginStatus"
@@ -121,5 +123,6 @@ export default defineComponent({
 <style>
 #main-title {
   font-weight: bold;
+  font-size: medium;
 }
 </style>
