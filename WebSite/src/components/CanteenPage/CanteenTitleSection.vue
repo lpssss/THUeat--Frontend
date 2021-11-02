@@ -2,11 +2,11 @@
   <q-item>
     <q-item-section avatar>
       <q-avatar size="100px">
-        <img :src="imageURL" alt="avatarImage">
+        <img :src="canteenImg" alt="avatarImage">
       </q-avatar>
     </q-item-section>
     <q-item-section class="justify-around">
-      <div>{{title}}</div>
+      <div>{{canteenName}}</div>
       <div>
         <q-rating
           v-model="canteenRating"
@@ -25,7 +25,7 @@ import {defineComponent, ref} from "vue";
 export default defineComponent({
   name: "CanteenTitleSection",
   props:{
-    title:{
+    canteenName:{
       type:String,
       required:true
     },
@@ -33,7 +33,7 @@ export default defineComponent({
       type:Number,
       required:true
     },
-    imageURL:{
+    canteenImg:{
       type:String,
       required:true
     }
