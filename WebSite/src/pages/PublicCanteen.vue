@@ -1,4 +1,5 @@
 <template>
+  <template>
   <div class="q-pa-md">
     <CanteenTitleSection v-bind="canteenData" />
   </div>
@@ -11,6 +12,7 @@
   <div class="q-ma-lg">
     <CanteenStallSection v-bind="canteenData" />
   </div>
+</template>
 </template>
 
 <script>
@@ -32,9 +34,14 @@ export default defineComponent({
   setup() {
     const canteenData = ref({});
     const getCanteenData = async () => {
-      const response = await axios.get("http://localhost:3000/canteenData/c1");
-      canteenData.value = response.data;
-      //console.log(canteenData)
+      try {
+        const response = await axios.get("http://localhost:3000/canteenData/c1");
+        canteenData.value = response.data[0];
+        //console.log(canteenData)
+      }
+      catch (err){
+        console.log(err.message)
+      }
     };
     getCanteenData();
 
