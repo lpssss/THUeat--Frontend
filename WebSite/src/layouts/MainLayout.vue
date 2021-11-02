@@ -6,7 +6,7 @@
       <q-toolbar>
         <q-btn dense flat icon="menu" round @click="toggleLeftDrawer" />
 
-        <q-toolbar-title id="main-title"> 
+        <q-toolbar-title> 
           <q-btn flat to='/' label='乐吃' id="main-title"/>
         </q-toolbar-title>
         <q-space />

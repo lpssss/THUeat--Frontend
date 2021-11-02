@@ -1,9 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md q-gutter-sm">
-      <q-banner inline-actions class="text-black bg-grey-3">
-          个人信息设置  
-      </q-banner>
+      <BannerSection v-bind="settingPageBanners.setting"/>
     </div>
 
     <div class="q-pa-md" align="center">
@@ -86,9 +84,7 @@
     </div>
 
     <div class="q-pa-md q-gutter-sm">
-      <q-banner inline-actions class="text-black bg-grey-3">
-          我的历史评分  
-      </q-banner>
+      <BannerSection v-bind="settingPageBanners.historyRating"/>
     </div>  
     
     <div class="q-pa-md">
@@ -96,9 +92,7 @@
     </div>
 
     <div class="q-pa-md q-gutter-sm">
-      <q-banner inline-actions class="text-black bg-grey-3">
-          我的历史评语  
-      </q-banner>
+      <BannerSection v-bind="settingPageBanners.historyComment"/>
     </div>
 
     <div class="q-pa-md">
@@ -117,16 +111,37 @@
 </template>
 <script>
 import { defineComponent, ref } from 'vue';
+import BannerSection from "components/Layout/BannerSection";
 
-export default {
+
+const settingPageBanners = {
+  setting:{
+    content: "个人信息设置",
+    change: false
+  },
+  historyRating:{
+    content: "我的历史评分",
+    change: false
+  },
+  historyComment:{
+    content: "我的历史评语",
+    change: false
+  },
+}
+
+export default defineComponent({
   name: 'Settings',
+  components:{
+    BannerSection,
+  },
   setup () {
     return {
+      settingPageBanners: settingPageBanners,
       identityModel: ref('清华学生'),
       options: [
         '清华学生','工作人员', '校外人员'
       ]
     }
   }
-}
+})
 </script>

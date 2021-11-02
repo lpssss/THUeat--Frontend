@@ -19,9 +19,9 @@ const routes = [
         component: () => import("pages/Setting.vue"),
       },
       {
-        path: "main",
-        name: "Main",
-        component: () => import("pages/Main.vue"),
+        path: "comment",
+        name: "Comment",
+        component: () => import("pages/Comment.vue"),
       }
     ],
   },
