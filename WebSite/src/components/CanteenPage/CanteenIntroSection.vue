@@ -16,7 +16,7 @@ export default defineComponent({
   name: "CanteenIntroSection",
   props:{
     intro:{
-      type:[String,null],
+      type:String,
       required:true
     }
   }
