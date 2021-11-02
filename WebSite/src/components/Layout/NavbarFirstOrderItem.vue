@@ -6,7 +6,7 @@
     v-if="secondOrderStatus"
   >
     <q-list bordered separator>
-      <NavbarSecondOrderItem v-for="item in secondOrderTitle" v-bind="item" :key="item.id"/>
+      <NavbarSecondOrderItem v-for="item in secondOrderTitle" v-bind="item" :key="item.canteenID"/>
     </q-list>
   </q-expansion-item>
   <template v-else>
@@ -46,12 +46,12 @@ export default defineComponent({
     //console.log(props.title,props.titleEng,props.secondOrderStatus)
     const secondOrderTitle=ref([])
     const getSecondOrderTitle=async ()=>{
-      const response=await axios.get(`http://localhost:3000/secondOrderTitle?type=${props.titleEng}`)
+      const response=await axios.get(`http://localhost:3000/canteens?canteenType=${props.titleEng}`)
       secondOrderTitle.value=response.data
       //console.log(secondOrderTitle)
     }
     if(props.secondOrderStatus)
-      onMounted(getSecondOrderTitle)
+      getSecondOrderTitle()
 
     return {
       secondOrderTitle,

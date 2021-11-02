@@ -3,7 +3,7 @@
     档口
   </div>
   <div class="row q-col-gutter-md">
-    <div class="col-3" v-for="stall in stalls" :key="stall.title">
+    <div class="col-3" v-for="eachStall in stall" :key="eachStall.stallID">
       <q-card>
         <img src="https://cdn.quasar.dev/img/parallax2.jpg" alt="test-image">
 
@@ -14,7 +14,7 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>{{stall.title}}</q-item-label>
+              <q-item-label>{{eachStall.stallName}}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -29,8 +29,8 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "CanteenStallSection",
   props:{
-    stalls:{
-      type:[Array,null],
+    stall:{
+      type:Array,
       required: true
     }
   }

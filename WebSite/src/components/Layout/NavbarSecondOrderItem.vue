@@ -2,7 +2,7 @@
   <q-item clickable v-ripple>
     <q-item-section>
       <div class="row justify-center">
-        <div>{{title}}</div>
+        <div>{{canteenName}}</div>
       </div>
     </q-item-section>
   </q-item>
@@ -13,7 +13,7 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "NavbarSecondOrderItem",
   props: {
-    title: {
+    canteenName: {
       type: String,
       required: true
     },

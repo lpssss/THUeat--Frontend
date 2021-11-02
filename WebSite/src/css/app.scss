@@ -1,1 +1,20 @@
 // app global css in SCSS form
+.my-card{
+  width: 100%;
+  max-width: 250px;
+}
+
+.custom-caption {
+  text-align: center;
+  padding: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, .3)
+}
+
+.my-card {
+  height:380px
+}
+
+.q-card-img {
+  height: 180px;
+}
