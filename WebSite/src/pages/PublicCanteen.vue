@@ -1,5 +1,5 @@
 <template>
-  <template v-if="Object.keys(canteenData.data).length">
+  <div v-if="Object.keys(canteenData.data).length">
     <!-- 取了数据才渲染 -->
     <div class="q-pa-md">
       <CanteenTitleSection
@@ -21,7 +21,7 @@
     <div class="q-ma-lg">
       <CanteenStallSection :stall="canteenData.data.stall" />
     </div>
-  </template>
+  </div>
 </template>
 
 <script>

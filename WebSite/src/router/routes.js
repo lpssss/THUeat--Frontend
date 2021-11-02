@@ -4,13 +4,25 @@ const routes = [
     name: "Index",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", name: "Home", component: () => import("pages/Index.vue") },
+      { 
+        path: "", 
+        name: "Home", 
+        component: () => import("pages/Index.vue") },
       {
         path: "canteen",
         name: "Canteen",
         component: () => import("pages/PublicCanteen.vue"),
       },
       {
+        path: "setting",
+        name: "Setting",
+        component: () => import("pages/Setting.vue"),
+      },
+      {
+        path: "comment",
+        name: "Comment",
+        component: () => import("pages/Comment.vue"),
+      }
         path: "dish",
         name: "Dish",
         component: () => import("pages/Dish.vue"),
