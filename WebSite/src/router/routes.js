@@ -23,6 +23,10 @@ const routes = [
         name: "Comment",
         component: () => import("pages/Comment.vue"),
       }
+        path: "dish",
+        name: "Dish",
+        component: () => import("pages/Dish.vue"),
+      },
     ],
   },
   {
