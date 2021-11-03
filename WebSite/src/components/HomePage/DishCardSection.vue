@@ -17,7 +17,7 @@
           <q-btn size="sm" falt round color="primary" icon="thumb_up" />
           <span class="q-px-sm text-caption text-grey"> {{ thumb }} </span>
         </q-card-section>
-      </q-card>
+    </q-card>
 </template>
 
 <script>
