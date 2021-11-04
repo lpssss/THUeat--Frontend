@@ -22,10 +22,16 @@ const routes = [
         path: "comment",
         name: "Comment",
         component: () => import("pages/Comment.vue"),
-      }
+      },
+      {
         path: "dish",
         name: "Dish",
         component: () => import("pages/Dish.vue"),
+      },
+      {
+        path: "stall",
+        name: "Stall",
+        component: () => import("pages/Stall.vue"),
       },
     ],
   },

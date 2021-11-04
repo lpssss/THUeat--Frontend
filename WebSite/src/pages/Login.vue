@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="background"></div>
   <q-page padding class="row items-center justify-center">
     <q-card class="login-card">
@@ -50,6 +51,7 @@
       </div>
     </q-card>
   </q-page>
+  </div>
 </template>
 
 <script>
