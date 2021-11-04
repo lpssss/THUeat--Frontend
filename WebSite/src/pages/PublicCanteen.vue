@@ -43,8 +43,12 @@ export default defineComponent({
     CanteenBasicDetailSection,
   },
   setup() {
-    const API_LINK = "http://localhost:3000/canteenData/?canteenID=c1"; // 之后放真正的API
+    const route=useRoute()
+    let id=route.query.canteenID
+    let API_LINK = `http://localhost:3000/canteenData/?canteenID=${id}`; // 之后放真正的API
     const canteenData = reactive({ data: {} });
+
+
     const getCanteenData = async () => {
       try {
         const response = await axios.get(API_LINK);
@@ -53,8 +57,18 @@ export default defineComponent({
         console.log(err.message);
       }
     };
+    watch(()=>route.query,()=>{
+      id=route.query.canteenID
+      API_LINK=`http://localhost:3000/canteenData/?canteenID=${id}`
+      getCanteenData()
+      console.log("watch",route.query.canteenID)
+    },{
+      immediate:true
+    });
 
-    getCanteenData();
+
+
+
 
     return {
       canteenData,
