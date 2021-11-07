@@ -109,6 +109,39 @@
         }
       ]
     }
+  ],
+  "dish": [
+    {
+      "dishID": "d01",
+      "dishName": "宫保鸡丁",
+      "canteenName": "清芬园",
+      "thumb": 321,
+      "comment": "宫保鸡丁（Kung Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
+      "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+      "judgements" :[
+        {
+          "content": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+          "title": "小明",
+          "subhead": "subhead1",
+          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
+        },
+        {
+          "content": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
+          "title": "小红",
+          "subhead": "subhead2",
+          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
+        },
+        {
+          "content": "味道不错，就是有点凉了，冬天希望能吃到热乎乎的饭菜。",
+          "title": "小亮",
+          "subhead": "subhead3",
+          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
+        }
+      ]
+    }
   ]
 }
 
