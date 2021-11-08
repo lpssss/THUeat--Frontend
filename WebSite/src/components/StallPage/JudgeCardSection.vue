@@ -3,7 +3,7 @@
       <q-item>
         <q-item-section avatar>
           <q-avatar>
-            <q-img: src="imgSrc"/>
+            <q-img :src="imgSrc"/>
           </q-avatar>
         </q-item-section>
 
@@ -24,7 +24,7 @@
 
         <q-separator vertical />
 
-        <q-img 
+        <q-img
         class="comment_pic"
         :src="imgSrc2"
         />
@@ -59,7 +59,7 @@ export default defineComponent({
         },
     },
     setup() {
-        
+
     },
 })
 </script>
