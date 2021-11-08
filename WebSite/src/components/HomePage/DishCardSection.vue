@@ -3,7 +3,7 @@
         <q-img :src="imgSrc" :alt="dishName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
-          <div class="text-h6">{{ dishName }}</div>
+          <div class="text-h6"><router-link :to="{path:'/dish',query:{dishName:dishName}}">{{ dishName }}</router-link></div>
           <div class="text-subtitle2"> {{ canteenName }} </div>
         </q-card-section>
 

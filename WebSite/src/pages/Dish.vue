@@ -32,13 +32,18 @@ import { reactive } from "vue";
 import axios from "axios";
 import StallPictureSection from "components/StallPage/StallPictureSection";
 import JudgeCardSection from "components/StallPage/JudgeCardSection";
+import { watch, watchEffect } from 'vue';
+import {useRoute} from 'vue-router'
 
 export default {
   name: "Dish",
   // Components需改名
   components: {JudgeCardSection, StallPictureSection },
   setup() {
-    const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
+    const route=useRoute()
+    let name=route.query.dishName
+    let API_LINK = `http://localhost:3000/dish/?dishName=${name}`; // 之后放真正的API
+    // const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
     const dishData = reactive({ data: {} });
     const getDishData = async () => {
       try {
@@ -48,7 +53,16 @@ export default {
         console.log(err.message);
       }
     };
-    getDishData();
+
+    watch(()=>route.query,()=>{
+      name=route.query.dishName
+      API_LINK=`http://localhost:3000/dish/?dishName=${name}`
+      getDishData()
+      console.log("watch",route.query.dishName)
+    },{
+      immediate:true
+    });
+    // getDishData();
 
     return {
       dishData,
