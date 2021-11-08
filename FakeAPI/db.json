@@ -53,7 +53,104 @@
           "stallName": "Stall 5"
         }
       ]
+    },
+    {
+      "canteenID": "c2",
+      "canteenName": "桃李园",
+      "operationTime": "12pm-7pm",
+      "contacts": "01231243",
+      "canteenAddress": "学清路",
+      "intro": "asdafewfwfwfwfw",
+      "rating": 4,
+      "canteenImg": "http://localhost:3000/favicon.ico",
+      "stall": [
+        {
+          "stallID": "s1",
+          "stallName": "Stall 1"
+        },
+        {
+          "stallID": "s2",
+          "stallName": "Stall 2"
+        },
+        {
+          "stallID": "s3",
+          "stallName": "Stall 3"
+        },
+        {
+          "stallID": "s4",
+          "stallName": "Stall 4"
+        },
+        {
+          "stallID": "s5",
+          "stallName": "Stall 5"
+        }
+      ]
+    },
+    {
+      "canteenID": "c3",
+      "canteenName": "紫荆园",
+      "operationTime": "12pm-7pm",
+      "contacts": "01231243",
+      "canteenAddress": "学清路",
+      "intro": "asdafewfwfwfwfw",
+      "rating": 4,
+      "canteenImg": "http://localhost:3000/favicon.ico",
+      "stall": [
+        {
+          "stallID": "s1",
+          "stallName": "Stall 1"
+        },
+        {
+          "stallID": "s2",
+          "stallName": "Stall 2"
+        },
+        {
+          "stallID": "s3",
+          "stallName": "Stall 3"
+        },
+        {
+          "stallID": "s4",
+          "stallName": "Stall 4"
+        },
+        {
+          "stallID": "s5",
+          "stallName": "Stall 5"
+        }
+      ]
+    },
+    {
+      "canteenID": "c4",
+      "canteenName": "玉树园",
+      "operationTime": "12pm-7pm",
+      "contacts": "01231243",
+      "canteenAddress": "学清路",
+      "intro": "asdafewfwfwfwfw",
+      "rating": 4,
+      "canteenImg": "http://localhost:3000/favicon.ico",
+      "stall": [
+        {
+          "stallID": "s1",
+          "stallName": "Stall 1"
+        },
+        {
+          "stallID": "s2",
+          "stallName": "Stall 2"
+        },
+        {
+          "stallID": "s3",
+          "stallName": "Stall 3"
+        },
+        {
+          "stallID": "s4",
+          "stallName": "Stall 4"
+        },
+        {
+          "stallID": "s5",
+          "stallName": "Stall 5"
+        }
+      ]
     }
+
   ],
   "stallData":[
     {
