@@ -1,13 +1,13 @@
 <template>
   <div v-if="Object.keys(stallData.data).length">
     <div>
-      <StallPictureSection 
+      <StallPictureSection
         :stallName="stallData.data.stallNameHead"
         :imgSrc="stallData.data.imgSrcHead"
         />
     </div>
     <div>
-      <StallIntroSection 
+      <StallIntroSection
         :content="stallData.data.introContent"
         :score="stallData.data.introScore"
         :scoreAmount="stallData.data.introScoreAmount"
@@ -58,7 +58,7 @@
     </div>
     </div>
   </div>
-  
+
 </template>
 
 <script>
@@ -69,11 +69,13 @@ import StallIntroSection from "components/StallPage/StallIntroSection";
 import DishCardSection from "components/HomePage/DishCardSection";
 import JudgeCardSection from "components/StallPage/JudgeCardSection";
 import Pagination from '../components/StallPage/Pagination.vue';
+import { watch, watchEffect } from 'vue';
+import {useRoute} from 'vue-router'
 
 
 export default defineComponent({
   name: "Stall",
-  components: { 
+  components: {
     StallPictureSection,
     StallIntroSection,
     DishCardSection,
@@ -86,7 +88,10 @@ export default defineComponent({
     }
   },
   setup (){
-    const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
+    const route=useRoute()
+    let name=route.query.stallName
+    let API_LINK = `http://localhost:3000/stallData/?stallNameHead=${name}`; // 之后放真正的API
+    // const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
     const stallData = reactive({ data: {} });
     const getStallData = async () => {
       try {
@@ -96,7 +101,15 @@ export default defineComponent({
         console.log(err.message);
       }
     };
-    getStallData();
+    watch(()=>route.query,()=>{
+      name=route.query.stallName
+      API_LINK=`http://localhost:3000/stallData/?stallNameHead=${name}`
+      getStallData()
+      console.log("watch",route.query.stallName)
+    },{
+      immediate:true
+    });
+    // getStallData();
 
     return {
       stallData
