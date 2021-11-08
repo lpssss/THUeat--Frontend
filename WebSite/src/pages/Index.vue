@@ -36,7 +36,7 @@
         v-for="dish in dishs"
         v-bind="dish"
         :key="dish.dishName"
-      />   
+      />
     </div>
   </q-page>
 </template>
@@ -88,7 +88,7 @@ const homePageBanner = {
 
 const stalls = [
   {
-    stallName: "东北风味",
+    stallName: "广东风味",
     canteenName: "清芬园",
     score: 4.8,
     scoreAmount: 233,
