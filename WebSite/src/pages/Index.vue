@@ -98,7 +98,7 @@ const stalls = [
   {
     stallName: "川渝风味",
     canteenName: "观畴",
-    score: 4.5,
+    score: 3.5,
     scoreAmount: 356,
     comment: "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述",
     imgSrc: "https://cdn.quasar.dev/img/avatar.png",

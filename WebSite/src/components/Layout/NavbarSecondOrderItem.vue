@@ -1,9 +1,7 @@
 <template>
   <q-item clickable v-ripple>
     <q-item-section>
-      <div class="row justify-center">
-        <div>{{canteenName}}</div>
-      </div>
+        <div> {{ canteenName }} </div>
     </q-item-section>
   </q-item>
 </template>
