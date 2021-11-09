@@ -22,6 +22,8 @@
                 color="primary"
                 icon="star_border"
                 icon-selected="star"
+                icon-half="star_half"
+                readonly
               />
               <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
             </div>
@@ -31,7 +33,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, toRef, defineComponent } from 'vue'
 export default defineComponent({
     name: "StallCardSection",
     props: {
@@ -65,9 +67,9 @@ export default defineComponent({
             default: '#'
         },
     },
-    setup () {
+    setup (props) {
     return {
-        ratingModel: ref(4),
+        ratingModel: ref(props.score)
     }
   }
 })
