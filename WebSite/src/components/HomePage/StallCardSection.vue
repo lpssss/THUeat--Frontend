@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { ref, toRef, defineComponent } from 'vue'
+import { ref, defineComponent } from 'vue'
 export default defineComponent({
     name: "StallCardSection",
     props: {
@@ -68,10 +68,10 @@ export default defineComponent({
         },
     },
     setup (props) {
-    return {
-        ratingModel: ref(props.score)
+      return {
+          ratingModel: ref(props.score)
+      }
     }
-  }
 })
 </script>
 
