@@ -56,7 +56,7 @@
           <q-tab-panel name="comments">
             <div class="text-h6">用餐者评价</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
-              <JudgeCardSection
+              <CommentCardSection
                 v-for="judgement in stallData.data.judgements"
                 v-bind="judgement"
                 :key="judgement.title"
@@ -78,7 +78,7 @@ import axios from "axios";
 import StallPictureSection from  "components/StallPage/StallPictureSection";
 import StallIntroSection from "components/StallPage/StallIntroSection";
 import DishCardSection from "components/HomePage/DishCardSection";
-import JudgeCardSection from "components/StallPage/JudgeCardSection";
+import CommentCardSection from "components/StallPage/CommentCardSection";
 import Pagination from 'components/StallPage/Pagination.vue';
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 
@@ -112,7 +112,7 @@ export default defineComponent({
     //StallPictureSection,
     StallIntroSection,
     DishCardSection,
-    JudgeCardSection,
+    CommentCardSection,
     Pagination,
     HomePageAnnouncementSection,
   },

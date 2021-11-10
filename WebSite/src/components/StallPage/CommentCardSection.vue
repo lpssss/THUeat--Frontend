@@ -35,7 +35,7 @@
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
-    name: "JudgeCardSection",
+    name: "CommentCardSection",
     props:{
         content: {
             type:String,
