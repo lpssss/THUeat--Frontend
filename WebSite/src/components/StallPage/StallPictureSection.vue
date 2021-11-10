@@ -1,10 +1,12 @@
 <template>
-  <div class="q-col-gutter-md row items-start">
+  <div class="row items-start">
       <div class="col-12">
-        <q-img :src="imgSrc"
-          style="width: 100%; height: 200px">
+        <q-img
+          :src="imgSrc"
+          style="width: 100%; height: 400px"
+        >
           <div class="absolute-bottom text-subtitle1 text-center">
-            {{stallName}}
+            {{ stallName }}
           </div>
         </q-img>
       </div>
@@ -26,11 +28,7 @@ export default defineComponent({
             default: "#"
         },
     },
-    setup() {
-        return {
-            lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        }
-    },
+    setup() {},
 })
 </script>
 <style scoped>

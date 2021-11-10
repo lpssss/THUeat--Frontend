@@ -49,9 +49,7 @@ import DishCardSection from "components/HomePage/DishCardSection";
 import StallCardSection from "components/HomePage/StallCardSection";
 import BannerSection from "components/Layout/BannerSection";
 
-
-
-const annoucements = [
+const announcements = [
   {
     name: "first",
     title: "新品广告",
@@ -130,7 +128,7 @@ const dishs = [
 ]
 
 export default defineComponent({
-  name: "HomePage",
+  name: "Index",
   components: {
     HomePageAnnouncementSection,
     BannerSection,
@@ -140,7 +138,7 @@ export default defineComponent({
   setup () {
     return {
       slide: ref('first'),
-      announcements: annoucements,
+      announcements: announcements,
       homePageBanner: homePageBanner,
       stalls: stalls,
       dishs: dishs,

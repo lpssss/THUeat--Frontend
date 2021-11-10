@@ -69,7 +69,7 @@ export default defineComponent({
     },
     setup (props) {
       return {
-          ratingModel: ref(props.score)
+          ratingModel: props.score
       }
     }
 })

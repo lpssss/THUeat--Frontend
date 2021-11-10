@@ -1,5 +1,5 @@
 <template>
-    <q-card flat bordered class="bg-purple-1" style="width:100%">
+    <q-card flat bordered style="width:100%">
       <q-card-section class="text-grey-9">
         {{content}}
       </q-card-section>
@@ -13,6 +13,8 @@
         color="purple-8"
         icon="star_border"
         icon-selected="star"
+        icon-half="star_half"
+        readonly
       />
       <!-- v-model无法传入prop的数据，需要修改 -->
       <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
@@ -47,9 +49,9 @@ export default defineComponent({
         },
         
     },
-    setup() {
+    setup(props) {
         return {
-            starscore:3,
+            starscore: props.score,
         }
     },
 })

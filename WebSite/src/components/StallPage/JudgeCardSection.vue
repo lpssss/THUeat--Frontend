@@ -10,7 +10,7 @@
         <q-item-section>
           <q-item-label>{{title}}</q-item-label>
           <q-item-label caption>
-            {{subhead}}
+            {{ subhead }}
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -19,7 +19,7 @@
 
       <q-card-section horizontal>
         <q-card-section class="col-8">
-          {{content}}
+          {{ content }}
         </q-card-section>
 
         <q-separator vertical />

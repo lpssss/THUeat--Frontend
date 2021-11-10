@@ -1,8 +1,8 @@
 <template>
     <q-carousel-slide :name="name" :img-src="imgSrc">
         <div class="absolute-bottom custom-caption">
-            <div class="text-h4">{{ title }}</div>
-            <div class="text-subtitle1">{{ content }}</div>
+            <div class="text-h5">{{ title }}</div>
+            <div class="text-subtitle2">{{ content }}</div>
         </div>
     </q-carousel-slide>
 </template>
@@ -14,7 +14,7 @@ export default defineComponent({
     props: {
         name: {
             type: String,
-            required: true
+            default: "first"
         },
 
         title: {
@@ -32,11 +32,7 @@ export default defineComponent({
             default: '#'
         },
     },
-    setup () {
-    return {
-      lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    }
-  }
+    setup () {}
 })
 </script>
 
