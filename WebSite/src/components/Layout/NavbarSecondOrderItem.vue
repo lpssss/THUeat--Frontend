@@ -1,9 +1,7 @@
 <template>
   <q-item clickable v-ripple>
     <q-item-section>
-      <div class="row justify-center">
-        <div><router-link :to="{path:'/canteen',query:{canteenID:canteenID}}">{{canteenName}}</router-link></div>
-      </div>
+        <div> {{ canteenName }} </div>
     </q-item-section>
   </q-item>
 </template>
@@ -17,10 +15,6 @@ export default defineComponent({
       type: String,
       required: true
     },
-    canteenID:{
-      type:String,
-      required: true
-    }
   }
 })
 </script>

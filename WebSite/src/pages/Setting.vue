@@ -20,7 +20,7 @@
         用户名
       </div>
       <div class="col-4 q-pt-md">
-        <q-input v-model="ph" placeholder="乐吃" hint="一些提示" counter maxlength="12" :dense="dense" />
+        <q-input v-model="ph" placeholder="乐吃" hint="提示" counter maxlength="12" :dense="dense" />
       </div>
       <div class="col-4 text-h6 q-pr-md" align="right">
         
@@ -29,10 +29,22 @@
 
     <div class="q-pa-md row justify-start items-center">
       <div class="col-4 q-pr-lg text-subtitle1" align="right">
-        密码
+        原密码
       </div>
       <div class="col-4">
-        <q-input v-model="password" standard :type="isPwd ? 'password' : 'text'" hint="一些提示" counter maxlength="18">
+        <q-input clearable standard v-model="text"/>
+      </div>
+      <div class="col-4 text-h6 q-pr-md" align="right">
+        
+      </div>
+    </div>
+
+    <div class="q-pa-md row justify-start items-center">
+      <div class="col-4 q-pr-lg text-subtitle1" align="right">
+        新密码
+      </div>
+      <div class="col-4">
+        <q-input v-model="password" standard :type="isPwd ? 'password' : 'text'" hint="提示" counter maxlength="18">
         <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -83,12 +95,12 @@
       </div>
     </div>
 
-    <div class="q-pa-md q-gutter-sm">
-      <BannerSection v-bind="settingPageBanners.historyRating"/>
-    </div>  
-    
-    <div class="q-pa-md">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit quod porro sunt ipsam in. Quibusdam, hic est! Animi beatae odit ut cum laborum quos id. Provident sequi porro doloribus temporibus.
+    <div class="q-pb-lg text-red" align="center">
+      <div class="q-pt-md">
+        <q-btn>
+          确认更改
+        </q-btn>
+      </div>
     </div>
 
     <div class="q-pa-md q-gutter-sm">
@@ -96,7 +108,7 @@
     </div>
 
     <div class="q-pa-md">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit quod porro sunt ipsam in. Quibusdam, hic est! Animi beatae odit ut cum laborum quos id. Provident sequi porro doloribus temporibus.
+      
     </div>
 
     <div class="q-pb-lg text-red" align="center">
@@ -112,22 +124,41 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BannerSection from "components/Layout/BannerSection";
+import StallCardSection from "components/HomePage/StallCardSection";
 
+const stallComments = [
+  //这里为了方便，复用stall卡片，把评价的菜品输入到canteenName属性
+  {
+    stallName: "东北风味",
+    canteenName: "小鸡炖蘑菇",
+    score: 4,
+    comment: "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价",
+    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
+  },
+  {
+    stallName: "川渝风味",
+    canteenName: "观畴",
+    score: 4.5,
+    scoreAmount: 356,
+    comment: "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述",
+    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
+  }
+];
 
 const settingPageBanners = {
   setting:{
     content: "个人信息设置",
     change: false
   },
-  historyRating:{
-    content: "我的历史评分",
-    change: false
-  },
   historyComment:{
-    content: "我的历史评语",
+    content: "我的历史评价",
     change: false
   },
 }
+
+const options = [
+  '清华学生', '校外人员'
+];
 
 export default defineComponent({
   name: 'Settings',
@@ -138,9 +169,8 @@ export default defineComponent({
     return {
       settingPageBanners: settingPageBanners,
       identityModel: ref('清华学生'),
-      options: [
-        '清华学生','工作人员', '校外人员'
-      ]
+      options: options,
+      text: ref("******")
     }
   }
 })

@@ -49,9 +49,7 @@ import DishCardSection from "components/HomePage/DishCardSection";
 import StallCardSection from "components/HomePage/StallCardSection";
 import BannerSection from "components/Layout/BannerSection";
 
-
-
-const annoucements = [
+const announcements = [
   {
     name: "first",
     title: "新品广告",
@@ -98,7 +96,7 @@ const stalls = [
   {
     stallName: "川渝风味",
     canteenName: "观畴",
-    score: 4.5,
+    score: 3.5,
     scoreAmount: 356,
     comment: "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述",
     imgSrc: "https://cdn.quasar.dev/img/avatar.png",
@@ -130,7 +128,7 @@ const dishs = [
 ]
 
 export default defineComponent({
-  name: "HomePage",
+  name: "Index",
   components: {
     HomePageAnnouncementSection,
     BannerSection,
@@ -140,7 +138,7 @@ export default defineComponent({
   setup () {
     return {
       slide: ref('first'),
-      announcements: annoucements,
+      announcements: announcements,
       homePageBanner: homePageBanner,
       stalls: stalls,
       dishs: dishs,

@@ -17,7 +17,7 @@
     <div class="q-pa-md">
     <div class="text-h6">用餐者评价</div>
     <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
-      <JudgeCardSection
+      <CommentCardSection
         v-for="judgement in dishData.data.judgements"
         v-bind="judgement"
         :key="judgement.title"
@@ -31,6 +31,7 @@
 import { reactive } from "vue";
 import axios from "axios";
 import StallPictureSection from "components/StallPage/StallPictureSection";
+import CommentCardSection from "components/StallPage/CommentCardSection";
 import JudgeCardSection from "components/StallPage/JudgeCardSection";
 import { watch, watchEffect } from 'vue';
 import {useRoute} from 'vue-router'
@@ -38,7 +39,7 @@ import {useRoute} from 'vue-router'
 export default {
   name: "Dish",
   // Components需改名
-  components: {JudgeCardSection, StallPictureSection },
+  components: {CommentCardSection, StallPictureSection },
   setup() {
     const route=useRoute()
     let name=route.query.dishName

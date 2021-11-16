@@ -154,6 +154,7 @@
   ],
   "stallData":[
     {
+      "stallName": "first",
       "stallNameHead": "广东风味",
       "imgSrcHead": "https://cdn.quasar.dev/img/parallax2.jpg",
       "introContent":"广东风味特点是食用方便，蒸熟、切片均可，是下酒佳肴；如果炒着吃，味道更好。广东的美食大多不是辣味的。而广东人最喜欢吃饭前和一碗汤，才吃饭。其中白切鸡是必不可缺的在饭桌上。",

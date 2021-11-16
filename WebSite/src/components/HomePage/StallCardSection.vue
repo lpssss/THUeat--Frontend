@@ -22,6 +22,8 @@
                 color="primary"
                 icon="star_border"
                 icon-selected="star"
+                icon-half="star_half"
+                readonly
               />
               <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
             </div>
@@ -65,11 +67,11 @@ export default defineComponent({
             default: '#'
         },
     },
-    setup () {
-    return {
-        ratingModel: ref(4),
+    setup (props) {
+      return {
+          ratingModel: props.score
+      }
     }
-  }
 })
 </script>
 

@@ -1,21 +1,22 @@
 <template>
   <q-expansion-item
-    expand-separator
-    icon="perm_identity"
+    :icon="icon"
     :label="title"
     v-if="secondOrderStatus"
+    :content-inset-level="1"
   >
-    <q-list bordered separator>
+    <q-list separator>
       <NavbarSecondOrderItem v-for="item in secondOrderTitle" v-bind="item" :key="item.canteenID"/>
     </q-list>
   </q-expansion-item>
-  <template v-else>
+
+  <div v-else>
     <q-item clickable v-ripple>
       <q-item-section>
           {{title}}
       </q-item-section>
     </q-item>
-  </template>
+  </div>
 </template>
 
 <script>
@@ -37,6 +38,10 @@ export default defineComponent({
     },
     secondOrderStatus: {
       type: Boolean,
+      required: true
+    },
+    icon: {
+      type: String,
       required: true
     }
   },
