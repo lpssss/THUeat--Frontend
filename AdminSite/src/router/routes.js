@@ -1,31 +1,43 @@
 const routes = [
   {
-    path: '/school/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/school/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: '/', component: () => import('pages/school/schoolDashboard.vue') },
-      { path: '/stallMaintenance', component: () => import('pages/school/stallMaintenance.vue') },
-      { path: '/userMaintenance', component: () => import('pages/school/userMaintenance.vue') }
-    ]
+      {
+        path: "/",
+        component: () => import("pages/school/schoolDashboard.vue"),
+      },
+      {
+        path: "/stallMaintenance",
+        component: () => import("pages/school/stallMaintenance.vue"),
+      },
+      {
+        path: "/userMaintenance",
+        component: () => import("pages/school/userMaintenance.vue"),
+      },
+    ],
   },
   {
-    path: '/stall/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/stall/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: '/Dashboard', component: () => import('pages/stall/stallDashboard.vue') },
-    ]
+      {
+        path: "/Dashboard",
+        component: () => import("pages/stall/StallDashboard.vue"),
+      },
+    ],
   },
   {
-    path: '/Login', component: () => import('pages/Login.vue')
-
+    path: "/Login",
+    component: () => import("pages/Login.vue"),
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue')
-  }
-]
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/Error404.vue"),
+  },
+];
 
-export default routes
+export default routes;
