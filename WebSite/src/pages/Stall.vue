@@ -15,7 +15,13 @@
           />
         </q-carousel>
       </div>
-
+    
+    <div class="q-pa-md">
+      <StallIntroSection 
+        :score="stallData.data.introScore"
+        :scoreAmount="stallData.data.introScoreAmount"
+      />
+    </div>
     
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="width:100%">
@@ -81,7 +87,7 @@ export default defineComponent({
   name: "Stall",
   components: { 
     //StallPictureSection,
-    //StallIntroSection,
+    StallIntroSection,
     DishCardSection,
     CommentCardSection,
     Pagination,

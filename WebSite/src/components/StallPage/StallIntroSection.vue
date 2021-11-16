@@ -1,9 +1,5 @@
 <template>
     <q-card flat bordered style="width:100%">
-      <q-card-section class="text-grey-9">
-        {{content}}
-      </q-card-section>
-      <q-separator  inset />
       <q-card-section>
         <div class="row justify-center">
     <div class="self-center col-6">
@@ -35,10 +31,6 @@ import { ref, defineComponent } from 'vue'
 export default defineComponent({
     name: "StallIntroSection",
     props: {
-        content: {
-            type: String,
-            default: ''
-        },
         score: {
             type: Number,
             default: 4
