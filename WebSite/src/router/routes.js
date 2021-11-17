@@ -34,6 +34,11 @@ const routes = [
         name: "Stall",
         component: () => import("pages/Stall.vue"),
       },
+      { 
+        path: "main", 
+        name: "Main", 
+        component: () => import("pages/Main.vue") 
+      },
     ],
   },
   {
