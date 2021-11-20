@@ -1,7 +1,7 @@
 <template>
-  <div class="q-pa-md" v-if="editable == false">
+  <div class="q-pa-md" v-if="creatable == false">
     <q-table
-      title="管理员管理系统"
+      title="普通管理员管理系统"
       :rows="data"
       :columns="columns"
       row-key="name"
@@ -26,7 +26,7 @@
     </q-table>
   </div>
 
-  <div class="q-pa-md" v-if="editable == true">
+  <div class="q-pa-md" style="margin-left:10%; margin-right:10%;" v-if="creatable == true">
     <h4 style="border-bottom: 0.1px solid;">管理员创建</h4>
 
     <div class="q-gutter-md" style="max-width: 100%">
@@ -82,20 +82,19 @@ const data = [
 
 export default defineComponent({
   setup () {
-    const editable = ref(false);
+    const creatable = ref(false);
     const addAdv = () => {
-        console.log("test");
-        editable.value = true
+      creatable.value = true
     };
     const saveAdv = () => {
-        editable.value = false
+      creatable.value = false
     };
     return {
       columns,
       data: ref(data),
       text: ref(''),
       model: ref(null),
-      editable,
+      creatable,
       addAdv,
       saveAdv,
     }
