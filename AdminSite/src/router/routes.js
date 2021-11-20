@@ -1,20 +1,21 @@
 const routes = [
   {
     path: '/school/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/superadminLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/school/schoolDashboard.vue') },
-      { path: '/stallMaintenance', component: () => import('pages/school/stallMaintenance.vue') },
-      { path: '/userMaintenance', component: () => import('pages/school/userMaintenance.vue') },
       { path: '/schooladminMaintenance', component: () => import('pages/school/schooladminMaintenance.vue') },
+      { path: '/stallCreation', component: () => import('pages/school/stallCreation.vue') },
+      { path: '/staffMaintenance', component: () => import('pages/school/staffMaintenance.vue') },
+      { path: '/userMaintenance', component: () => import('pages/school/userMaintenance.vue') },
       { path: '/settings', component: () => import('pages/school/settings.vue') }
     ]
   },
   {
-    path: '/stall/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: '/stall',
+    component: () => import('src/layouts/superadminLayout.vue'),
     children: [
-      { path: '/Dashboard', component: () => import('pages/stall/stallDashboard.vue') },
+      { path: '/stall/', component: () => import('pages/stall/stallDashboard.vue') }
     ]
   },
   {

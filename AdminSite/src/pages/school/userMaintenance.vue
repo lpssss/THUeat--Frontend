@@ -12,13 +12,6 @@
           <q-toggle v-model="props.row.status" checked-icon="check" color="green" unchecked-icon="clear" />
         </q-td>
       </template>
-
-      <template v-slot:body-cell-btnDelete="props">
-        <q-td :props="props">
-          <q-btn size="10px" outline round color="red" icon="close" />
-        </q-td>
-      </template>
-
     </q-table>
   </div>
 </template>
@@ -40,7 +33,6 @@ const columns = [
   { name: 'userEmail', align: 'left', label: '邮件', field: 'stallEmail' },
   { name: 'report', align: 'left', label: '投诉', field: 'report', sortable: true },
   { name: 'status', align: 'left', label: '激活', field: 'status', sortable: true },
-  { name: 'btnDelete', align: 'left', field: 'delete' }
 ]
 
 const data = [

@@ -1,6 +1,5 @@
 <template>
-  <div class="q-pa-md" v-if="editable == false">
-    <h4 style="border-bottom: 0.1px solid;">Dashboard</h4>
+  <div class="q-pa-md" v-if="creatable == false">
     <div class="row q-mb-lg">
       <div class="col-12">
         <div class="row q-gutter-md justify-center">
@@ -21,7 +20,7 @@
           <div class="col-12 col-md">
             <q-card class="my-card">
               <q-card-section>
-                <div class="text-h6" style="border-bottom: 1px solid; font-weight: bold;">档口管理员 Stall Admin</div>
+                <div class="text-h6" style="border-bottom: 1px solid; font-weight: bold;">档主管理员 Staff Admin</div>
               </q-card-section>
               <q-card-section class="q-pt-none text-h4"  style="text-align: center;">
                 <q-icon name="build"/>
@@ -83,12 +82,11 @@
       </q-table>
     </div>
 
-  <div class="q-pa-md" v-if="editable == true">
+  <div class="q-pa-md" style="margin-left:10%; margin-right:10%;" v-if="creatable == true">
     <h4 style="border-bottom: 0.1px solid;">创建新广告或通告</h4>
 
     <div class="q-gutter-md" style="max-width: 100%">
       <q-input filled v-model="text" label="图片名称" stack-label />
-      <q-input filled v-model="text" label="创建者 - XXX"  disable />
       <q-file filled bottom-slots v-model="model" label="图片" counter>
         <template v-slot:prepend>
           <q-icon name="cloud_upload" @click.stop />
@@ -118,7 +116,6 @@ const columns = [
     format: val => `${val}`,
     sortable: true
   },
-  { name: 'Staff_ID', align: 'left', label: '创建者', field: 'Staff_ID', sortable: true },
   { name: 'image', align: 'left', label: '图片', field: 'image', sortable: true },
   { name: 'btnDelete', align: 'left', field: 'delete' }
 ]
@@ -126,33 +123,30 @@ const columns = [
 const data = [
   {
     Username: '图片一',
-    Staff_ID: '管理员一',
     image: 'test'
   },
   {
     Username: '图片二',
-    Staff_ID: '管理员二',
     image: 'test'
   },
   {
     Username: '图片三',
-    Staff_ID: '管理员三',
     image: 'test'
   }
 ]
 export default defineComponent({
     setup () {
-      const editable = ref(false);
+      const creatable = ref(false);
       const addAdv = () => {
-          editable.value = true
+          creatable.value = true
       };
       const saveAdv = () => {
-          editable.value = false
+          creatable.value = false
       };
     return {
       columns,
       data: ref(data),
-      editable,
+      creatable,
       addAdv,
       saveAdv,
       text: ref(''),
