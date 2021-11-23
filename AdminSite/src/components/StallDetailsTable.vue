@@ -1,6 +1,11 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="Treats" :rows="rows" :columns="columns" row-key="name" />
+    <q-table
+      title="Treats"
+      :rows="rows"
+      :columns="columns"
+      row-key="name"
+    />
   </div>
 </template>
 
@@ -23,12 +28,12 @@ const columns = [
 
 export default {
   name: "StallDetailsTable",
-  props:{
+  props: {
     // rows的部分需要从api获取的数据整理
-    rows:{
-      type:Array,
-      required:true
-    }
+    rows: {
+      type: Array,
+      required: true,
+    },
   },
   setup() {
     return {

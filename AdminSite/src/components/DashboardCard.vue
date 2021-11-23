@@ -4,6 +4,9 @@
       <q-card-section>
         <div class="text-h6" style="border-bottom: 1px solid; font-weight: bold;">
           {{titleName}}
+          <q-item-label caption v-if="subhead">
+            {{ subhead }}
+          </q-item-label>
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none text-h4" style="text-align: center;">
@@ -21,6 +24,9 @@ export default {
     titleName:{
       type:String,
       required:true
+    },
+    subhead:{
+      type:String,
     },
     iconName:{
       type:String,
