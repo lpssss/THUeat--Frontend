@@ -3,7 +3,7 @@
         <q-img :src="dishImage" :alt="dishName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
-          <div class="text-h6"><router-link :to="{path:'/dish',query:{dishName:dishName}}">{{ dishName }}</router-link></div>
+          <div class="text-h6"><router-link :to="{path:'/dish',query:{dishID:dishID}}">{{ dishName }}</router-link></div>
           <div class="text-subtitle2"> {{ canteenName }} </div>
         </q-card-section>
 
@@ -25,6 +25,11 @@ import { ref, defineComponent } from 'vue'
 export default defineComponent({
     name: "DishCardSection",
     props: {
+        dishID: {
+          type: String,
+          required: true
+        },
+
         dishName: {
             type: String,
             required: true
