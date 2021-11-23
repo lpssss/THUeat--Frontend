@@ -1,26 +1,21 @@
 {
-  "canteens": [
+  "navigation": [
     {
-      "canteenID": "c1",
-      "canteenName": "玉树园1",
-      "canteenType": "student_canteen"
+       "canteenID": "1",
+       "canteenName": "丁香",
+       "canteenType": "student"
     },
     {
-      "canteenID": "c2",
-      "canteenName": "玉树园2",
-      "canteenType": "student_canteen"
+      "canteenID": "2",
+      "canteenName": "紫荆",
+      "canteenType": "student"
     },
     {
-      "canteenID": "c3",
-      "canteenName": "玉树园3",
-      "canteenType": "teacher_canteen"
-    },
-    {
-      "canteenID": "c4",
-      "canteenName": "玉树园4",
-      "canteenType": "teacher_canteen"
+       "canteenID": "3",
+       "canteenName": "荷园",
+       "canteenType": "teacher"
     }
-  ],
+ ],
   "canteenData": [
     {
       "canteenID": "c1",
@@ -415,4 +410,6 @@
       }
     ]
   }
+ 
+
 }
