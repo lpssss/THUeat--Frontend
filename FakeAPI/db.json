@@ -63,28 +63,40 @@
       "introContent": "广东风味特点是食用方便，蒸熟、切片均可，是下酒佳肴；如果炒着吃，味道更好。广东的美食大多不是辣味的。而广东人最喜欢吃饭前和一碗汤，才吃饭。其中白切鸡是必不可缺的在饭桌上。",
       "introScore": 4,
       "introScoreAmount": 30,
-      "judgements": [
-        {
-          "content": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
-          "title": "小明",
-          "subhead": "subhead1",
-          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
-        },
-        {
-          "content": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
-          "title": "小红",
-          "subhead": "subhead2",
-          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
-        },
-        {
-          "content": "味道不错，就是有点凉了，冬天希望能吃到热乎乎的饭菜。",
-          "title": "小亮",
-          "subhead": "subhead3",
-          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
-        }
+      "judgements" :[
+          {
+            "content": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+            "title": "小明",
+            "subhead": "subhead1",
+            "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+            "thumb": 345,
+            "commentImgSrc1":"https://cdn.quasar.dev/img/parallax2.jpg",
+            "commentImgSrc2":"https://cdn.quasar.dev/img/parallax2.jpg",
+            "commentImgSrc3":"https://cdn.quasar.dev/img/parallax2.jpg"
+          },
+          {
+            "content": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
+            "title": "小红",
+            "subhead": "subhead2",
+            "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+            "thumb": 234,
+            "commentImgSrc1":"https://cdn.quasar.dev/img/parallax2.jpg",
+            "commentImgSrc2":"https://cdn.quasar.dev/img/parallax2.jpg",
+            "commentImgSrc3":"https://cdn.quasar.dev/img/parallax2.jpg"
+          },
+          {
+            "content": "味道不错，就是有点凉了，冬天希望能吃到热乎乎的饭菜。",
+            "title": "小亮",
+            "subhead": "subhead3",
+            "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
+            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+            "thumb": 123,
+            "commentImgSrc1":"https://cdn.quasar.dev/img/parallax2.jpg",
+            "commentImgSrc2":"https://cdn.quasar.dev/img/parallax2.jpg",
+            "commentImgSrc3":"https://cdn.quasar.dev/img/parallax2.jpg"
+          }
       ],
       "dishes": [
         {

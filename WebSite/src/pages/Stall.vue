@@ -15,14 +15,14 @@
           />
         </q-carousel>
       </div>
-
+    
     <div class="q-pa-md">
       <StallIntroSection 
-        :content="stallData.data.introContent"
         :score="stallData.data.introScore"
         :scoreAmount="stallData.data.introScoreAmount"
       />
     </div>
+    
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="width:100%">
         <q-tabs

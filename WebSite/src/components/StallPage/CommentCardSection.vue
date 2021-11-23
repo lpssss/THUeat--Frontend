@@ -1,5 +1,5 @@
 <template>
-    <q-card class="my-card" flat bordered>
+    <q-card class="my-card" flat bordered >
       <q-item>
         <q-item-section avatar>
           <q-avatar>
@@ -17,20 +17,31 @@
 
       <q-separator />
 
-      <q-card-section horizontal>
-        <q-card-section class="col-8">
-          {{ content }}
+      
+        <q-card-section>
+          <div class="ellipsis-2-lines" >
+              {{ content }}
+          </div>
+        </q-card-section>
+        
+        <q-card-section vertical >
+          <q-img :src="commentImgSrc1"/>
         </q-card-section>
 
-        <q-separator vertical />
+        <q-card-section class="q-pt-none">
+          <q-btn size="sm" falt round color="primary" icon="thumb_up" />
+          <span class="q-px-sm text-caption text-grey"> {{ thumb }} </span>
+        </q-card-section>
+        
+        
 
-        <q-img
-        class="comment_pic"
-        :src="imgSrc2"
-        />
-      </q-card-section>
+      
     </q-card>
 </template>
+
+
+  
+
 <script>
 import { ref, defineComponent } from 'vue'
 
@@ -49,6 +60,10 @@ export default defineComponent({
             type:String,
             default:'#'
         },
+        thumb: {
+            type: Number,
+            default: 5
+        },
         title: {
             type:String,
             default:''
@@ -57,6 +72,11 @@ export default defineComponent({
             type:String,
             default:''
         },
+        commentImgSrc1: {
+            type:String,
+            default:'#'
+        },
+        
     },
     setup() {
 
