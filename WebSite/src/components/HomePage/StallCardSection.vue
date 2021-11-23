@@ -3,7 +3,7 @@
         <q-img :src="stallImage" :alt="stallName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
-          <div class="text-h6"> {{stallName}} </div>
+          <div class="text-h6"> <router-link :to="{path:'/stall',query:{stallName:stallName}}">{{stallName}}</router-link> </div>
           <div class="text-subtitle2"> {{ canteenName }} </div>
         </q-card-section>
 

@@ -45,8 +45,9 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, watch  } from "vue";
 import axios from "axios";
+import {useRoute} from 'vue-router'
 import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetailSection";
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
@@ -69,6 +70,7 @@ const canteenPageBanner = {
   }
 };
 
+
 export default defineComponent({
   name: "PublicCanteen",
   components: {
@@ -79,7 +81,10 @@ export default defineComponent({
     CanteenBasicDetailSection,
   },
   setup() {
-    const API_LINK = "http://localhost:3000/canteens/?canteenID=c1"; // 之后放真正的API
+    const route=useRoute()
+    let id=route.query.canteenID
+    let API_LINK = `http://localhost:3000/canteens/?canteenID=${id}`; // 之后放真正的API
+    //const API_LINK = "http://localhost:3000/canteenData/?canteenID=c1"; // 之后放真正的API
     const canteenData = reactive({ data: {} });
     const getCanteenData = async () => {
       try {
@@ -89,7 +94,15 @@ export default defineComponent({
         console.log(err.message);
       }
     };
-    getCanteenData();
+    watch(()=>route.query,()=>{
+      id=route.query.canteenID
+      API_LINK=`http://localhost:3000/canteens/?canteenID=${id}`
+      getCanteenData()
+      console.log("watch",route.query.canteenID)
+    },{
+      immediate:true
+    });
+    //getCanteenData();
 
     return {
       canteenData,
