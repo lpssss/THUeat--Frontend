@@ -9,17 +9,17 @@
         >
           <HomePageAnnouncementSection
             name="first"
-            :title="stallData.data.stallNameHead"
-            :content="stallData.data.introContent"
-            :imgSrc="stallData.data.imgSrcHead"
+            :title="stallData.data.stallName"
+            :content="stallData.data.stallDescribe"
+            :imgSrc="stallData.data.stallImage"
           />
         </q-carousel>
       </div>
     
     <div class="q-pa-md">
       <StallIntroSection 
-        :score="stallData.data.introScore"
-        :scoreAmount="stallData.data.introScoreAmount"
+        :score="stallData.data.stallRate"
+        :scoreAmount="stallData.data.stallRateNumber"
       />
     </div>
     
@@ -57,9 +57,9 @@
             <div class="text-h6">用餐者评价</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <CommentCardSection
-                v-for="judgement in stallData.data.judgements"
-                v-bind="judgement"
-                :key="judgement.title"
+                v-for="review in stallData.data.reviews"
+                v-bind="review"
+                :key="review.reviewID"
               />
             </div>
             <Pagination/>
@@ -99,7 +99,7 @@ export default defineComponent({
     }
   },
   setup (){
-    const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
+    const STALL_API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
     const DISH_API_LINK = "http://localhost:3000/dishes";
 
     const dishData = reactive({ data: {} });
@@ -107,7 +107,7 @@ export default defineComponent({
 
     const getStallData = async () => {
       try {
-        const response = await axios.get(API_LINK);
+        const response = await axios.get(STALL_API_LINK);
         stallData.data = response.data[0];
       } catch (err) {
         console.log(err.message);
