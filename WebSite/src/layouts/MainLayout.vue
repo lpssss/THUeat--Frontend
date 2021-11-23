@@ -75,14 +75,14 @@ const firstOrderTitle = [
   {
     titleId: "f1",
     title: "教工餐厅",
-    titleEng: "teacher_canteen",
+    titleEng: "teacher",
     icon: "school",
     secondOrderStatus: true,
   },
   {
     titleId: "f2",
     title: "学生餐厅",
-    titleEng: "student_canteen",
+    titleEng: "student",
     icon: "face",
     secondOrderStatus: true,
   }

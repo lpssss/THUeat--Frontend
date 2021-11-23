@@ -6,14 +6,19 @@
       </q-avatar>
     </q-item-section>
     <q-item-section class="justify-around">
-      <div>{{canteenName}}</div>
-      <div>
+      <div class="text-h6">{{canteenName}}</div>
+      <div class="q-gutter-y-md row">
         <q-rating
           v-model="canteenRating"
           color="orange"
+          icon="star_border"
+          icon-selected="star"
+          icon-half="star_half"
           readonly
           size="2em" />
+        <span class="text-caption text-grey q-pa-sm"> ({{ rating }})</span>
       </div>
+
     </q-item-section>
 
   </q-item>

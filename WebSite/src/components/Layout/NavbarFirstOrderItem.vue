@@ -51,7 +51,7 @@ export default defineComponent({
     //console.log(props.title,props.titleEng,props.secondOrderStatus)
     const secondOrderTitle=ref([])
     const getSecondOrderTitle=async ()=>{
-      const response=await axios.get(`http://localhost:3000/canteens?canteenType=${props.titleEng}`)
+      const response=await axios.get(`http://localhost:3000/navigation?canteenType=${props.titleEng}`)
       secondOrderTitle.value=response.data
       //console.log(secondOrderTitle)
     }

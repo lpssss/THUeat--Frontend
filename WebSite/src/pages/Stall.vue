@@ -9,17 +9,17 @@
         >
           <HomePageAnnouncementSection
             name="first"
-            :title="stallData.data.stallNameHead"
-            :content="stallData.data.introContent"
-            :imgSrc="stallData.data.imgSrcHead"
+            :title="stallData.data.stallName"
+            :content="stallData.data.stallDescribe"
+            :imgSrc="stallData.data.stallImage"
           />
         </q-carousel>
       </div>
 
     <div class="q-pa-md">
-      <StallIntroSection
-        :score="stallData.data.introScore"
-        :scoreAmount="stallData.data.introScoreAmount"
+      <StallIntroSection 
+        :score="stallData.data.stallRate"
+        :scoreAmount="stallData.data.stallRateNumber"
       />
     </div>
 
@@ -45,7 +45,7 @@
             <div class="text-h6">推荐菜品</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <DishCardSection
-                v-for="dish in dishData.data"
+                v-for="dish in stallData.data.dishes"
                 v-bind="dish"
                 :key="dish.dishID"
               />
@@ -57,9 +57,9 @@
             <div class="text-h6">用餐者评价</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <CommentCardSection
-                v-for="judgement in stallData.data.judgements"
-                v-bind="judgement"
-                :key="judgement.title"
+                v-for="review in stallData.data.reviews"
+                v-bind="review"
+                :key="review.reviewID"
               />
             </div>
             <Pagination/>
@@ -73,21 +73,20 @@
 </template>
 
 <script>
-import { ref, defineComponent, reactive } from "vue";
+import { ref, defineComponent, reactive, watch } from "vue";
 import axios from "axios";
+import {useRoute} from 'vue-router'
 import StallPictureSection from  "components/StallPage/StallPictureSection";
 import StallIntroSection from "components/StallPage/StallIntroSection";
 import DishCardSection from "components/HomePage/DishCardSection";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import Pagination from 'components/StallPage/Pagination.vue';
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
-import { watch } from 'vue';
-import {useRoute} from 'vue-router'
+
 
 export default defineComponent({
   name: "Stall",
   components: {
-    //StallPictureSection,
     StallIntroSection,
     DishCardSection,
     CommentCardSection,
@@ -102,11 +101,8 @@ export default defineComponent({
   setup (){
     const route=useRoute()
     let name=route.query.stallName
-    let API_LINK = `http://localhost:3000/stallData/?stallNameHead=${name}`; // 之后放真正的API
-    //const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
-    const DISH_API_LINK = "http://localhost:3000/dishes";
-
-    const dishData = reactive({ data: {} });
+    let API_LINK = `http://localhost:3000/stallData/?stallName=${name}`; // 之后放真正的API
+    
     const stallData = reactive({ data: {} });
 
     const getStallData = async () => {
@@ -117,19 +113,11 @@ export default defineComponent({
         console.log(err.message);
       }
     };
-    const getDishData = async () => {
-      try {
-        const response = await axios.get(DISH_API_LINK);
-        dishData.data = response.data;
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
+    
     watch(()=>route.query,()=>{
       name=route.query.stallName
-      API_LINK=`http://localhost:3000/stallData/?stallNameHead=${name}`
+      API_LINK=`http://localhost:3000/stallData/?stallName=${name}`
       getStallData();
-      getDishData();
       console.log("watch",route.query.stallName)
     },{
       immediate:true
@@ -140,7 +128,6 @@ export default defineComponent({
     return {
       slide: ref('first'),
       stallData,
-      dishData,
     };
 },
 })

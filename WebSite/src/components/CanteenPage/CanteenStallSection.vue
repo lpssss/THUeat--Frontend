@@ -1,43 +1,79 @@
 <template>
-  <div>
-    <div>
-      档口
-    </div>
-    <div class="row q-col-gutter-md">
-      <div class="col-3" v-for="eachStall in stall" :key="eachStall.stallID">
-        <q-card>
-          <img src="https://cdn.quasar.dev/img/parallax2.jpg" alt="test-image">
-          <q-list>
-            <q-item clickable>
-              <q-item-section avatar>
-                <q-icon color="primary" name="local_bar" />
-              </q-item-section>
+    <q-card class="my-card-canteenstall">
+        <q-img :src="stallImage" :alt="stallName" class="q-card-img"/>
 
-              <q-item-section>
-                <q-item-label>{{eachStall.stallName}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-card>
-      </div>
-    </div>
-  </div>
+        <q-card-section class="q-pb-none">
+          <div class="text-h6"> {{stallName}} </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div class="ellipsis-2-lines" >
+            {{ stallBestComment }}
+          </div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="q-px-none">
+            <div class="q-gutter-y-md row">
+              <q-rating
+                v-model="ratingModel"
+                size="1.5em"
+                color="primary"
+                icon="star_border"
+                icon-selected="star"
+                icon-half="star_half"
+                readonly
+              />
+              <span class="text-caption text-grey q-ml-sm"> {{ stallRate }} ({{ rateAmount }})</span>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
 </template>
 
 <script>
-import {defineComponent} from "vue";
-
+import { ref, defineComponent } from 'vue'
 export default defineComponent({
-  name: "CanteenStallSection",
-  props:{
-    stall:{
-      type:Array,
-      required: true
+    name: "StallCardSection",
+    props: {
+        stallName: {
+            type: String,
+            required: true
+        },
+
+        canteenName: {
+            type: String,
+            default: ''
+        },
+
+        stallRate: {
+            type: Number,
+            default: 5
+        },
+
+        rateAmount: {
+            type: Number,
+            default: 1
+        },
+
+        stallBestComment: {
+            type: String,
+            default: ''
+        },
+
+        stallImage: {
+            type: String,
+            default: '#'
+        },
+    },
+    setup (props) {
+      return {
+          ratingModel: props.stallRate
+      }
     }
-  }
 })
 </script>
 
-<style scoped>
+<style>
 
 </style>

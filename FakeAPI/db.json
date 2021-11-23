@@ -1,56 +1,76 @@
 {
+  "navigation": [
+    {
+       "canteenID": "1",
+       "canteenName": "丁香",
+       "canteenType": "student"
+    },
+    {
+      "canteenID": "2",
+      "canteenName": "紫荆",
+      "canteenType": "student"
+    },
+    {
+       "canteenID": "3",
+       "canteenName": "荷园",
+       "canteenType": "teacher"
+    }
+ ],
   "canteens": [
     {
-      "canteenID": "c1",
-      "canteenName": "玉树园1",
-      "canteenType": "student_canteen"
-    },
-    {
-      "canteenID": "c2",
-      "canteenName": "玉树园2",
-      "canteenType": "student_canteen"
-    },
-    {
-      "canteenID": "c3",
-      "canteenName": "玉树园3",
-      "canteenType": "teacher_canteen"
-    },
-    {
-      "canteenID": "c4",
-      "canteenName": "玉树园4",
-      "canteenType": "teacher_canteen"
-    }
-  ],
-  "canteenData": [
-    {
-      "canteenID": "c1",
-      "canteenName": "清芬园",
-      "operationTime": "12pm-7pm",
-      "contacts": "01231243",
+      "canteenID": "3",
+      "canteenName": "荷园",
+      "canteenOperationtime": "12pm-7pm",
+      "canteenPhone": "01231243",
       "canteenAddress": "学清路",
-      "intro": "asdafewfwfwfwfw",
-      "rating": 4,
-      "canteenImg": "http://localhost:3000/favicon.ico",
-      "stall": [
+      "canteenIntro": "荷园简介",
+      "canteenRate": 4.6,
+      "canteenImage": "http://localhost:3000/favicon.ico",
+      "stalls": [
         {
           "stallID": "s1",
-          "stallName": "Stall 1"
+          "stallName": "Stall 1",
+          "stallRate": 4.8,
+          "rateAmount": 300,
+          "myRate": 4,
+          "stallImage": "http://localhost:3000/favicon.ico",
+          "stallBestComment": "这个档口太棒这个档口太棒了这个档口太棒了这个档口太棒了了"
         },
         {
           "stallID": "s2",
-          "stallName": "Stall 2"
+          "stallName": "Stall 2",
+          "stallRate": 4.7,
+          "rateAmount": 3,
+          "myRate": 4,
+          "stallImage": "http://localhost:3000/favicon.ico",
+          "stallBestComment": "这个档口太棒了这个档口太棒了这个档口太棒了这个档口太棒了这个档口太棒了"
         },
         {
           "stallID": "s3",
-          "stallName": "Stall 3"
+          "stallName": "Stall 3",
+          "stallRate": 4.8,
+          "rateAmount": 30,
+          "myRate": 4,
+          "stallImage": "http://localhost:3000/favicon.ico",
+          "stallBestComment": "这个档口太棒了这个档口太棒了这个档口太棒了这个档口太棒了"
         },
         {
-          "stallID": "s4",
-          "stallName": "Stall 4"
+          "stallID": "stall01",
+          "stallRate": 4.8,
+          "rateAmount": 300,
+          "stallImage": "https://cdn.quasar.dev/img/avatar.png",
+          "stallName": "东北风味",
+          "canteenName": "清芬园",
+          "stallBestComment": "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价"
         },
         {
-          "stallID": "s5",
-          "stallName": "Stall 5"
+          "stallID": "stall02",
+          "stallRate": 3.5,
+          "rateAmount": 200,
+          "stallImage": "https://cdn.quasar.dev/img/avatar.png",
+          "stallName": "川渝风味",
+          "canteenName": "观畴",
+          "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
         }
       ]
     },
@@ -153,46 +173,60 @@
   ],
   "stallData": [
     {
-      "stallName": "first",
-      "stallNameHead": "广东风味",
-      "imgSrcHead": "https://cdn.quasar.dev/img/parallax2.jpg",
-      "introContent": "广东风味特点是食用方便，蒸熟、切片均可，是下酒佳肴；如果炒着吃，味道更好。广东的美食大多不是辣味的。而广东人最喜欢吃饭前和一碗汤，才吃饭。其中白切鸡是必不可缺的在饭桌上。",
-      "introScore": 4,
-      "introScoreAmount": 30,
-      "judgements" :[
-          {
-            "content": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
-            "title": "小明",
-            "subhead": "subhead1",
-            "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "thumb": 345,
-            "commentImgSrc1":"https://cdn.quasar.dev/img/parallax2.jpg",
-            "commentImgSrc2":"https://cdn.quasar.dev/img/parallax2.jpg",
-            "commentImgSrc3":"https://cdn.quasar.dev/img/parallax2.jpg"
-          },
-          {
-            "content": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
-            "title": "小红",
-            "subhead": "subhead2",
-            "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "thumb": 234,
-            "commentImgSrc1":"https://cdn.quasar.dev/img/parallax2.jpg",
-            "commentImgSrc2":"https://cdn.quasar.dev/img/parallax2.jpg",
-            "commentImgSrc3":"https://cdn.quasar.dev/img/parallax2.jpg"
-          },
-          {
-            "content": "味道不错，就是有点凉了，冬天希望能吃到热乎乎的饭菜。",
-            "title": "小亮",
-            "subhead": "subhead3",
-            "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "thumb": 123,
-            "commentImgSrc1":"https://cdn.quasar.dev/img/parallax2.jpg",
-            "commentImgSrc2":"https://cdn.quasar.dev/img/parallax2.jpg",
-            "commentImgSrc3":"https://cdn.quasar.dev/img/parallax2.jpg"
-          }
+      "stallName": "东北风味",
+      "stallImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+      "stallDescribe": "广东风味特点是食用方便，蒸熟、切片均可，是下酒佳肴；如果炒着吃，味道更好。广东的美食大多不是辣味的。而广东人最喜欢吃饭前和一碗汤，才吃饭。其中白切鸡是必不可缺的在饭桌上。",
+      "stallRate": 4,
+      "stallRateNumber": 1024,
+      "reviews" :[
+        {
+          "reviewID": "1",
+          "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+          "userName": "小明",
+          "reviewDateTime": "2021-11-11 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 100,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
+            {
+              "dishID": "string",
+              "dishName": "string"
+            },
+            {
+              "dishID": "string",
+              "dishName": "string"
+            }
+          ]
+        },
+        {
+          "reviewID": "2",
+          "reviewComment": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
+          "userName": "小红",
+          "reviewDateTime": "2021-11-1 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 10,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
+            {
+              "dishID": "string",
+              "dishName": "string"
+            },
+            {
+              "dishID": "string",
+              "dishName": "string"
+            }
+          ]
+        }
       ],
       "dishes": [
         {
@@ -237,181 +271,72 @@
       ]
     }
   ],
-  "dish": [
-    {
-      "dishID": "dish01",
-      "dishName": "宫保鸡丁",
-      "canteenName": "清芬园",
-      "thumb": 321,
-      "comment": "宫保鸡丁（Kung Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
-      "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-      "judgements": [
-        {
-          "content": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
-          "title": "小明",
-          "subhead": "subhead1",
-          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
-        },
-        {
-          "content": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
-          "title": "小红",
-          "subhead": "subhead2",
-          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
-        },
-        {
-          "content": "味道不错，就是有点凉了，冬天希望能吃到热乎乎的饭菜。",
-          "title": "小亮",
-          "subhead": "subhead3",
-          "imgSrc": "https://cdn.quasar.dev/img/avatar.png",
-          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg"
-        }
-      ]
-    }
-  ],
-  "stalls": [
-    {
-      "stallID": "stall01",
-      "stallRate": 4.8,
-      "rateAmount": 300,
-      "stallImages": "https://cdn.quasar.dev/img/avatar.png",
-      "stallName": "东北风味",
-      "canteenName": "清芬园",
-      "stallBestComment": "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价"
-    },
-    {
-      "stallID": "stall02",
-      "stallRate": 3.5,
-      "rateAmount": 200,
-      "stallImages": "https://cdn.quasar.dev/img/avatar.png",
-      "stallName": "川渝风味",
-      "canteenName": "观畴",
-      "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
-    },
-    {
-      "stallID": "stall03",
-      "stallRate": 3.5,
-      "rateAmount": 200,
-      "stallImages": "https://cdn.quasar.dev/img/avatar.png",
-      "stallName": "广东风味",
-      "canteenName": "观畴",
-      "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
-    }
-  ],
-  "stall01": {
-    "stallName": "string",
-    "stallAddress": "string",
-    "stallDescribe": "string",
-    "stallImages": [
-      "string",
-      "string"
-    ],
-    "stallRate": 4.5,
-    "myRate": 4.5,
-    "stallRateNumber": 1024,
-    "stallOperationtime": "string",
-    "dishes": [
-      {
-        "dishID": "string",
-        "dishName": "string",
-        "dishImage": "string",
-        "dishPrice": 10,
-        "dishLikes": 100,
-        "myDishLike": true,
-        "dishAvailableTime": "string",
-        "dishBestComment": "string"
-      },
-      {
-        "dishID": "string",
-        "dishName": "string",
-        "dishImage": "string",
-        "dishPrice": 10,
-        "dishLikes": 100,
-        "myDishLike": true,
-        "dishAvailableTime": "string",
-        "dishBestComment": "string"
-      }
-    ],
-    "reviews": [
-      {
-        "userName": "string",
-        "userImage": "string",
-        "reviewID": "string",
-        "reviewDateTime": "string",
-        "reviewImages": [
-          "string",
-          "string",
-          "string"
-        ],
-        "reviewComment": "string",
-        "reviewTags": [
-          "a",
-          "b",
-          "c"
-        ],
-        "reviewLikes": 100,
-        "myReviewLike": true,
-        "reply": true,
-        "replyDateTime": "string",
-        "replyComment": "string",
-        "dishes": [
-          {
-            "dishID": "string",
-            "dishName": "string"
-          },
-          {
-            "dishID": "string",
-            "dishName": "string"
-          }
-        ]
-      },
-      {
-        "userName": "string",
-        "reviewID": "string",
-        "reviewDateTime": "string",
-        "reviewImages": [
-          "string",
-          "string",
-          "string"
-        ],
-        "reviewComment": "string",
-        "reviewTags": [
-          "a",
-          "b",
-          "c"
-        ],
-        "reviewLikes": 100,
-        "myReviewLike": false,
-        "reply": true,
-        "replyDateTime": "string",
-        "replyComment": "string",
-        "dishes": [
-          {
-            "dishID": "string",
-            "dishName": "string"
-          },
-          {
-            "dishID": "string",
-            "dishName": "string"
-          }
-        ]
-      }
-    ]
-  },
   "dishes": [
     {
       "dishID": "dish01",
       "dishName": "宫保鸡丁",
       "dishImage": "https://cdn.quasar.dev/img/avatar.png",
       "dishPrice": 10,
-      "dishLikes": 100,
+      "dishLikes": 10,
       "myDishLike": true,
       "dishAvailableTime": "string",
       "stallID": "string",
       "stallName": "东北风味",
       "canteenName": "清芬园",
-      "dishBestComment": "好吃极了了太好吃了太好吃了太好吃了太好吃了太"
+      "dishBestComment": "太好吃了太好吃了太好吃了太好吃了太好吃了太好吃了！",
+      "dishIntro": "宫保鸡丁（Kung Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
+      "reviews" :[
+        {
+          "reviewID": "1",
+          "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+          "userName": "小明",
+          "reviewDateTime": "2021-11-11 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 100,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
+            {
+              "dishID": "string",
+              "dishName": "string"
+            },
+            {
+              "dishID": "string",
+              "dishName": "string"
+            }
+          ]
+        },
+        {
+          "reviewID": "2",
+          "reviewComment": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
+          "userName": "小红",
+          "reviewDateTime": "2021-11-1 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 10,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
+          {
+            "dishID": "string",
+            "dishName": "string"
+          },
+          {
+            "dishID": "string",
+            "dishName": "string"
+          }
+          ]
+        }
+      ]
     },
     {
       "dishID": "dish02",
@@ -424,7 +349,35 @@
       "stallID": "string",
       "stallName": "东北风味",
       "canteenName": "桃李园地下",
-      "dishBestComment": "太好吃了太好吃了太好吃了太好吃了太好吃了太好吃了！"
+      "dishIntro": "芝士辣白菜汤泡饭是桃李地下的新菜品",
+      "dishBestComment": "太好吃了太好吃了太好吃了太好吃了太好吃了太好吃了！",
+      "reviews" :[
+        {
+          "reviewID": "1",
+          "reviewComment": "不好吃气死了气死了气死了气死了",
+          "userName": "小明",
+          "reviewDateTime": "2021-11-11 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 100,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
+            {
+              "dishID": "string",
+              "dishName": "string"
+            },
+            {
+              "dishID": "string",
+              "dishName": "string"
+            }
+          ]
+        }
+      ]
     },
     {
       "dishID": "dish03",
@@ -437,7 +390,65 @@
       "stallID": "string",
       "stallName": "东北风味",
       "canteenName": "澜园",
-      "dishBestComment": "四喜丸子，属于鲁菜。四喜丸子是旧时人们为庆贺和祈求人生的四大喜事：久旱逢甘雨；他乡遇故知；洞房花烛夜；金榜题名时而制作的菜肴，之所以做成圆形状是取吉庆团圆美满之意。由四个色和味形俱佳的肉丸组成，寓人生福、禄、寿、喜四大喜事。以取其吉祥之意。寓意：福、禄、寿、喜 Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。"
+      "dishIntro": "四喜丸子不是四个丸子",
+      "dishBestComment": "四喜丸子，属于鲁菜。四喜丸子是旧时人们为庆贺和祈求人生的四大喜事：久旱逢甘雨；他乡遇故知；洞房花烛夜；金榜题名时而制作的菜肴，之所以做成圆形状是取吉庆团圆美满之意。由四个色和味形俱佳的肉丸组成，寓人生福、禄、寿、喜四大喜事。以取其吉祥之意。寓意：福、禄、寿、喜 Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
+      "reviews" :[
+        {
+          "reviewID": "1",
+          "reviewComment": "太贵了太贵了太贵了太贵了",
+          "userName": "Kate",
+          "reviewDateTime": "2021-11-11 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 100,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
+            {
+              "dishID": "string",
+              "dishName": "string"
+            },
+            {
+              "dishID": "string",
+              "dishName": "string"
+            }
+          ]
+        }
+      ]
+    }
+
+  ],
+  "stalls": [
+    {
+      "stallID": "stall01",
+      "stallRate": 4.8,
+      "rateAmount": 300,
+      "stallImage": "https://cdn.quasar.dev/img/avatar.png",
+      "stallName": "东北风味",
+      "canteenName": "清芬园",
+      "stallBestComment": "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价"
+    },
+    {
+      "stallID": "stall02",
+      "stallRate": 3.5,
+      "rateAmount": 200,
+      "stallImage": "https://cdn.quasar.dev/img/avatar.png",
+      "stallName": "川渝风味",
+      "canteenName": "观畴",
+      "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
+    },
+    {
+      "stallID": "stall03",
+      "stallRate": 3.5,
+      "rateAmount": 290,
+      "stallImages": "https://cdn.quasar.dev/img/parallax2.jpg",
+      "stallName": "广东风味",
+      "canteenName": "观畴",
+      "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
     }
   ],
   "usersDetails": {
@@ -447,15 +458,11 @@
     "userImage": "https://cdn.quasar.dev/img/avatar.png",
     "myReviews": [
       {
-        "stallID": "string",
-        "stallName": "string",
-        "reviewDateTime": "string",
-        "reviewComment": "string",
-        "reviewImages": [
-          "string",
-          "string",
-          "string"
-        ],
+        "stallID": "stall01",
+        "stallName": "东北风味",
+        "reviewDateTime": "2021-11-11 14:20",
+        "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+        "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
         "reviewTags": [
           "a",
           "b",
@@ -520,4 +527,6 @@
       }
     ]
   }
+ 
+
 }
