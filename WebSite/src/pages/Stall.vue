@@ -15,14 +15,14 @@
           />
         </q-carousel>
       </div>
-    
+
     <div class="q-pa-md">
-      <StallIntroSection 
+      <StallIntroSection
         :score="stallData.data.introScore"
         :scoreAmount="stallData.data.introScoreAmount"
       />
     </div>
-    
+
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="width:100%">
         <q-tabs
@@ -67,9 +67,9 @@
         </q-tab-panels>
       </div>
     </div>
-    
+
   </div>
-  
+
 </template>
 
 <script>
@@ -81,11 +81,12 @@ import DishCardSection from "components/HomePage/DishCardSection";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import Pagination from 'components/StallPage/Pagination.vue';
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
-
+import { watch} from 'vue';
+import {useRoute} from 'vue-router'
 
 export default defineComponent({
   name: "Stall",
-  components: { 
+  components: {
     //StallPictureSection,
     StallIntroSection,
     DishCardSection,
@@ -99,7 +100,10 @@ export default defineComponent({
     }
   },
   setup (){
-    const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
+    const route=useRoute()
+    let name=route.query.stallName
+    let API_LINK = `http://localhost:3000/stallData/?stallNameHead=${name}`; // 之后放真正的API
+    //const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
     const DISH_API_LINK = "http://localhost:3000/dishes";
 
     const dishData = reactive({ data: {} });
@@ -121,10 +125,18 @@ export default defineComponent({
         console.log(err.message);
       }
     };
+    watch(()=>route.query,()=>{
+      name=route.query.stallName
+      API_LINK=`http://localhost:3000/stallData/?stallNameHead=${name}`
+      getStallData()
+      getDishData()
+      console.log("watch",route.query.stallName)
+    },{
+      immediate:true
+    });
+    //getStallData();
+    //getDishData();
 
-    getStallData();
-    getDishData();
-    
     return {
       slide: ref('first'),
       stallData,
