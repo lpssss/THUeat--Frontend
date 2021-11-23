@@ -38,16 +38,21 @@ import { ref, reactive } from "vue";
 import axios from "axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
+import { watch } from 'vue';
+import {useRoute} from 'vue-router'
 
 export default {
   name: "Dish",
   // Components需改名
   components: {
-    CommentCardSection, 
+    CommentCardSection,
     HomePageAnnouncementSection,
     },
   setup() {
-    const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
+    const route=useRoute()
+    let id=route.query.dishID
+    let API_LINK = `http://localhost:3000/dish/?dishID=${id}`; // 之后放真正的API
+    //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
     const dishData = reactive({ data: {} });
     const getDishData = async () => {
       try {
@@ -57,7 +62,15 @@ export default {
         console.log(err.message);
       }
     };
-    getDishData();
+    watch(()=>route.query,()=>{
+      id=route.query.dishID
+      API_LINK=`http://localhost:3000/dish/?dishID=${id}`
+      getDishData()
+      console.log("watch",route.query.dishID)
+    },{
+      immediate:true
+    });
+    //getDishData();
 
     return {
       slide: ref('first'),
