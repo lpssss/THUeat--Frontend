@@ -16,36 +16,61 @@
        "canteenType": "teacher"
     }
  ],
-  "canteenData": [
+  "canteens": [
     {
       "canteenID": "c1",
       "canteenName": "清芬园",
-      "operationTime": "12pm-7pm",
-      "contacts": "01231243",
+      "canteenOperationtime": "12pm-7pm",
+      "canteenPhone": "01231243",
       "canteenAddress": "学清路",
-      "intro": "asdafewfwfwfwfw",
-      "rating": 4,
-      "canteenImg": "http://localhost:3000/favicon.ico",
-      "stall": [
+      "canteenIntro": "清芬园简介",
+      "canteenRate": 4.6,
+      "canteenImage": "http://localhost:3000/favicon.ico",
+      "stalls": [
         {
           "stallID": "s1",
-          "stallName": "Stall 1"
+          "stallName": "Stall 1",
+          "stallRate": 4.8,
+          "rateAmount": 300,
+          "myRate": 4,
+          "stallImage": "http://localhost:3000/favicon.ico",
+          "stallBestComment": "这个档口太棒这个档口太棒了这个档口太棒了这个档口太棒了了"
         },
         {
           "stallID": "s2",
-          "stallName": "Stall 2"
+          "stallName": "Stall 2",
+          "stallRate": 4.7,
+          "rateAmount": 3,
+          "myRate": 4,
+          "stallImage": "http://localhost:3000/favicon.ico",
+          "stallBestComment": "这个档口太棒了这个档口太棒了这个档口太棒了这个档口太棒了这个档口太棒了"
         },
         {
           "stallID": "s3",
-          "stallName": "Stall 3"
+          "stallName": "Stall 3",
+          "stallRate": 4.8,
+          "rateAmount": 30,
+          "myRate": 4,
+          "stallImage": "http://localhost:3000/favicon.ico",
+          "stallBestComment": "这个档口太棒了这个档口太棒了这个档口太棒了这个档口太棒了"
         },
         {
-          "stallID": "s4",
-          "stallName": "Stall 4"
+          "stallID": "stall01",
+          "stallRate": 4.8,
+          "rateAmount": 300,
+          "stallImage": "https://cdn.quasar.dev/img/avatar.png",
+          "stallName": "东北风味",
+          "canteenName": "清芬园",
+          "stallBestComment": "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价"
         },
         {
-          "stallID": "s5",
-          "stallName": "Stall 5"
+          "stallID": "stall02",
+          "stallRate": 3.5,
+          "rateAmount": 200,
+          "stallImage": "https://cdn.quasar.dev/img/avatar.png",
+          "stallName": "川渝风味",
+          "canteenName": "观畴",
+          "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
         }
       ]
     }
@@ -174,7 +199,7 @@
       "stallID": "stall01",
       "stallRate": 4.8,
       "rateAmount": 300,
-      "stallImages": "https://cdn.quasar.dev/img/avatar.png",
+      "stallImage": "https://cdn.quasar.dev/img/avatar.png",
       "stallName": "东北风味",
       "canteenName": "清芬园",
       "stallBestComment": "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价"
@@ -183,7 +208,7 @@
       "stallID": "stall02",
       "stallRate": 3.5,
       "rateAmount": 200,
-      "stallImages": "https://cdn.quasar.dev/img/avatar.png",
+      "stallImage": "https://cdn.quasar.dev/img/avatar.png",
       "stallName": "川渝风味",
       "canteenName": "观畴",
       "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
@@ -193,7 +218,7 @@
     "stallName": "string",
     "stallAddress": "string",
     "stallDescribe": "string",
-    "stallImages": [
+    "stallImage": [
       "string",
       "string"
     ],

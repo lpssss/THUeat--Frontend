@@ -1,8 +1,5 @@
 <template>
-  <div class="column">
-    <div class="col">
-      简介
-    </div>
+  <div class="column q-pa-md">
     <div class="col">
       {{intro}}
     </div>
