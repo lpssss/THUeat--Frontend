@@ -179,21 +179,20 @@
       "stallRate": 4,
       "stallRateNumber": 1024,
       "reviews" :[
-          {
-            "reviewID": "1",
-            "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
-            "userName": "小明",
-            "reviewDateTime": "2021-11-11 14:20",
-            "userImage": "https://cdn.quasar.dev/img/avatar.png",
-            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "reviewTags": ["a", "b", "c"],
-            "reviewLikes": 100,
-            "myReviewLike": true,
-            "reply": true,
-            "replyDateTime": "string",
-            "replyComment": "string",
-            "dishes": [
+        {
+          "reviewID": "1",
+          "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+          "userName": "小明",
+          "reviewDateTime": "2021-11-11 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 100,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
             {
               "dishID": "string",
               "dishName": "string"
@@ -202,23 +201,22 @@
               "dishID": "string",
               "dishName": "string"
             }
-            ]
-          },
-          {
-            "reviewID": "2",
-            "reviewComment": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
-            "userName": "小红",
-            "reviewDateTime": "2021-11-1 14:20",
-            "userImage": "https://cdn.quasar.dev/img/avatar.png",
-            "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-            "reviewTags": ["a", "b", "c"],
-            "reviewLikes": 10,
-            "myReviewLike": true,
-            "reply": true,
-            "replyDateTime": "string",
-            "replyComment": "string",
-            "dishes": [
+          ]
+        },
+        {
+          "reviewID": "2",
+          "reviewComment": "菜品味道不错，分量很足，如果能再淡一些就更好了。",
+          "userName": "小红",
+          "reviewDateTime": "2021-11-1 14:20",
+          "userImage": "https://cdn.quasar.dev/img/avatar.png",
+          "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
+          "reviewTags": ["a", "b", "c"],
+          "reviewLikes": 10,
+          "myReviewLike": true,
+          "reply": true,
+          "replyDateTime": "string",
+          "replyComment": "string",
+          "dishes": [
             {
               "dishID": "string",
               "dishName": "string"
@@ -227,8 +225,8 @@
               "dishID": "string",
               "dishName": "string"
             }
-            ]
-          }
+          ]
+        }
       ],
       "dishes": [
         {
@@ -460,15 +458,11 @@
     "userImage": "https://cdn.quasar.dev/img/avatar.png",
     "myReviews": [
       {
-        "stallID": "string",
-        "stallName": "string",
-        "reviewDateTime": "string",
-        "reviewComment": "string",
-        "reviewImages": [
-          "string",
-          "string",
-          "string"
-        ],
+        "stallID": "stall01",
+        "stallName": "东北风味",
+        "reviewDateTime": "2021-11-11 14:20",
+        "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
+        "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
         "reviewTags": [
           "a",
           "b",
