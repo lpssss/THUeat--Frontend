@@ -5,7 +5,7 @@
       <div class="col-12">
         <div class="row q-gutter-md justify-center">
           <DashboardCard
-            v-for="data in testdata"
+            v-for="data in finalDisplayData"
             :key="data.engName"
             v-bind="data"
           />
@@ -20,9 +20,8 @@
 <script>
 import DashboardCard from "components/DashboardCard";
 import StallDetailsTable from "components/StallDetailsTable";
-import axios from "axios";
-import { reactive, ref } from "vue";
-//这些数据需要和后端对照，确定数据获取的方法
+import { ref } from "vue";
+
 // 显示面板显示的数据
 const DISPLAYED_DATA_TITLE_ICON = [
   { engName: "stallRate", titleName: "档口平均分", iconName: "star_rate" },
@@ -53,16 +52,37 @@ const testReturnData = {
   bestDishName: "string7",
   stallOperationtime: "string8",
 };
-
-const MODIFIABLE_STALL_ATTRIBUTES = ["简介", "图片", "营业时间"];
-const rows = [
+const MODIFIABLE_ROWS = ["stallDescribe", "stallImages", "stallOperationTime"];
+const ROWS = [
   {
+    engName: "stallName",
     attributeName: "档口名字",
-    attribute: "1231231",
+    modifiable: 0,
   },
   {
+    engName: "stallDescribe",
     attributeName: "档口简介",
-    attribute: "124214",
+    modifiable: 1,
+  },
+  {
+    engName: "stallAddress",
+    attributeName: "档口地址",
+    modifiable: 0,
+  },
+  {
+    engName: "stallImages",
+    attributeName: "档口照片",
+    modifiable: 1,
+  },
+  {
+    engName: "stallOperationtime",
+    attributeName: "档口运营时间",
+    modifiable: 1,
+  },
+  {
+    engName: "canteenName",
+    attributeName: "档口所属食堂",
+    modifiable: 0,
   },
 ];
 export default {
@@ -72,14 +92,25 @@ export default {
     // const API_LINK = "http://localhost:3000/"; // 之后放真正的API
     // const apiDashboardDisplayData = {};
     const arrangeData = () => {
-      let finaldata= DISPLAYED_DATA_TITLE_ICON.map((item) => {
-        const target = item.engName;
-        if(target==='canteenAvgRate')
-          return { ...item, displayedData: ref(testReturnData[target]), subhead:"所属食堂: "+testReturnData.canteenName };
-        else
-          return { ...item, displayedData: ref(testReturnData[target]) };
-      });
-      return finaldata
+      return [
+        DISPLAYED_DATA_TITLE_ICON.map((item) => {
+          const target = item.engName;
+          if (target === "canteenAvgRate")
+            return {
+              ...item,
+              displayedData: ref(testReturnData[target]),
+              subhead: "所属食堂: " + testReturnData.canteenName,
+            };
+          else return { ...item, displayedData: ref(testReturnData[target]) };
+        }),
+        ROWS.map((item) => {
+          const target = item.engName;
+          return {
+            ...item,
+            attribute: testReturnData[target],
+          };
+        }),
+      ];
     };
     // const getDashboardDisplayData = async () => {
     //   try {
@@ -91,10 +122,11 @@ export default {
     // };
 
     // getDashboardDisplayData();
-    const testdata=arrangeData();
-    console.log(testdata)
+    const [finalDisplayData,rows] = arrangeData();
+    console.log(finalDisplayData);
+    console.log(rows)
     return {
-      testdata,
+      finalDisplayData,
       rows,
     };
   },

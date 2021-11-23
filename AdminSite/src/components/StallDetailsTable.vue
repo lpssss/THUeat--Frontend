@@ -22,7 +22,7 @@ const columns = [
     name: "attribute",
     align: "center",
     label: "属性",
-    field: "attribute",
+    field: (row) => row.attribute,
   },
 ];
 
@@ -35,7 +35,8 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    console.log(props.rows);
     return {
       columns,
     };
