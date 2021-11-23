@@ -31,7 +31,7 @@ import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetail
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
 import CanteenStallSection from "components/CanteenPage/CanteenStallSection";
-import { watch, watchEffect } from 'vue';
+import { watch } from 'vue';
 import {useRoute} from 'vue-router'
 
 export default defineComponent({
