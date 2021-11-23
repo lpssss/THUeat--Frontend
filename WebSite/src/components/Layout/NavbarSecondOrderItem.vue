@@ -1,7 +1,7 @@
 <template>
   <q-item clickable v-ripple>
     <q-item-section>
-        <div> {{ canteenName }} </div>
+        <div> <router-link :to="{path:'/canteen',query:{canteenID:canteenID}}">{{ canteenName }}</router-link> </div>
     </q-item-section>
   </q-item>
 </template>
@@ -11,6 +11,10 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "NavbarSecondOrderItem",
   props: {
+    canteenID: {
+      type: String,
+      required: true
+    },
     canteenName: {
       type: String,
       required: true
