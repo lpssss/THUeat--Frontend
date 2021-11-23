@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      title="Treats"
+      title="档口信息"
       :rows="rows"
       :columns="columns"
       row-key="name"
