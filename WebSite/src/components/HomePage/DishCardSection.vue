@@ -1,6 +1,6 @@
 <template>
     <q-card class="my-card">
-        <q-img :src="imgSrc" :alt="dishName" class="q-card-img"/>
+        <q-img :src="dishImage" :alt="dishName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
           <div class="text-h6"><router-link :to="{path:'/dish',query:{dishName:dishName}}">{{ dishName }}</router-link></div>
@@ -9,13 +9,13 @@
 
         <q-card-section>
           <div class="ellipsis-2-lines" >
-              {{ comment }}
+              {{ dishBestComment }}
           </div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
           <q-btn size="sm" falt round color="primary" icon="thumb_up" />
-          <span class="q-px-sm text-caption text-grey"> {{ thumb }} </span>
+          <span class="q-px-sm text-caption text-grey"> {{ dishLikes }} </span>
         </q-card-section>
     </q-card>
 </template>
@@ -35,17 +35,17 @@ export default defineComponent({
             default: ''
         },
 
-        thumb: {
+        dishLikes: {
             type: Number,
             default: 5
         },
 
-        comment: {
+        dishBestComment: {
             type: String,
             default: ''
         },
 
-        imgSrc: {
+        dishImage: {
             type: String,
             default: '#'
         },

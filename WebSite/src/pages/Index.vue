@@ -21,9 +21,9 @@
 
     <div class="q-pa-md row items-start q-gutter-md">
       <StallCardSection
-        v-for="stall in stalls"
+        v-for="stall in stallData.data"
         v-bind="stall"
-        :key="stall.stallName"
+        :key="stall.stallID"
       />
     </div>
 
@@ -33,16 +33,16 @@
 
     <div class="q-pa-md row items-start q-gutter-md">
       <DishCardSection
-        v-for="dish in dishs"
+        v-for="dish in dishData.data"
         v-bind="dish"
-        :key="dish.dishName"
-      />
+        :key="dish.dishID"
+      />   
     </div>
   </q-page>
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, reactive } from "vue"
 import axios from "axios";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import DishCardSection from "components/HomePage/DishCardSection";
@@ -84,49 +84,6 @@ const homePageBanner = {
   }
 };
 
-const stalls = [
-  {
-    stallName: "广东风味",
-    canteenName: "清芬园",
-    score: 4.8,
-    scoreAmount: 233,
-    comment: "这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价这是一条精选的很长的评价",
-    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
-  },
-  {
-    stallName: "川渝风味",
-    canteenName: "观畴",
-    score: 3.5,
-    scoreAmount: 356,
-    comment: "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述",
-    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
-  }
-];
-
-const dishs = [
-  {
-    dishName: "宫保鸡丁",
-    canteenName: "清芬园",
-    thumb: 321,
-    comment: "宫保鸡丁（Kung Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
-    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
-  },
-  {
-    dishName: "芝士辣白菜汤泡饭",
-    canteenName: "桃李园地下",
-    thumb: 323,
-    comment: "太好吃了太好吃了太好吃了太好吃了太好吃了太好吃了！",
-    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
-  },
-  {
-    dishName: "四喜丸子",
-    canteenName: "澜园",
-    thumb: 31,
-    comment: "四喜丸子，属于鲁菜。四喜丸子是旧时人们为庆贺和祈求人生的四大喜事：久旱逢甘雨；他乡遇故知；洞房花烛夜；金榜题名时而制作的菜肴，之所以做成圆形状是取吉庆团圆美满之意。由四个色和味形俱佳的肉丸组成，寓人生福、禄、寿、喜四大喜事。以取其吉祥之意。寓意：福、禄、寿、喜 Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
-    imgSrc: "https://cdn.quasar.dev/img/avatar.png",
-  },
-]
-
 export default defineComponent({
   name: "Index",
   components: {
@@ -136,12 +93,39 @@ export default defineComponent({
     StallCardSection,
   },
   setup () {
+    
+    const DISH_API_LINK = "http://localhost:3000/dishes";
+    const STALL_API_LINK = "http://localhost:3000/stalls";
+
+    const dishData = reactive({ data: {} });
+    const stallData = reactive({ data: {} });
+
+    const getDishData = async () => {
+      try {
+        const response = await axios.get(DISH_API_LINK);
+        dishData.data = response.data;
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    const getStallData = async () => {
+      try {
+        const response = await axios.get(STALL_API_LINK);
+        stallData.data = response.data;
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
+    getDishData();
+    getStallData();
+    
     return {
       slide: ref('first'),
       announcements: announcements,
       homePageBanner: homePageBanner,
-      stalls: stalls,
-      dishs: dishs,
+      dishData,
+      stallData,
     }
   }
 })

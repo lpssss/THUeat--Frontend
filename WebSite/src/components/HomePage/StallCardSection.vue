@@ -1,6 +1,6 @@
 <template>
     <q-card class="my-card">
-        <q-img :src="imgSrc" :alt="stallName" class="q-card-img"/>
+        <q-img :src="stallImages" :alt="stallName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
           <div class="text-h6"> <router-link :to="{path:'/stall',query:{stallName:stallName}}">{{stallName}}</router-link> </div>
@@ -9,7 +9,7 @@
 
         <q-card-section>
           <div class="ellipsis-2-lines" >
-            {{ comment }}
+            {{ stallBestComment }}
           </div>
         </q-card-section>
 
@@ -25,7 +25,7 @@
                 icon-half="star_half"
                 readonly
               />
-              <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
+              <span class="text-caption text-grey q-ml-sm"> {{ stallRate }} ({{ rateAmount }})</span>
             </div>
           </div>
         </q-card-section>
@@ -47,29 +47,29 @@ export default defineComponent({
             default: ''
         },
 
-        score: {
+        stallRate: {
             type: Number,
             default: 5
         },
 
-        scoreAmount: {
+        rateAmount: {
             type: Number,
             default: 1
         },
 
-        comment: {
+        stallBestComment: {
             type: String,
             default: ''
         },
 
-        imgSrc: {
+        stallImages: {
             type: String,
             default: '#'
         },
     },
     setup (props) {
       return {
-          ratingModel: props.score
+          ratingModel: props.stallRate
       }
     }
 })
