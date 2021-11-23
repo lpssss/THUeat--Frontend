@@ -78,8 +78,9 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { useQuasar } from 'quasar'
+import { defineComponent, ref, reactive} from 'vue';
+import { useQuasar } from 'quasar';
+import axios from "axios";
 import BannerSection from "components/Layout/BannerSection";
 import LabelSection from "components/CommentPage/LabelSection";
 
@@ -126,6 +127,8 @@ export default defineComponent({
         message: `${rejectedEntries.length} 个文件上传失败，文件类型不符合要求`
       })
     }
+
+    
 
     return {
       checkFileType,

@@ -15,14 +15,14 @@
           />
         </q-carousel>
       </div>
-
+    
     <div class="q-pa-md">
       <StallIntroSection 
-        :content="stallData.data.introContent"
         :score="stallData.data.introScore"
         :scoreAmount="stallData.data.introScoreAmount"
       />
     </div>
+    
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="width:100%">
         <q-tabs
@@ -45,9 +45,9 @@
             <div class="text-h6">推荐菜品</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <DishCardSection
-                v-for="dish in stallData.data.dishes"
+                v-for="dish in dishData.data"
                 v-bind="dish"
-                :key="dish.dishName"
+                :key="dish.dishID"
               />
             </div>
             <Pagination/>
@@ -100,7 +100,11 @@ export default defineComponent({
   },
   setup (){
     const API_LINK = "http://localhost:3000/stallData"; // 之后放真正的API
+    const DISH_API_LINK = "http://localhost:3000/dishes";
+
+    const dishData = reactive({ data: {} });
     const stallData = reactive({ data: {} });
+
     const getStallData = async () => {
       try {
         const response = await axios.get(API_LINK);
@@ -109,11 +113,22 @@ export default defineComponent({
         console.log(err.message);
       }
     };
-    getStallData();
+    const getDishData = async () => {
+      try {
+        const response = await axios.get(DISH_API_LINK);
+        dishData.data = response.data;
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
 
+    getStallData();
+    getDishData();
+    
     return {
       slide: ref('first'),
       stallData,
+      dishData,
     };
 },
 })
