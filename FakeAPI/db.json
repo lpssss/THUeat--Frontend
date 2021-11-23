@@ -240,7 +240,7 @@
   ],
   "dish": [
     {
-      "dishID": "d01",
+      "dishID": "dish01",
       "dishName": "宫保鸡丁",
       "canteenName": "清芬园",
       "thumb": 321,
@@ -287,6 +287,15 @@
       "rateAmount": 200,
       "stallImages": "https://cdn.quasar.dev/img/avatar.png",
       "stallName": "川渝风味",
+      "canteenName": "观畴",
+      "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
+    },
+    {
+      "stallID": "stall03",
+      "stallRate": 3.5,
+      "rateAmount": 200,
+      "stallImages": "https://cdn.quasar.dev/img/avatar.png",
+      "stallName": "广东风味",
       "canteenName": "观畴",
       "stallBestComment": "如果暂无用户评价，这是一条默认的档口描述。如果暂无用户评价，这是一条默认的档口描述"
     }
