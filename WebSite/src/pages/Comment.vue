@@ -69,20 +69,22 @@
         </div>
       </div>
       <div class="col-3 q-pa-md" align="right">
-        <q-btn>提交</q-btn>
+        <q-btn @click="onComment">提交</q-btn>
       </div>
       <div class="col-3 q-pa-md" align="left"></div>
-    </div>  
+    </div>
   </q-page>
 
 </template>
 
 <script>
-import { defineComponent, ref, reactive} from 'vue';
+import {defineComponent, ref, reactive, computed} from 'vue';
 import { useQuasar } from 'quasar';
 import axios from "axios";
 import BannerSection from "components/Layout/BannerSection";
 import LabelSection from "components/CommentPage/LabelSection";
+import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 
 const commentBanner = {
@@ -108,12 +110,14 @@ const labels = [
 
 export default defineComponent({
   name: "Comment",
-  components: {     
+  components: {
     BannerSection,
     LabelSection,
   },
   setup () {
     const $q = useQuasar()
+    const store=useStore()
+    const router=useRouter()
 
     function checkFileType (files) {
       return files.filter(file => file.type === 'image/png')
@@ -127,20 +131,31 @@ export default defineComponent({
         message: `${rejectedEntries.length} 个文件上传失败，文件类型不符合要求`
       })
     }
+    //点击提交评论按钮后确认是否是登录状态，如果不是，跳转到登陆页面
+    function onComment(){
+      console.log(store._state.data.login.loginStatus)
+      if(!store._state.data.login.loginStatus){
+        router.push('/login')
+      }
+      else{
+        console.log('submit successfully')
+      }
+    }
 
-    
+
 
     return {
       checkFileType,
       onRejected,
+      onComment,
       text: ref(''),
       dishModel: ref(null),
       ratingModel: ref(0),
-      dishOptions: dishOptions,      
+      dishOptions: dishOptions,
       commentBanner: commentBanner,
       labels: labels,
     }
-  }
+  },
 })
 
 </script>
