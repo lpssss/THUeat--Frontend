@@ -3,8 +3,8 @@
       <q-card-section>
         <div class="row justify-center">
     <div class="self-center col-6">
-      <q-rating 
-        v-model="starscore" 
+      <q-rating
+        v-model="starscore"
         size="2em"
         color="purple-8"
         icon="star_border"
@@ -16,8 +16,8 @@
       <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
     </div>
         <div class="col-2">
-      <q-btn color="purple-8"  icon-right="send" label="去评价" >
-        
+      <q-btn color="purple-8"  icon-right="send" label="去评价" @click="$router.push('/comment')">
+
       </q-btn>
     </div>
   </div>
@@ -39,7 +39,7 @@ export default defineComponent({
             type: Number,
             default: 32
         },
-        
+
     },
     setup(props) {
         return {

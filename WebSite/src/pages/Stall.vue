@@ -17,7 +17,7 @@
       </div>
 
     <div class="q-pa-md">
-      <StallIntroSection 
+      <StallIntroSection
         :score="stallData.data.stallRate"
         :scoreAmount="stallData.data.stallRateNumber"
       />
@@ -102,7 +102,7 @@ export default defineComponent({
     const route=useRoute()
     let name=route.query.stallName
     let API_LINK = `http://localhost:3000/stallData/?stallName=${name}`; // 之后放真正的API
-    
+
     const stallData = reactive({ data: {} });
 
     const getStallData = async () => {
@@ -113,7 +113,7 @@ export default defineComponent({
         console.log(err.message);
       }
     };
-    
+
     watch(()=>route.query,()=>{
       name=route.query.stallName
       API_LINK=`http://localhost:3000/stallData/?stallName=${name}`
