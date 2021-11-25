@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-table
       title="菜品列表"
-      :rows="rows"
+      :rows="dishData"
       :columns="columns"
       row-key="name"
       binary-state-sort
@@ -11,22 +11,18 @@
         <q-btn color="primary" @click="addDish">创建</q-btn>
       </template>
 
-      <template v-slot:body-cell-status="props">
+      <template v-slot:body-cell-dishStatus="props">
         <q-td :props="props">
           <q-toggle
-            model-value="false"
             checked-icon="check"
             color="green"
             unchecked-icon="clear"
-          />
+            :model-value="props.row.dishStatus"
+            @update:model-value="(...args)=>{doSomething(props.row,...args)}"
+            />
         </q-td>
       </template>
 
-      <template v-slot:body-cell-btnDelete="props">
-        <q-td :props="props">
-          <q-btn size="10px" outline round color="red" icon="close" />
-        </q-td>
-      </template>
     </q-table>
   </div>
 </template>
@@ -40,7 +36,7 @@ const columns = [
     name: "dishID",
     align: "left",
     label: "菜品编号",
-    field: (row) => row.dishID,
+    field: "dishID",
     sortable: true,
   },
   {
@@ -52,11 +48,51 @@ const columns = [
     sortable: true,
   },
   {
-    name:"status",
+    name: "dishIntro",
+    required: true,
+    label: "菜品简介",
+    align: "left",
+    field: "dishIntro",
+    sortable: true,
+  },
+  {
+    name: "dishPrice",
+    required: true,
+    label: "菜品价格",
+    align: "left",
+    field: "dishPrice",
+    sortable: true,
+  },
+  {
+    name: "dishImage",
+    required: true,
+    label: "菜品图片",
+    align: "left",
+    field: "dishImage",
+    sortable: true,
+  },
+  {
+    name: "dishLikes",
+    required: true,
+    label: "菜品点赞数",
+    align: "left",
+    field: "dishLikes",
+    sortable: true,
+  },
+  {
+    name: "dishAvailableTime",
+    required: true,
+    label: "菜品售卖时段",
+    align: "left",
+    field: "dishAvailableTime",
+    sortable: true,
+  },
+  {
+    name:"dishStatus",
     required: true,
     label: "激活状态",
     align: "left",
-    field: "status",
+    field: "dishStatus",
   }
 ];
 
@@ -68,10 +104,20 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const dishData=ref(props.rows);
+    function doSomething(a,value,evt){
+      console.log(a.dishStatus)
+      a.dishStatus=value
+      console.log(value)
+      console.log(evt)
+
+    }
     return {
       columns,
-      stats:ref(true)
+      dishData,
+      stats:ref(true),
+      doSomething
     };
   },
 };
