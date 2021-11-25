@@ -5,7 +5,7 @@
       <div class="col-12">
         <div class="row q-gutter-md justify-center">
           <DashboardCard
-            v-for="data in finalDisplayData"
+            v-for="data in dashboardData"
             :key="data.engName"
             v-bind="data"
           />
@@ -44,7 +44,7 @@ const testReturnData = {
   stallDescribe: "string3",
   canteenName: "string4",
   stallStatus: 1,
-  stallImages: ["string5", "string6"],
+  stallImages: ["https://placeimg.com/500/300/nature", "https://placeimg.com/500/300/nature"],
   stallRate: 4.5,
   stallRateNumber: 1024,
   stallCommentNumber: 10,
@@ -57,33 +57,33 @@ const ROWS = [
   {
     engName: "stallName",
     attributeName: "档口名字",
-    modifiable: 0,
-  },
-  {
-    engName: "stallDescribe",
-    attributeName: "档口简介",
-    modifiable: 1,
-  },
-  {
-    engName: "stallAddress",
-    attributeName: "档口地址",
-    modifiable: 0,
-  },
-  {
-    engName: "stallImages",
-    attributeName: "档口照片",
-    modifiable: 1,
-  },
-  {
-    engName: "stallOperationtime",
-    attributeName: "档口运营时间",
-    modifiable: 1,
+    modifiable: false,
   },
   {
     engName: "canteenName",
     attributeName: "档口所属食堂",
-    modifiable: 0,
+    modifiable: false,
   },
+  {
+    engName: "stallAddress",
+    attributeName: "档口地址",
+    modifiable: false,
+  },
+  {
+    engName: "stallOperationtime",
+    attributeName: "档口运营时间",
+    modifiable: true,
+  },
+  {
+    engName: "stallDescribe",
+    attributeName: "档口简介",
+    modifiable: true,
+  },
+  {
+    engName: "stallImages",
+    attributeName: "档口照片",
+    modifiable: true,
+  }
 ];
 export default {
   name: "StallDashboard",
@@ -122,11 +122,11 @@ export default {
     // };
 
     // getDashboardDisplayData();
-    const [finalDisplayData,rows] = arrangeData();
-    console.log(finalDisplayData);
+    const [dashboardData,rows] = arrangeData();
+    console.log(dashboardData);
     console.log(rows)
     return {
-      finalDisplayData,
+      dashboardData,
       rows,
     };
   },
