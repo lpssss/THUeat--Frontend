@@ -16,8 +16,17 @@
 
     <q-card flat bordered class="bg-purple-10086" style="width:100%">
       <q-card-section class="q-pa-md">
-        <q-btn size="sm" falt round color="primary" icon="thumb_up" />
+        <q-btn size="sm" round color="primary" icon="thumb_up" />
         <span class="q-px-sm text-caption text-grey"> {{ dishData.data.dishLikes }} </span>
+        <div class="dish-price">
+          <q-icon name="attach_money" style="font-size: 1.5rem" />
+          {{ dishData.data.dishPrice }}元
+        </div>
+        <q-icon name="schedule" style="font-size: 1.5rem" />
+          {{ dishData.data.dishAvailableTime }}
+        <div>
+
+        </div>
       </q-card-section>
     </q-card>
     <div class="q-pa-md">
@@ -80,4 +89,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.dish-price{
+  padding:10px 0 10px 0;
+}
+</style>
