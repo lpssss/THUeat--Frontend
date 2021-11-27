@@ -1,23 +1,28 @@
 <template>
+  <q-btn color="primary" label="储存修改" @click="saveChanges" />
   <div class="q-pa-md">
     <q-markup-table separator="cell" wrap-cells>
       <thead>
         <tr>
-          <th class="text-center" v-for="column in columns" :key="column.name">
+          <th
+            class="text-center"
+            v-for="column in STALL_DETAILS_COLUMNS"
+            :key="column.name"
+          >
             {{ column.label }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in rowDetails" :key="row.engName">
-          <td class="text-center">{{ row.attributeName }}</td>
+        <tr v-for="row in rows" :key="row.engTitle">
+          <td class="text-center">{{ row.engTitle }}</td>
           <td class="text-center">
-            <template v-if="row.engName !== 'stallImages'">
-              {{ row.attribute }}
+            <template v-if="row.engTitle !== 'stallImages'">
+              {{ stallDetails.data[row.engTitle] }}
             </template>
             <template v-else>
               <q-btn
-                v-if="row.engName === 'stallImages'"
+                v-if="row.engTitle === 'stallImages'"
                 color="primary"
                 label="查看/编辑图片"
                 @click="showPictureEditor = true"
@@ -25,22 +30,22 @@
             </template>
             <template v-if="row.modifiable">
               <q-popup-edit
-                v-model="row.attribute"
+                v-if="row.engTitle === 'stallOperationtime'"
+                v-model="stallDetails.data[row.engTitle]"
                 v-slot="scope"
                 auto-save
-                v-if="row.engName === 'stallOperationtime'"
               >
                 <q-select
                   v-model="scope.value"
-                  :options="operationtimeOptions"
+                  :options="OPERATION_TIME_OPTIONS"
                   label="请选择时段"
                 />
               </q-popup-edit>
               <q-popup-edit
-                v-model="row.attribute"
+                v-if="row.engTitle === 'stallDescribe'"
+                v-model="stallDetails.data[row.engTitle]"
                 v-slot="scope"
                 auto-save
-                v-if="row.engName === 'stallDescribe'"
                 buttons
               >
                 <q-input
@@ -48,7 +53,6 @@
                   dense
                   autofocus
                   counter
-                  @keyup.enter="scope.set"
                   autogrow
                 />
               </q-popup-edit>
@@ -119,12 +123,23 @@
 
       <q-card-section>
         <div class="text-h6">上传新图片</div>
-        <q-file filled bottom-slots v-model="uploadedPicture" label="图片" counter style="max-width: 300px">
+        <q-file
+          filled
+          bottom-slots
+          v-model="uploadedPicture"
+          label="图片"
+          counter
+          style="max-width: 300px"
+        >
           <template v-slot:prepend>
             <q-icon name="cloud_upload" @click.stop />
           </template>
           <template v-slot:append>
-            <q-icon name="close" @click.stop="uploadedPicture = null" class="cursor-pointer" />
+            <q-icon
+              name="close"
+              @click.stop="uploadedPicture = null"
+              class="cursor-pointer"
+            />
           </template>
         </q-file>
       </q-card-section>
@@ -136,9 +151,11 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
+import { api } from "boot/axios";
+import { useQuasar } from "quasar";
 
-const columns = [
+const STALL_DETAILS_COLUMNS = [
   {
     name: "attributeName",
     label: "档口基本信息",
@@ -148,25 +165,57 @@ const columns = [
     label: "属性",
   },
 ];
+const OPERATION_TIME_OPTIONS = ["早上", "中午", "晚上"];
+const API_LINK = "mystall-post";
 
 export default {
   name: "StallDetailsTable",
   props: {
-    // rows的部分需要从api获取的数据整理
+    stallDetailsData: {
+      type: Object,
+      required: true,
+    },
     rows: {
       type: Array,
       required: true,
     },
   },
   setup(props) {
-    console.log(props.rows);
+    const $q = useQuasar();
+    const showPictureEditor = ref(false);
+    const stallDetails = reactive({ data: { ...props.stallDetailsData } });
+    async function sendData() {
+      try {
+        return await api.post(API_LINK, stallDetails.data);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    }
+    function saveChanges() {
+      sendData().then((response) => {
+        console.log(response);
+        if (response.status === 201) {
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "修改成功",
+            timeout: 500,
+          });
+        }
+      });
+    }
+    // console.log(props.stallDetailsData);
+
     return {
-      uploadedPicture:ref(null),
-      showPictureEditor: ref(false),
+      STALL_DETAILS_COLUMNS,
+      OPERATION_TIME_OPTIONS,
+      stallDetails,
+      saveChanges,
+      //图片还未处理好
+      uploadedPicture: ref(null),
+      showPictureEditor,
       slide: ref(1),
-      operationtimeOptions: ["早上", "中午"],
-      rowDetails: ref(props.rows),
-      columns,
     };
   },
 };
