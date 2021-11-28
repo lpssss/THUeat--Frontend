@@ -36,11 +36,11 @@
     <q-slide-transition>
       <div v-show="expanded">
         <q-separator />
-        <q-card-section class="text-subitle2">
+        <q-card-section class="text-subtitle2">
           <q-form @submit="onSubmit">
             <q-input
               filled
-              v-model="name"
+              v-model="reply"
               label="回复内容"
               lazy-rules
               :rules="[
@@ -59,10 +59,15 @@
 
 <script>
 import { ref } from "vue";
-
+import {api} from "boot/axios";
+import {useQuasar} from "quasar";
 export default {
   name: "StallCommentCard",
   props: {
+    reviewID:{
+      type:String,
+      required:true
+    },
     reviewComment: {
       type: String,
       default: "菜品味道不错，分量很足，如果能再淡一些就更好了",
@@ -88,9 +93,37 @@ export default {
       default: "#",
     },
   },
-  setup() {
+  setup(props) {
+    console.log(props)
+    const $q=useQuasar()
+    const reply=ref("");
+    const expanded=ref(false);
+    function onSubmit(){
+      async function sendData() {
+        try {
+          const API_LINK=`reviews/${props.reviewID}`
+          console.log(props.reviewID)
+          return await api.post("reviews-post", {replyComment:reply.value});
+        } catch (error) {
+          console.log(error.response.data);
+        }
+      }
+      sendData().then((res) => {
+        if (res.status === 201) {
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "回复成功",
+            timeout: 500,
+          });
+        }
+      });
+    }
     return {
-      expanded: ref(false),
+      expanded,
+      reply,
+      onSubmit
     };
   },
 };
