@@ -1,6 +1,6 @@
 const routes = [
   {
-    path: '/school/',
+    path: '/superadmin/',
     component: () => import('src/layouts/superadminLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/school/schoolDashboard.vue') },
@@ -12,14 +12,28 @@ const routes = [
     ]
   },
   {
-    path: '/stall',
-    component: () => import('src/layouts/superadminLayout.vue'),
+    path: '/admin/',
+    component: () => import('src/layouts/adminLayout.vue'),
     children: [
-      { path: '/stall/', component: () => import('pages/stall/stallDashboard.vue') }
+      { path: '/admin/', component: () => import('pages/school/schoolDashboard.vue') },
+      { path: '/admin/stallCreation', component: () => import('pages/school/stallCreation.vue') },
+      { path: '/admin/staffMaintenance', component: () => import('pages/school/staffMaintenance.vue') },
+      { path: '/admin/userMaintenance', component: () => import('pages/school/userMaintenance.vue') },
+      { path: '/admin/settings', component: () => import('pages/school/settings.vue') }
     ]
   },
   {
-    path: '/Login', component: () => import('pages/Login.vue')
+    path: '/staff/',
+    component: () => import('src/layouts/staffLayout.vue'),
+    children: [
+      { path: '/staff/', component: () => import('pages/stall/StallDashboard.vue') },
+      { path: '/staff/CommentReply', component: () => import('pages/stall/CommentReply.vue') },
+      { path: '/staff/DishManagement', component: () => import('pages/stall/DishManagement.vue') },
+      // { path: '/staff/settings', component: () => import('pages/stall/Settings.vue') }
+    ]
+  },
+  {
+    path: '/login', component: () => import('pages/Login.vue')
 
   },
 
