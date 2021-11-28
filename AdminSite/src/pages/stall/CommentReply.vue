@@ -1,7 +1,7 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">   <!--需要判断获取数据是否完成-->
+  <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4" v-if="reviewsData.data.length">   <!--需要判断获取数据是否完成-->
     <StallCommentCard
-      v-for="review in reviews"
+      v-for="review in reviewsData.data"
       v-bind="review"
       :key="review.reviewID"
     />
@@ -9,6 +9,9 @@
 </template>
 
 <script>
+import {api} from "boot/axios";
+import {reactive} from "vue"
+
 const reviews=[
   {
     "reviewID": "1",
@@ -59,23 +62,24 @@ const reviews=[
     ]
   }
 ];
+const API_LINK="reviews"
 import StallCommentCard from "components/StallCommentCard";
 export default {
   name: "CommentReply",
   components: {StallCommentCard},
   setup(){
-    // const API_LINK = "http://localhost:3000/"; // 之后放真正的API
-    // const reviewsData = {};
-    // const getReviesData = async () => {
-    //   try {
-    //     const response = await axios.get(API_LINK);
-    //     reviewsData = response.data[0];
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // };
+    const reviewsData = reactive({data:[]});
+    async function getReviewsData(){
+      try {
+        const response = await api.get(API_LINK);
+        reviewsData.data = response.data;
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+    getReviewsData();
     return {
-      reviews
+      reviewsData
     }
   }
 }

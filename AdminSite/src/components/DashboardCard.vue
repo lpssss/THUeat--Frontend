@@ -33,7 +33,6 @@ export default {
       required:true
     },
     displayedData:{
-      type:String,
       required:true
     }
   }
