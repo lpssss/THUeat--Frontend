@@ -1,135 +1,102 @@
+<!--种类：页面 "/staff/dishes"--->
+<!--功能：档主菜品管理页面，将菜品管理页面所有Components整合一起，获取页面所需数据并整理分配到旗下Components-->
+<!--所需Components：菜品创建表格DishCreateForm，菜品信息表格DishesTable-->
+<!--接收Emits：来自DishCreateForm的createDish，closeForm-->
+<!--备注：由于API fetch有延时，因此为了避免warning，使用v-if在获得数据后才开始render-->
+<!--pending：创建新菜品的POST返回-->
 <template>
-  <template v-if="curDishData.data.length">
-    <div
-      class="q-pa-md"
-      style="margin-left: 10%; margin-right: 10%"
-      v-if="dishCreateForm"
-    >
-      <h4 style="border-bottom: 1px solid">菜品创建</h4>
-      <q-form class="q-gutter-md" @submit="onSubmit">
-        <q-input filled v-model="newDishData.dishName" label="菜品名字" />
-        <q-input filled v-model="newDishData.dishIntro" label="菜品简介" />
-        <q-select
-          filled
-          v-model="newDishData.dishAvailableTime"
-          :options="DISH_AVAILABLE_TIME_OPTIONS"
-          label="售卖时段"
-        />
-        <q-input
-          v-model.number="newDishData.dishPrice"
-          type="number"
-          filled
-          style="max-width: 200px"
-          label="菜品价格"
-        />
-        <q-file
-          filled
-          bottom-slots
-          v-model="uploadedPicture"
-          label="图片"
-          counter
-          style="max-width: 300px"
-        >
-          <template v-slot:prepend>
-            <q-icon name="cloud_upload" @click.stop />
-          </template>
-          <template v-slot:append>
-            <q-icon
-              name="close"
-              @click.stop="uploadedPicture = null"
-              class="cursor-pointer"
-            />
-          </template>
-        </q-file>
-        <div style="margin-left: 45%">
-          <q-btn
-            style="margin-right: 10px"
-            color="red"
-            @click="cancelDishCreate"
-            label="取消"
-          />
-          <q-btn color="green" type="submit" label="提交" />
-        </div>
-      </q-form>
-    </div>
-
-    <DishesTable
-      v-else
-      :rows="curDishData.data"
-      @openForm="dishCreateForm = true"
+  <template v-if="curDishData.length">
+    <DishCreateForm
+      v-if="openDishCreateForm"
+      ref="dishForm"
+      @createDish="createDish"
+      @closeForm="openDishCreateForm = false"
     />
+    <template v-else>
+      <q-btn color="primary" @click="openDishCreateForm = true">创建</q-btn>
+      <DishesTable :rows-data="curDishData" @updateRow="updateRow"/>
+    </template>
   </template>
 </template>
 
 <script>
-import DishesTable from "components/DishesTable";
-import { ref, reactive } from "vue";
 import { api } from "boot/axios";
+import { ref } from "vue";
 import { useQuasar } from "quasar";
-import { useRouter } from "vue-router";
+import DishesTable from "components/DishesTable";
+import DishCreateForm from "components/DishCreateForm";
 
-const API_LINK = "dishes";
-const DISH_AVAILABLE_TIME_OPTIONS = ["早上", "中午", "晚上"];
 export default {
   name: "DishManagement",
-  components: { DishesTable },
+  components: { DishCreateForm, DishesTable },
   setup() {
+    //openDishCreateForm: 控制创建菜品表单开关
+    //curDishData: 菜品信息表格的数据
+    //dishForm: 用来控制DishCreateForm (template ref)
     const $q = useQuasar();
-    const $router = useRouter();
-    const dishCreateForm = ref(false);
-    const curDishData = reactive({ data: [] });
-    const initialData = {
-      dishName: "",
-      dishIntro: "",
-      dishPrice: 0,
-      dishImage: "",
-      dishAvailableTime: "",
-    };
-    const newDishData = reactive({ ...initialData });
-    function cancelDishCreate() {
-      dishCreateForm.value = false;
-      Object.assign(newDishData, initialData);
+    const openDishCreateForm = ref(false);
+    const curDishData = ref([]);
+    const dishForm = ref();
+
+    function updateRow(data){
+      const targetIdx=curDishData.value.findIndex(item=>item.dishID===data.dishID)
+      curDishData.value[targetIdx]=data
     }
+
+    //功能：提交菜品创建表格，并显示后端创建结果（成功 & 失败）
+    function createDish(newDishData) {
+      async function sendData() {
+        const API_LINK = "dishes-post";
+        return await api.post(API_LINK, newDishData);
+      }
+      sendData()
+        .then((res) => {
+          if (res.status === 201) {
+            $q.notify({
+              type: "success",
+              message: "创建成功",
+            });
+            curDishData.value.push({
+              ...newDishData,
+              dishID: "random",
+              dishLikes: "0",
+              dishStatus: true,
+            }); //需要返回dishID和dishLikes
+            openDishCreateForm.value = false;
+            dishForm.value.resetForm();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          $q.notify({
+            type: "error",
+            message: "创建失败，请重新创建",
+          });
+        });
+    }
+
+    //功能：获取所有菜品信息，失败则显示错误信息
     async function getDishData() {
       try {
+        const API_LINK = "dishes";
         const response = await api.get(API_LINK);
-        curDishData.data = response.data;
-        console.log(curDishData);
+        curDishData.value = response.data;
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          type: "error",
+          message: "获取数据失败，请刷新页面重试",
+        });
       }
     }
-    function onSubmit() {
-      async function sendData() {
-        try {
-          return await api.post("dishes-post", newDishData);
-        } catch (error) {
-          console.log(error.response.data);
-        }
-      }
-      sendData().then((res) => {
-        if (res.status === 201) {
-          $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "创建成功",
-            timeout: 500,
-          });
-          Object.assign(newDishData, initialData);
-          dishCreateForm.value = false;
-          $router.go(0);
-        }
-      });
-    }
+    //运行获取数据函数
     getDishData();
+
     return {
-      DISH_AVAILABLE_TIME_OPTIONS,
-      dishCreateForm,
+      openDishCreateForm,
       curDishData,
-      newDishData,
-      cancelDishCreate,
-      onSubmit,
+      dishForm,
+      updateRow,
+      createDish,
     };
   },
 };
