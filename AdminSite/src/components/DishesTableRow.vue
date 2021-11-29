@@ -78,7 +78,15 @@
       />
     </td>
   </tr>
-  <ImageGallery v-if="showImageGallery" :images="myRowData.dishImage"/>
+  <q-dialog v-model="showImageGallery" full-width persistent>
+    <q-card>
+      <ImageGallery :images="myRowData.dishImage"/>
+      <q-card-actions align="right" class="bg-white text-teal">
+        <q-btn flat label="关闭" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
 </template>
 
 <script>
