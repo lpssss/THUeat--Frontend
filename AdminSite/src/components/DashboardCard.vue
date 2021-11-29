@@ -1,9 +1,12 @@
+<!--种类：Component -->
+<!--功能：统计数据卡片，显示统计数据-->
+<!--所需Props：标题title，小标题subhead（显示所属食堂数据用到）,卡片图案iconName,数据displayedData-->
 <template>
   <div class="col-12 col-md">
     <q-card class="my-card">
       <q-card-section>
         <div class="text-h6" style="border-bottom: 1px solid; font-weight: bold;">
-          {{titleName}}
+          {{title}}
           <q-item-label caption v-if="subhead">
             {{ subhead }}
           </q-item-label>
@@ -21,19 +24,17 @@
 export default {
   name: "DashboardCard",
   props:{
-    titleName:{
+    title:{
       type:String,
-      required:true
     },
     subhead:{
       type:String,
     },
     iconName:{
       type:String,
-      required:true
     },
     displayedData:{
-      required:true
+      type:[String,Number],
     }
   }
 }
