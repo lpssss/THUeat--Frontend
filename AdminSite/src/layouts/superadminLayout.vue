@@ -52,32 +52,32 @@ const linksList = [
   {
     title: '显示面板',
     icon: 'dashboard',
-    to: '/'
+    to: '/superadmin'
   },
   {
     title: '普通管理员记录',
     icon: 'admin_panel_settings',
-    to: '/schooladminMaintenance'
+    to: '/superadmin/schooladminMaintenance'
   },
   {
     title: '档口记录',
     icon: 'restaurant',
-    to: '/stallCreation'
+    to: '/superadmin/stallCreation'
   },
   {
     title: '档主记录',
     icon: 'badge',
-    to: '/staffMaintenance'
+    to: '/superadmin/staffMaintenance'
   },
   {
     title: '普通用户管理',
     icon: 'person',
-    to: '/userMaintenance'
+    to: '/superadmin/userMaintenance'
   },
   {
     title: '设置',
     icon: 'settings',
-    to: '/settings'
+    to: '/superadmin/settings'
   },
 ];
 
