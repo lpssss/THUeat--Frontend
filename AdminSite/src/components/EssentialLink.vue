@@ -3,7 +3,6 @@
     clickable
     tag="b"
     exact
-    :href="link"
     :to="to"
   >
     <q-item-section

@@ -61,21 +61,24 @@ const routes = [
   },
   {
     path: "/staff/",
-    component: () => import("src/layouts/staffLayout.vue"),
+    component: () => import("layouts/StaffLayout.vue"),
     children: [
       {
         path: "",
         component: () => import("pages/stall/StallDashboard.vue"),
       },
       {
-        path: "CommentReply",
-        component: () => import("pages/stall/CommentReply.vue"),
+        path: "reviews",
+        component: () => import("pages/stall/StallReviews.vue"),
       },
       {
-        path: "DishManagement",
+        path: "dishes",
         component: () => import("pages/stall/DishManagement.vue"),
       },
-      // { path: '/staff/settings', component: () => import('pages/stall/Settings.vue') }
+      {
+        path: "settings",
+        component: () => import("pages/stall/StaffSettings.vue"),
+      },
     ],
   },
 

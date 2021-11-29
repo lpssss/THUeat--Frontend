@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          乐吃 - 档主管理系统
+          乐吃 - 档口管理系统
         </q-toolbar-title>
 
         <q-chip>用户名</q-chip>
@@ -55,14 +55,14 @@ const linksList = [
     to: '/staff/'
   },
   {
-    title: '档口记录',
-    icon: 'restaurant',
-    to: '/staff/CommentReply'
+    title: '评论回复',
+    icon: 'question_answer',
+    to: '/staff/reviews'
   },
   {
-    title: '档主记录',
-    icon: 'badge',
-    to: '/staff/DishManagement'
+    title: '菜品记录',
+    icon: 'restaurant',
+    to: '/staff/dishes'
   }
 ];
 

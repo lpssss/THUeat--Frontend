@@ -1,5 +1,9 @@
+<!--种类：Component -->
+<!--功能：档口信息表格，用户可直接在表格中使用popup-edit进行信息修改（编辑图片需打开另外窗口），含自动保存功能-->
+<!--所需Component：图片库ImageGallery-->
+<!--所需Props：档口信息数据stallDetailsData，档口图片链接stallImages，档口信息表格第一列每行的标题rowsTitle-->
+<!--发送Emits: 更新parent数据updateData-->
 <template>
-  <q-btn color="primary" label="储存修改" @click="saveChanges" />
   <div class="q-pa-md">
     <q-markup-table separator="cell" wrap-cells>
       <thead>
@@ -7,31 +11,31 @@
           <th
             class="text-center"
             v-for="column in STALL_DETAILS_COLUMNS"
-            :key="column.name"
+            :key="column.engTitle"
           >
-            {{ column.label }}
+            {{ column.title }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in rows" :key="row.engTitle">
-          <td class="text-center">{{ row.engTitle }}</td>
+        <tr v-for="rowTitle in rowsTitle" :key="rowTitle.engTitle">
+          <td class="text-center">{{ rowTitle.title }}</td>
           <td class="text-center">
-            <template v-if="row.engTitle !== 'stallImages'">
-              {{ stallDetails.data[row.engTitle] }}
+            <template v-if="rowTitle.engTitle !== 'stallImages'">
+              {{ myStallDetails[rowTitle.engTitle] }}
             </template>
             <template v-else>
               <q-btn
-                v-if="row.engTitle === 'stallImages'"
+                v-if="rowTitle.engTitle === 'stallImages'"
                 color="primary"
                 label="查看/编辑图片"
-                @click="showPictureEditor = true"
+                @click="showImageGallery = true"
               />
             </template>
-            <template v-if="row.modifiable">
+            <template v-if="rowTitle.modifiable">
               <q-popup-edit
-                v-if="row.engTitle === 'stallOperationtime'"
-                v-model="stallDetails.data[row.engTitle]"
+                v-if="rowTitle.engTitle === 'stallOperationtime'"
+                v-model="myStallDetails[rowTitle.engTitle]"
                 v-slot="scope"
                 auto-save
               >
@@ -42,8 +46,8 @@
                 />
               </q-popup-edit>
               <q-popup-edit
-                v-if="row.engTitle === 'stallDescribe'"
-                v-model="stallDetails.data[row.engTitle]"
+                v-if="rowTitle.engTitle === 'stallDescribe'"
+                v-model="myStallDetails[rowTitle.engTitle]"
                 v-slot="scope"
                 auto-save
                 buttons
@@ -62,160 +66,100 @@
       </tbody>
     </q-markup-table>
   </div>
-  <q-dialog v-model="showPictureEditor" full-width persistent>
+  <q-dialog v-model="showImageGallery" full-width persistent>
     <q-card>
-      <q-carousel
-        v-model="slide"
-        transition-prev="slide-right"
-        transition-next="slide-left"
-        swipeable
-        animated
-        control-color="primary"
-        navigation
-        padding
-        arrows
-        height="300px"
-        class="bg-grey-1 shadow-2 rounded-borders"
-      >
-        <q-carousel-slide :name="1" class="column no-wrap">
-          <div
-            class="
-              row
-              fit
-              justify-start
-              items-center
-              q-gutter-xs q-col-gutter
-              no-wrap
-            "
-          >
-            <q-img
-              class="rounded-borders col-6 full-height"
-              src="https://cdn.quasar.dev/img/mountains.jpg"
-            />
-            <q-img
-              class="rounded-borders col-6 full-height"
-              src="https://cdn.quasar.dev/img/parallax1.jpg"
-            />
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide :name="2" class="column no-wrap">
-          <div
-            class="
-              row
-              fit
-              justify-start
-              items-center
-              q-gutter-xs q-col-gutter
-              no-wrap
-            "
-          >
-            <q-img
-              class="rounded-borders col-6 full-height"
-              src="https://cdn.quasar.dev/img/parallax2.jpg"
-            />
-            <q-img
-              class="rounded-borders col-6 full-height"
-              src="https://cdn.quasar.dev/img/quasar.jpg"
-            />
-          </div>
-        </q-carousel-slide>
-      </q-carousel>
-
-      <q-card-section>
-        <div class="text-h6">上传新图片</div>
-        <q-file
-          filled
-          bottom-slots
-          v-model="uploadedPicture"
-          label="图片"
-          counter
-          style="max-width: 300px"
-        >
-          <template v-slot:prepend>
-            <q-icon name="cloud_upload" @click.stop />
-          </template>
-          <template v-slot:append>
-            <q-icon
-              name="close"
-              @click.stop="uploadedPicture = null"
-              class="cursor-pointer"
-            />
-          </template>
-        </q-file>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn flat label="OK" color="primary" v-close-popup />
+      <ImageGallery :images="stallImages" />
+      <q-card-actions align="right" class="bg-white text-teal">
+        <q-btn flat label="关闭" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import { ref, reactive } from "vue";
 import { api } from "boot/axios";
+import { ref, reactive, watch } from "vue";
 import { useQuasar } from "quasar";
+import ImageGallery from "components/ImageGallery";
 
+//档口信息表格的column名字
 const STALL_DETAILS_COLUMNS = [
-  {
-    name: "attributeName",
-    label: "档口基本信息",
-  },
-  {
-    name: "attribute",
-    label: "属性",
-  },
+  { engTitle: "Attribute Name", title: "档口基本信息" },
+  { engTitle: "Attribute", title: "属性" },
 ];
+//档口运营时间选项
 const OPERATION_TIME_OPTIONS = ["早上", "中午", "晚上"];
-const API_LINK = "mystall-post";
 
 export default {
   name: "StallDetailsTable",
+  components: { ImageGallery },
   props: {
     stallDetailsData: {
       type: Object,
       required: true,
     },
-    rows: {
+    stallImages: {
+      type: Array,
+      required: true,
+    },
+    rowsTitle: {
       type: Array,
       required: true,
     },
   },
-  setup(props) {
+  emits:["updateData"],
+  setup(props,context) {
+    //showImageGallery: 控制图片库的开关
+    //myStallDetails: 重新复制档口信息，以直接修改档口信息
     const $q = useQuasar();
-    const showPictureEditor = ref(false);
-    const stallDetails = reactive({ data: { ...props.stallDetailsData } });
-    async function sendData() {
-      try {
-        return await api.post(API_LINK, stallDetails.data);
-      } catch (error) {
-        console.log(error.response.data);
-      }
+    const showImageGallery= ref(false);
+    const myStallDetails = reactive( {...props.stallDetailsData} );
+
+    //输入1个数据：需要POST去后端的档口信息（不包括上传和删除的图片），Object
+    //输出1个数据：后端的回应，Object
+    //功能：POST 数据去后端
+    async function postData(data) {
+      const API_LINK = "mystall-post";
+      return await api.post(API_LINK, data);
     }
-    function saveChanges() {
-      sendData().then((response) => {
-        console.log(response);
-        if (response.status === 201) {
+    //输入1个数据：需要POST去后端的档口信息（包括修改后的信息和删减后的图片，不包括上传的图片），Object
+    //功能：运行POST函数，并显示后端操作结果（成功 & 失败）
+    function saveChanges(data) {
+      console.log(data);
+      postData(data)
+        .then((response) => {
+          console.log(response);
+          if (response.status === 201) {
+            $q.notify({
+              type: "success",
+              message: "修改成功",
+            });
+            context.emit("updateData",data)
+          }
+        })
+        .catch((err) => {
+          console.log(err.response.data);
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "修改成功",
-            timeout: 500,
+            type: "error",
+            message: "修改失败，请刷新页面重试",
           });
-        }
-      });
+        });
     }
-    // console.log(props.stallDetailsData);
+    //功能：在任一档口信息有修改后自动POST去后端
+    watch(
+      () => myStallDetails,
+      (newState) => {
+        saveChanges({ ...newState });
+      },
+      { deep: true }
+    );
 
     return {
       STALL_DETAILS_COLUMNS,
       OPERATION_TIME_OPTIONS,
-      stallDetails,
+      myStallDetails,
+      showImageGallery,
       saveChanges,
-      //图片还未处理好
-      uploadedPicture: ref(null),
-      showPictureEditor,
-      slide: ref(1),
     };
   },
 };

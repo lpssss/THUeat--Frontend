@@ -1,3 +1,5 @@
+<!--种类：Component -->
+<!--功能：评论卡片，显示用户评论，档主可回复评论-->
 <template>
   <q-card class="my-card-comment" flat bordered>
     <q-item>
@@ -37,7 +39,7 @@
       <div v-show="expanded">
         <q-separator />
         <q-card-section class="text-subtitle2">
-          <q-form @submit="onSubmit">
+          <q-form @submit="replyReview">
             <q-input
               filled
               v-model="reply"
@@ -58,27 +60,26 @@
 </template>
 
 <script>
+import { api } from "boot/axios";
 import { ref } from "vue";
-import {api} from "boot/axios";
-import {useQuasar} from "quasar";
+import { useQuasar } from "quasar";
 export default {
-  name: "StallCommentCard",
+  name: "StallReviewsCard",
   props: {
-    reviewID:{
-      type:String,
-      required:true
+    reviewID: {
+      type: String,
+      required: true,
     },
     reviewComment: {
       type: String,
-      default: "菜品味道不错，分量很足，如果能再淡一些就更好了",
+      default: "",
     },
     userImage: {
       type: String,
-      default: "#",
     },
     reviewLikes: {
       type: Number,
-      default: 5,
+      default: 0,
     },
     userName: {
       type: String,
@@ -90,40 +91,41 @@ export default {
     },
     reviewImage: {
       type: String,
-      default: "#",
     },
   },
   setup(props) {
-    console.log(props)
-    const $q=useQuasar()
-    const reply=ref("");
-    const expanded=ref(false);
-    function onSubmit(){
+    //reply: 回复内容
+    //expanded: 控制回复框的开关
+    const $q = useQuasar();
+    const reply = ref("");
+    const expanded = ref(false);
+
+    //功能：将回复内容更新到后端，并显示状态（成功 & 失败）
+    function replyReview() {
       async function sendData() {
-        try {
-          const API_LINK=`reviews/${props.reviewID}`
-          console.log(props.reviewID)
-          return await api.post("reviews-post", {replyComment:reply.value});
-        } catch (error) {
-          console.log(error.response.data);
-        }
+        const API_LINK = `reviews/${props.reviewID}`;
+        console.log(props.reviewID);
+        return await api.post("reviews-post", { replyComment: reply.value });
       }
       sendData().then((res) => {
         if (res.status === 201) {
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type:"success",
             message: "回复成功",
-            timeout: 500,
           });
         }
-      });
+      }).catch(err=>{
+        console.log(err)
+        $q.notify({
+          type:"error",
+          message: "回复失败，请重新回复",
+        });
+      })
     }
     return {
       expanded,
       reply,
-      onSubmit
+      replyReview,
     };
   },
 };
