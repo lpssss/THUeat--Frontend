@@ -4,6 +4,8 @@ const routes = [
     component: () => import("src/layouts/LoginLayout.vue"),
     children: [
       { path: "", component: () => import("pages/Login.vue"), alias: "/login" },
+      { path: "firstLoginSettings", component: () => import("pages/firstLogin.vue") },
+
     ],
   },
   {
