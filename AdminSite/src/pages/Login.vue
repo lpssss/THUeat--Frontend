@@ -1,11 +1,17 @@
 <template>
   <div>
     <div class="background"></div>
-    <q-page padding class="row items-center justify-center">
+    <q-page
+      padding
+      class="row items-center justify-center"
+    >
       <q-card class="login-card">
-        <h6 align="center">让我们开始吧!</h6>
+        <h6 align="center">乐吃管理系统</h6>
         <div class="q-pa-md">
-          <q-form @submit="onSubmit" class="q-gutter-md">
+          <q-form
+            @submit="onSubmit"
+            class="q-gutter-md"
+          >
             <q-input
               v-model="nickname"
               label="用户名"
@@ -28,8 +34,10 @@
               </template>
             </q-input>
             <div>
-              <q-checkbox v-model="acceptpw" label="记住密码" />
-              <q-checkbox v-model="acceptclause" label="接受条款" />
+              <q-checkbox
+                v-model="acceptclause"
+                label="接受条款"
+              />
             </div>
 
             <div class="row justify-evenly">
@@ -52,25 +60,24 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       nickname: null,
       password: null,
       isPwd: true,
-      acceptpw: false,
       acceptclause: false,
       onsubmit: false,
     };
   },
 
   methods: {
-    onSubmit() {
+    onSubmit () {
       if (this.acceptclause !== true) {
         this.$q.notify({
           color: "red-5",
           textColor: "white",
           icon: "warning",
-          message: "请先接受条款",
+          message: "请接受条款",
           timeout: 500,
         });
       } else {
