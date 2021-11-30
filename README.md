@@ -1,4 +1,18 @@
-# THUeat--Frontend
+# THUeat Frontend
+
+# 测试
+单元测试工具：Vue-test-utils, Jest
+
+参考链接：https://next.vue-test-utils.vuejs.org/guide/, https://jestjs.io/docs/getting-started
+
+E2E测试工具：Cypress
+
+参考链接：https://docs.cypress.io/guides/overview/why-cypress
+
+Quasar相关测试：https://quasar.dev/quasar-cli/testing-and-auditing, https://github.com/quasarframework/quasar-testing/tree/next
+
+注：私人页面已安装 quasar test extension, 公共页面由渊升负责处理
+
 
 档主页面情况：
 1. 未完成部分：图片处理与创建新菜品的API（还在和后台协调），API链接（未换上正确的）
@@ -18,3 +32,5 @@
 1. 直接打开db.json在里面更改即可
 
 更多详情请看：https://www.npmjs.com/package/json-server
+
+
