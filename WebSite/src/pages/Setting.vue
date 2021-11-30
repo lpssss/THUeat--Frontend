@@ -4,8 +4,7 @@
       <BannerSection v-bind="settingPageBanners.setting" />
     </div>
 
-    <q-form
-      @submit="onSubmitAvatar"
+    <div
       class="q-pa-md" 
       align="center"
     >
@@ -13,25 +12,19 @@
         <img :src="userDetailData.data.userImage" alt="头像" />
       </q-avatar>
       <div class="q-pt-md row justify-center items-center">
-        <div class="item-center">
-          <q-file
-            class="q-pa-md item-center"
-            align="center"
-            style="max-width: 150px"
-            name="poster_file"
-            v-model="image"
-            filled
-            label="上传头像"
-          />
-        </div>
-        
-        <div class="q-pa-md justify-center items-center" type="submit" >
-          <q-btn>确认修改</q-btn>
-        </div>
+        <q-file
+          class="q-pa-md item-center"
+          align="center"
+          style="max-width: 150px"
+          name="poster_file"
+          v-model="image"
+          filled
+          label="上传头像"
+        />
       </div>
-    </q-form>
+    </div>
 
-    <div class="q-pa-md row justify-start items-center">
+    <div class="q-pt-none row justify-start items-center">
       <div class="col-4 q-pr-lg text-subtitle1" align="right">用户名</div>
       <div class="col-4 q-pt-md">
         <q-input
@@ -44,6 +37,41 @@
         />
       </div>
       <div class="col-4 text-h6 q-pr-md" align="right"></div>
+    </div>
+
+    <div class="q-pa-md row justify-start items-center">
+      <div class="col-4 q-pr-lg text-subtitle1" align="right">身份</div>
+      <div class="col-4">
+        <q-select v-model="identityModel" :options="options" label="请选择您的身份" />
+      </div>
+      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+    </div>
+
+    <div class="q-pa-md row justify-start items-center">
+      <div class="col-4 q-pr-lg text-subtitle1" align="right">电话</div>
+      <div class="col-4">
+        <q-input v-model="telephone" :label="userDetailData.data.userPhone" type="tel" :dense="dense" />
+      </div>
+      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+    </div>
+
+    <div class="q-pa-md row justify-start items-center">
+      <div class="col-4 q-pr-lg text-subtitle1" align="right">邮箱</div>
+      <div class="col-4">
+        <q-input
+          v-model="email"
+          :label="userDetailData.data.userEmail"
+          type="email"
+          :dense="dense"
+        />
+      </div>
+      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+    </div>
+
+    <div class="q-pb-lg text-black" align="center">
+      <div class="q-pt-md">
+        <q-btn @click="postNewDetails()">确认更改个人信息</q-btn>
+      </div>
     </div>
 
     <div class="q-pa-md row justify-start items-center">
@@ -89,38 +117,9 @@
       <div class="col-4 text-h6 q-pr-md" align="right"></div>
     </div>
 
-    <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">身份</div>
-      <div class="col-4">
-        <q-select v-model="identityModel" :options="options" label="请选择您的身份" />
-      </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
-    </div>
-
-    <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">电话</div>
-      <div class="col-4">
-        <q-input v-model="telephone" :label="userDetailData.data.userPhone" type="tel" :dense="dense" />
-      </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
-    </div>
-
-    <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">邮箱</div>
-      <div class="col-4">
-        <q-input
-          v-model="email"
-          :label="userDetailData.data.userEmail"
-          type="email"
-          :dense="dense"
-        />
-      </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
-    </div>
-
-    <div class="q-pb-lg text-red" align="center">
+    <div class="q-pb-lg text-black" align="center">
       <div class="q-pt-md">
-        <q-btn @click="postNewDetails()">确认更改</q-btn>
+        <q-btn @click="postNewPassword()">确认更改密码</q-btn>
       </div>
     </div>
 
@@ -195,7 +194,7 @@ export default defineComponent({
 
     const postNewDetails = () => {
       //console.log(user.value)
-      api.post('api_link', {
+      api.post('users/details', {
         userName: user.value,
         userPhone: telephone.value,
         userImage: image.value,
@@ -211,7 +210,21 @@ export default defineComponent({
       })
     };
 
-    postNewDetails();
+    const postNewPassword = () => {
+      console.log(password.value)
+      api.post('users/password', {
+        password: password.value,
+        oldPassword: passwordOld.value,
+      }).then ((res) => {
+        if (res.status === 200 ) {
+            updateToken(res.data.token);
+        }
+        if (res.status === 404){
+          console.log('error')
+        }
+      })
+    };
+
 
     getUserData();
     return {
@@ -229,6 +242,7 @@ export default defineComponent({
       user,
       image,
       postNewDetails,
+      postNewPassword,
     }
   }
 });
