@@ -1,9 +1,9 @@
 {
   "navigation": [
     {
-       "canteenID": "1",
-       "canteenName": "丁香",
-       "canteenType": "student"
+      "canteenID": "1",
+      "canteenName": "丁香",
+      "canteenType": "student"
     },
     {
       "canteenID": "2",
@@ -11,11 +11,11 @@
       "canteenType": "student"
     },
     {
-       "canteenID": "3",
-       "canteenName": "荷园",
-       "canteenType": "teacher"
+      "canteenID": "3",
+      "canteenName": "荷园",
+      "canteenType": "teacher"
     }
- ],
+  ],
   "canteens": [
     {
       "canteenID": "3",
@@ -178,7 +178,7 @@
       "stallDescribe": "广东风味特点是食用方便，蒸熟、切片均可，是下酒佳肴；如果炒着吃，味道更好。广东的美食大多不是辣味的。而广东人最喜欢吃饭前和一碗汤，才吃饭。其中白切鸡是必不可缺的在饭桌上。",
       "stallRate": 4,
       "stallRateNumber": 1024,
-      "reviews" :[
+      "reviews": [
         {
           "reviewID": "1",
           "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
@@ -186,7 +186,11 @@
           "reviewDateTime": "2021-11-11 14:20",
           "userImage": "https://cdn.quasar.dev/img/avatar.png",
           "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-          "reviewTags": ["a", "b", "c"],
+          "reviewTags": [
+            "a",
+            "b",
+            "c"
+          ],
           "reviewLikes": 100,
           "myReviewLike": true,
           "reply": true,
@@ -210,7 +214,11 @@
           "reviewDateTime": "2021-11-1 14:20",
           "userImage": "https://cdn.quasar.dev/img/avatar.png",
           "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-          "reviewTags": ["a", "b", "c"],
+          "reviewTags": [
+            "a",
+            "b",
+            "c"
+          ],
           "reviewLikes": 10,
           "myReviewLike": true,
           "reply": true,
@@ -285,7 +293,7 @@
       "canteenName": "清芬园",
       "dishBestComment": "太好吃了太好吃了太好吃了太好吃了太好吃了太好吃了！",
       "dishIntro": "宫保鸡丁（Kung Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
-      "reviews" :[
+      "reviews": [
         {
           "reviewID": "1",
           "reviewComment": "很好吃，就是每次中午下课后排队要排很久，有时候刚到食堂就发现这道菜已经卖完了。这种受欢迎的菜品可以多做一些。",
@@ -294,7 +302,11 @@
           "userImage": "https://cdn.quasar.dev/img/avatar.png",
           "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
           "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-          "reviewTags": ["a", "b", "c"],
+          "reviewTags": [
+            "a",
+            "b",
+            "c"
+          ],
           "reviewLikes": 100,
           "myReviewLike": true,
           "reply": true,
@@ -319,21 +331,25 @@
           "userImage": "https://cdn.quasar.dev/img/avatar.png",
           "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
           "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-          "reviewTags": ["a", "b", "c"],
+          "reviewTags": [
+            "a",
+            "b",
+            "c"
+          ],
           "reviewLikes": 10,
           "myReviewLike": true,
           "reply": true,
           "replyDateTime": "string",
           "replyComment": "string",
           "dishes": [
-          {
-            "dishID": "string",
-            "dishName": "string"
-          },
-          {
-            "dishID": "string",
-            "dishName": "string"
-          }
+            {
+              "dishID": "string",
+              "dishName": "string"
+            },
+            {
+              "dishID": "string",
+              "dishName": "string"
+            }
           ]
         }
       ]
@@ -351,7 +367,7 @@
       "canteenName": "桃李园地下",
       "dishIntro": "芝士辣白菜汤泡饭是桃李地下的新菜品",
       "dishBestComment": "太好吃了太好吃了太好吃了太好吃了太好吃了太好吃了！",
-      "reviews" :[
+      "reviews": [
         {
           "reviewID": "1",
           "reviewComment": "不好吃气死了气死了气死了气死了",
@@ -360,7 +376,11 @@
           "userImage": "https://cdn.quasar.dev/img/avatar.png",
           "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
           "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-          "reviewTags": ["a", "b", "c"],
+          "reviewTags": [
+            "a",
+            "b",
+            "c"
+          ],
           "reviewLikes": 100,
           "myReviewLike": true,
           "reply": true,
@@ -392,7 +412,7 @@
       "canteenName": "澜园",
       "dishIntro": "四喜丸子不是四个丸子",
       "dishBestComment": "四喜丸子，属于鲁菜。四喜丸子是旧时人们为庆贺和祈求人生的四大喜事：久旱逢甘雨；他乡遇故知；洞房花烛夜；金榜题名时而制作的菜肴，之所以做成圆形状是取吉庆团圆美满之意。由四个色和味形俱佳的肉丸组成，寓人生福、禄、寿、喜四大喜事。以取其吉祥之意。寓意：福、禄、寿、喜 Pao Chicken），是一道闻名中外的特色传统名菜。鲁菜、川菜、贵州菜中都有收录，原料、做法有差别。 宫保鸡丁选用鸡肉为主料，佐以花生米、辣椒等辅料烹制而成。 红而不辣、辣而不猛、香辣味浓、肉质滑脆。由于其入口鲜辣，鸡肉的鲜嫩配合花生的香脆。",
-      "reviews" :[
+      "reviews": [
         {
           "reviewID": "1",
           "reviewComment": "太贵了太贵了太贵了太贵了",
@@ -401,7 +421,11 @@
           "userImage": "https://cdn.quasar.dev/img/avatar.png",
           "imgSrc2": "https://cdn.quasar.dev/img/parallax2.jpg",
           "reviewImage": "https://cdn.quasar.dev/img/parallax2.jpg",
-          "reviewTags": ["a", "b", "c"],
+          "reviewTags": [
+            "a",
+            "b",
+            "c"
+          ],
           "reviewLikes": 100,
           "myReviewLike": true,
           "reply": true,
@@ -420,7 +444,6 @@
         }
       ]
     }
-
   ],
   "stalls": [
     {
@@ -526,7 +549,10 @@
         "myRate": 4
       }
     ]
+  },
+  "user": {
+    "token": "9944b09199c62b4bbdfc6ee4b",
+    "firstLogin": false,
+    "type": "staff"
   }
- 
-
 }
