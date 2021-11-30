@@ -20,6 +20,7 @@
       <StallIntroSection
         :score="stallData.data.stallRate"
         :scoreAmount="stallData.data.stallRateNumber"
+        :stallAddress="stallData.data.stallAddress"
       />
     </div>
 

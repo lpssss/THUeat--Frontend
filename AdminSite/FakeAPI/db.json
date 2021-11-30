@@ -194,7 +194,7 @@
       "myReviewLike": true,
       "reply": true,
       "replyDateTime": "string",
-      "replyComment": "string",
+      "replyComment": "感谢同学提出的宝贵建议，我们后续将对同学提出的问题进行改进，欢迎同学再次品尝！",
       "dishes": [
         {
           "dishID": "string",
@@ -222,7 +222,7 @@
       "myReviewLike": true,
       "reply": true,
       "replyDateTime": "string",
-      "replyComment": "string",
+      "replyComment": "感谢同学提出的宝贵建议，我们后续将对同学提出的问题进行改进，欢迎同学再次品尝！",
       "dishes": [
         {
           "dishID": "string",

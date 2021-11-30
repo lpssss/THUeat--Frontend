@@ -43,10 +43,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: iSI0xt0Zqp6sp0CxoSx8C5X8
+          vercel-token: ${{ secrets.VERCEL_PRIVATE_SITE_TOKEN }}
           vercel-args: '--prod'
-          vercel-org-id: T6IpSgy3P1x6BA1p1Yfsw6rm
-          vercel-project-id: prj_R6l6lE4YAZ0uvP8vFvVcx2PRL3ys
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.PRIVATE_SITE_PROJECT_ID }}
 
   public-site-build:
     defaults:
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: amondnet/vercel-action@v20
         with:
-          vercel-token: zu3OCe8MCb0MVhrvqqhdySwe
+          vercel-token: ${{ secrets.VERCEL_PUBLIC_SITE_TOKEN }}
           vercel-args: '--prod'
-          vercel-org-id: T6IpSgy3P1x6BA1p1Yfsw6rm
-          vercel-project-id: prj_ErkXmrLD9cQzjRJ9SfcxZxKlStnm
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.PUBLIC_SITE_PROJECT_ID }}
