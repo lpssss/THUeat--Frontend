@@ -177,6 +177,7 @@
       "stallImage": "https://cdn.quasar.dev/img/parallax2.jpg",
       "stallDescribe": "广东风味特点是食用方便，蒸熟、切片均可，是下酒佳肴；如果炒着吃，味道更好。广东的美食大多不是辣味的。而广东人最喜欢吃饭前和一碗汤，才吃饭。其中白切鸡是必不可缺的在饭桌上。",
       "stallRate": 4,
+      "stallAddress": "清芬园二层",
       "stallRateNumber": 1024,
       "reviews" :[
         {
@@ -191,7 +192,7 @@
           "myReviewLike": true,
           "reply": true,
           "replyDateTime": "string",
-          "replyComment": "string",
+          "replyComment": "感谢同学提出的宝贵建议，我们后续将对同学提出的问题进行改进，欢迎同学再次品尝！",
           "dishes": [
             {
               "dishID": "string",
@@ -215,7 +216,7 @@
           "myReviewLike": true,
           "reply": true,
           "replyDateTime": "string",
-          "replyComment": "string",
+          "replyComment": "感谢同学提出的宝贵建议，我们后续将对同学提出的问题进行改进，欢迎同学再次品尝！",
           "dishes": [
             {
               "dishID": "string",
