@@ -5,6 +5,8 @@
     </div>
 
     <div class="q-pt-none row justify-center items-center">
+      <q-form @submit="onSubmit" class="q-gutter-md">
+      </q-form>
       <div class="col-3 q-pa-md" align="right"></div>
       <div class="col-3 q-pa-md " align="left">
         <div style="max-width: 200px">
@@ -114,13 +116,20 @@ export default defineComponent({
     BannerSection,
     LabelSection,
   },
+
+  data() {
+    return {
+      acceptclause: false,
+    }
+  },
+
   setup () {
     const $q = useQuasar()
     const store=useStore()
     const router=useRouter()
 
     function checkFileType (files) {
-      return files.filter(file => file.type === 'image/png')
+      return files.filter(file => file.type === 'image/*')
     }
 
     function onRejected (rejectedEntries) {
@@ -128,7 +137,7 @@ export default defineComponent({
       // https://quasar.dev/quasar-plugins/notify#Installation
       $q.notify({
         type: 'negative',
-        message: `${rejectedEntries.length} 个文件上传失败，文件类型不符合要求`
+        message: `${rejectedEntries.length} 个文件上传失败`
       })
     }
     //点击提交评论按钮后确认是否是登录状态，如果不是，跳转到登陆页面
@@ -136,6 +145,15 @@ export default defineComponent({
       console.log(store._state.data.login.loginStatus)
       if(!store._state.data.login.loginStatus){
         router.push('/login')
+      }
+      if (ref(this.ratingModel) === 0) {
+        this.$q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "请先对档口进行打分",
+          timeout: 500,
+        });
       }
       else{
         console.log('submit successfully')
