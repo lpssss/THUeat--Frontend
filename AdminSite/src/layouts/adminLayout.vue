@@ -16,7 +16,10 @@
         </q-toolbar-title>
 
         <q-chip>用户名</q-chip>
-        <q-btn color="red">登出</q-btn>
+        <q-btn
+          color="red"
+          @click="logout"
+        >登出</q-btn>
       </q-toolbar>
     </q-header>
 
@@ -47,6 +50,8 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import useAppState from "src/store/userAppState.js";
+import { useRouter } from "vue-router";
 
 const linksList = [
   {
@@ -83,10 +88,17 @@ export default defineComponent({
   },
 
   setup () {
-    const leftDrawerOpen = ref(false)
+    const leftDrawerOpen = ref(false);
+    const { resetState } = useAppState();
+    const router = useRouter();
+    const logout = () => {
+      resetState();
+      router.push('/');
+    }
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
+      logout,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
