@@ -1,5 +1,8 @@
 <template>
     <q-card flat bordered style="width:100%">
+    <q-card-section>
+      档口地址：{{ stallAddress }}
+    </q-card-section>
       <q-card-section>
         <div class="row justify-center">
     <div class="self-center col-6">
@@ -38,6 +41,10 @@ export default defineComponent({
         scoreAmount: {
             type: Number,
             default: 32
+        },
+        stallAddress: {
+            type: String,
+            default:'#'
         },
 
     },
