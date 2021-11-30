@@ -140,10 +140,6 @@ export default defineComponent({
       else {
         login()
 
-
-
-
-
         // const login = async () => {
         //   console.log('b');
 
