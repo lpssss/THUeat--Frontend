@@ -1,69 +1,110 @@
 <template>
   <div class="q-pa-md">
-    <q-table
+     <q-table
       title="用户管理系统"
-      :rows="data"
+      :rows="usersApi"
       :columns="columns"
-      row-key="name"
+      row-key="userName"
       binary-state-sort
     >
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
-          <q-toggle v-model="props.row.status" checked-icon="check" color="green" unchecked-icon="clear" />
+          <q-toggle v-model="props.row.userStatus" 
+                    checked-icon="check" 
+                    color="green" 
+                    unchecked-icon="clear"
+                    @update:model-value="
+                      (...args) => {
+                    doSomething(props.row, ...args);}
+              "></q-toggle>
         </q-td>
       </template>
-    </q-table>
+    </q-table> 
   </div>
+  <q-dialog v-model="confirmChangeStatus" persistent>
+    <q-card>
+      <q-card-section class="row items-center">
+        <span class="q-ml-sm">您是否确定更改状态？</span>
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn flat label="取消" color="primary" @click="postStatusChange" v-close-popup />
+        <q-btn
+          flat
+          label="确定"
+          color="primary"
+          @click="postStatusChange"
+          v-close-popup
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { api } from 'boot/axios'
+import { defineComponent, ref, onMounted } from 'vue'
 
 const columns = [
-  {
-    name: 'Username',
-    required: true,
-    label: '用户姓名',
-    align: 'left',
-    field: row => row.Username,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'User_ID', align: 'left', label: '用户编号', field: 'User_ID', sortable: true },
-  { name: 'userEmail', align: 'left', label: '邮件', field: 'stallEmail' },
-  { name: 'report', align: 'left', label: '投诉', field: 'report', sortable: true },
-  { name: 'status', align: 'left', label: '激活', field: 'status', sortable: true },
+  { name: 'userName',  align: 'left', label: '用户姓名', field: 'userName',  sortable: true  },
+  { name: 'userID', align: 'left', label: '用户编号', field: 'userID', sortable: true },
+  { name: 'userEmail', align: 'left', label: '邮件', field: 'userEmail' },
+  { name: 'status', align: 'left', label: '激活', field: 'userStatus', sortable: true },
 ]
 
-const data = [
+const users = [
   {
-    Username: '李先生',
-    User_ID: 'U0001',
-    stallEmail: 'test1@mail.com',
-    report: 5,
-    status: false
+    userName: '李先生',
+    userID: 'U0001',
+    userEmail: 'test1@mail.com',
+    userStatus: false
   },
   {
-    Username: '黄女士',
-    User_ID: 'U0002',
-    stallEmail: 'test2@mail.com',
-    report: 2,
-    status: true
+    userName: '黄女士',
+    userID: 'U0002',
+    userEmail: 'test2@mail.com',
+    userStatus: true
   },
   {
-    Username: '李先生',
-    User_ID: 'U0003',
-    stallEmail: 'test3@mail.com',
-    report: 0,
-    status: true
+    userName: '李先生',
+    userID: 'U0003',
+    userEmail: 'test3@mail.com',
+    userStatus: true
   }
 ]
 
 export default defineComponent({
   setup () {
+    const confirmChangeStatus = ref(false);
+    const postStatusChange = () => {
+      console.log("confirm");
+    };
+    function doSomething(a, value, evt) {
+      a.dishStatus = value;
+      confirmChangeStatus.value = true;
+    }
+
+    const usersApi = ref([]);
+    const getUsersData = async () => {
+      try {
+        const response = await api.get("/usertest");
+        usersApi.value.splice(0, usersApi.value.length, ...response.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+
+    onMounted(() => {
+      getUsersData()
+    })
+
     return {
       columns,
-      data: ref(data)
+      users: ref(users),
+      usersApi,
+      confirmChangeStatus,
+      postStatusChange,
+      doSomething
     }
   }
 })
