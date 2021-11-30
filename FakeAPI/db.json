@@ -495,7 +495,7 @@
         "reviewLikes": 100,
         "reply": true,
         "replyDateTime": "string",
-        "replyComment": "string",
+        "replyComment": "你胡说",
         "dishes": [
           {
             "dishID": "string",
