@@ -1,4 +1,4 @@
-# THUeat Frontend
+# THUeat Frontend 乐吃App前端
 
 # 测试
 单元测试工具：Vue-test-utils, Jest
@@ -13,13 +13,12 @@ Quasar相关测试：https://quasar.dev/quasar-cli/testing-and-auditing, https:/
 
 注：私人页面已安装 quasar test extension, 公共页面由渊升负责处理
 
+# 网站上线啦！
+公共页面：https://thueat-public-site.vercel.app/
 
-档主页面情况：
-1. 未完成部分：图片处理与创建新菜品的API（还在和后台协调），API链接（未换上正确的）
-2. API GET 和 POST 的写法如果不清楚有需要可以参考，里面已写上注释帮助理解
+私人页面： https://thu-eat-frontend.vercel.app/
 
-
-清华大学食堂App前端
+# FakeAPI 使用方法
 
 注意：现在已增加 Fake API的文件夹，用来设置jsonserver进行提取数据
 
