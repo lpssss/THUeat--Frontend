@@ -137,11 +137,6 @@
       </div>
     </div>
 
-    <div class="q-pb-lg text-red" align="center">
-      <div class="q-pt-md">
-        <q-btn>退出登录</q-btn>
-      </div>
-    </div>
   </q-page>
 </template>
 
