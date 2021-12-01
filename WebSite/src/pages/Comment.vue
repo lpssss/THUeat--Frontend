@@ -78,12 +78,12 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, computed } from "vue";
+import { defineComponent, ref, reactive, computed, watch } from "vue";
 import { useQuasar } from "quasar";
 import axios from "axios";
 import BannerSection from "components/Layout/BannerSection";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 import { api } from "boot/axios";
 
 const commentBanner = {
@@ -129,6 +129,18 @@ export default defineComponent({
     const group = ref([]);
     const files = ref([]);
 
+    const route=useRoute()
+    let name=route.query.stallName
+    let API_LINK = `http://localhost:3000/stallData/?stallName=${name}`; // 之后放真正的API
+
+    watch(()=>route.query,()=>{
+      name=route.query.stallName
+      API_LINK=`http://localhost:3000/stallData/?stallName=${name}`
+      console.log("watch",route.query.stallName)
+    },{
+      immediate:true
+    });
+
     function checkFileType(files) {
       return files.filter(file => file.type === "image/png" | "image/jpg");
     }
@@ -160,7 +172,7 @@ export default defineComponent({
         console.log("submit successfully");
         console.log(group.value)
         console.log(date)
-        
+
         api
           .post("users/password", {
             reviewDateTime: date,
