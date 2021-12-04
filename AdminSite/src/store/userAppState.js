@@ -5,7 +5,7 @@ const STATE_NAME = "appState";
 
 const defaultState = {
   token: null,
-  //  firstLogin: true,
+  vaildName: null,
   userType: null,
 };
 
@@ -22,9 +22,9 @@ const getters = {
   getToken: () => {
     return computed(() => state.token);
   },
-  // getFirstLogin: () => {
-  //   return computed(() => state.firstLogin);
-  // },
+  getvaildName: () => {
+    return computed(() => state.vaildName);
+  },
   getType: () => {
     return computed(() => state.userType);
   },
@@ -34,9 +34,9 @@ const actions = {
   updateToken: (token) => {
     state.token = token;
   },
-  // updateFirstLogin: (firstLogin) => {
-  //   state.firstLogin = firstLogin;
-  // },
+  updatevaildName: (vaildName) => {
+    state.vaildName = vaildName;
+  },
   updateType: (type) => {
     state.userType = type;
   },
