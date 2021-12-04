@@ -57,14 +57,14 @@
 
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import useAppState from "src/store/userAppState.js";
 import { api } from 'boot/axios'
 
 
-const { updateToken, updateFirstLogin, updateType } = useAppState();
+const { updateToken, updateFirstLogin, updateType, resetState } = useAppState();
 
 
 export default defineComponent({
@@ -78,42 +78,43 @@ export default defineComponent({
 
 
     const login = async () => {
-      const res = await api.get("/user");
-      await api.get('/user').then((res) => {
-        if (res.status === 200 && res.data !== undefined) {
-          updateToken(res.data.token);
-          updateType(res.data.type);
-          if (res.data.firstLogin === true) {
+      if (name.value.length > 0 && password.value.length >= 6) {
+        const res = await api.get("/user");
+        await api.get('/user').then((res) => {
+          if (res.status === 200 && res.data !== undefined) {
+            updateToken(res.data.token);
+            updateType(res.data.type);
+            if (res.data.firstLogin === true) {
 
-            console.log('first')
-            // Route to First login page
-            router.push("/firstLoginSettings");
-          }
-          else {
-            // Route to normal page
-            switch (res.data.type) {
-              case "super":
-                router.push('/superadmin');
-                break;
-              case "admin":
-                router.push('/admin');
-                break;
-              case "staff":
-                router.push('/staff');
-                break;
-              default:
-                router.push('/');
+              // Route to First login page
+              router.push("/firstLoginSettings");
             }
-            $q.notify({
-              color: "green-4",
-              textColor: "white",
-              icon: "cloud_done",
-              message: "登录成功",
-              timeout: 500,
-            });
+            else {
+              // Route to normal page
+              switch (res.data.type) {
+                case "super":
+                  router.push('/superadmin');
+                  break;
+                case "admin":
+                  router.push('/admin');
+                  break;
+                case "staff":
+                  router.push('/staff');
+                  break;
+                default:
+                  router.push('/');
+              }
+              $q.notify({
+                color: "green-4",
+                textColor: "white",
+                icon: "cloud_done",
+                message: "登录成功",
+                timeout: 500,
+              });
+            }
           }
-        }
-      })
+        })
+      }
     }
 
 
@@ -125,7 +126,7 @@ export default defineComponent({
           textColor: "white",
           icon: "warning",
           message: "请接受条款",
-          timeout: 500,
+          timeout: 1000,
         });
       }
       if (name.value.length <= 0) {
@@ -134,6 +135,15 @@ export default defineComponent({
           textColor: "white",
           icon: "warning",
           message: "请填些用户名",
+          timeout: 1000
+        });
+      }
+      if (password.value.length < 6) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "密码不能小于6位数",
           timeout: 500
         });
       }
@@ -189,6 +199,9 @@ export default defineComponent({
         //}
       }
     }
+    onMounted(() => {
+      resetState();
+    })
     return { name, password, isPwd, acceptclause, onLogin }
   }
 })
