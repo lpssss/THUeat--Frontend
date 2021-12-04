@@ -35,33 +35,19 @@ export default route(function (/* { store, ssrContext } */) {
     let currentUserType = getType().value;
     if (from.name === undefined && to.name === 'login') {
       next();
-    } else {
-      if (to.meta.permissions[0] === currentUserType) {
-        next();
-      } else {
-        resetState();
-        next('login')
-      }
-
     }
-
-
-
-
-    //next();
-
-
-
-    // let isAuthenticated = getIsAuthenticated();
-    // if (to.meta.requiredAuth && !isAuthenticated.value) {
-    //   next("login");
-    // } else {
-    //   if (!to.meta.requiredAuth && isAuthenticated.value) {
-    //     next(from);
-    //   } else {
-    //     next();
-    //   }
-    // }
+    if (from.name === 'login' && to.name === 'firstLoginSettings') {
+      next();
+    }
+    if (from.name === 'firstLoginSettings' && to.name === 'login') {
+      next();
+    }
+    if (to.meta.permissions[0] === currentUserType) {
+      next();
+    } else {
+      resetState();
+      next('login')
+    }
   });
 
   return Router
