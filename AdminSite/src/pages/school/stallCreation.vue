@@ -1,4 +1,6 @@
 <template>
+
+  <!-- Show stalls data -->
   <div
     class="q-pa-md"
     v-if="creatable == false"
@@ -11,43 +13,27 @@
       binary-state-sort
     >
       <template v-slot:top-right>
-        <q-btn color="primary" @click="add">创建</q-btn>
+        <q-btn
+          color="primary"
+          @click="add"
+        >创建</q-btn>
       </template>
 
-           <template v-slot:body-cell-status="props">
+      <template v-slot:body-cell-status="props">
         <q-td :props="props">
-          <q-toggle v-model="props.row.stallStatus" 
-                    checked-icon="check" 
-                    color="green" 
-                    unchecked-icon="clear"
-                    @update:model-value="
-                      (...args) => {
-                    doSomething(props.row, ...args);}
-              "  />
+          <q-toggle
+            v-model="props.row.stallStatus"
+            checked-icon="check"
+            color="green"
+            unchecked-icon="clear"
+            @click="confirmChangeStatus(props.row.stallStatus)"
+          />
         </q-td>
       </template>
     </q-table>
   </div>
 
-  <q-dialog v-model="confirmChangeStatus" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <span class="q-ml-sm">您是否确定更改状态？</span>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="取消" color="primary" @click="postStatusChange" v-close-popup />
-          <q-btn
-            flat
-            label="确定"
-            color="primary"
-            @click="postStatusChange"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
+  <!-- Create new stall -->
   <div
     class="q-pa-md"
     style="margin-left:10%; margin-right:10%;"
@@ -59,11 +45,30 @@
       class="q-gutter-md"
       style="max-width: 100%"
     >
-      <q-select filled v-model="newStall.canteenName" :options="canteen" label="食堂" />
-      <q-select filled v-model="newStall.stallFloor" :options="floor" label="楼层" />
-      <q-input  filled v-model="newStall.stallName" label="档口名字" stack-label />
+      <q-select
+        filled
+        v-model="newStall.canteenName"
+        :options="canteen"
+        label="食堂"
+      />
+      <q-select
+        filled
+        v-model="newStall.stallFloor"
+        :options="floor"
+        label="楼层"
+      />
+      <q-input
+        filled
+        v-model="newStall.stallName"
+        label="档口名字"
+        stack-label
+      />
       <div style="margin-left:45%;">
-        <q-btn style="margin-right:10px;" color="red" @click="cancel()">取消</q-btn>
+        <q-btn
+          style="margin-right:10px;"
+          color="red"
+          @click="cancel()"
+        >取消</q-btn>
         <q-btn
           color="green"
           @click="save()"
@@ -75,10 +80,12 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue'
-// import { api } from 'boot/axios'
+import { useQuasar } from "quasar";
+import { api } from 'boot/axios'
 
+// Table columns title
 const columns = [
-  { name: 'stallName', label: '档口名字', align: 'left', field:'stallName', sortable: true },
+  { name: 'stallName', label: '档口名字', align: 'left', field: 'stallName', sortable: true },
   { name: 'canteenName', align: 'left', label: '食堂名字', field: 'canteenName', sortable: true },
   { name: 'stallFloor', align: 'left', label: '楼层', field: 'stallFloor', sortable: true },
   { name: 'status', align: 'left', label: '激活状态', field: 'stallStatus', sortable: true }
@@ -107,14 +114,14 @@ const stalls = [
 
 export default defineComponent({
   setup () {
+    const $q = useQuasar();
     const creatable = ref(false);
     const orgStall = {
-        stallName: null,
-        canteenName: null,
-        stallFloor: null
-      };
-
-    const newStall = reactive({...orgStall});
+      stallName: null,
+      canteenName: null,
+      stallFloor: null
+    };
+    const newStall = reactive({ ...orgStall });
     const add = () => {
       creatable.value = true;
       Object.assign(newStall, orgStall)
@@ -122,23 +129,47 @@ export default defineComponent({
     const cancel = () => {
       creatable.value = false
     };
+    const confirmChangeStatus = (status) => {
+      // const postStallStatus = () => {
+      // api.post('Api_Link', {
+      //   stallStatus: status,
+      // }).then ((res) => {
+      // if (res.status === 200 && res.data !== undefined) {
+      // getstallsData,
+      //   $q.notify({
+      // color: "green-4",
+      // textColor: "white",
+      // icon: "cloud_done",
+      // message: "修改成功",
+      // timeout: 1000,
+      //  });
+      // }
+      // if (res.status === 404){
+      //   console.log('error')
+      // }
+      //  
+      // }) 
+    };
     const save = () => {
       creatable.value = false
     };
 
-    const confirmChangeStatus = ref(false);
-    const postStatusChange = () => {
-      console.log("confirm");
-    };
-    function doSomething(a, value, evt) {
-      a.dishStatus = value;
-      confirmChangeStatus.value = true;
-    };
-
+    // Get stalls data
     // const stalls = ref([]);
     // const getstallsData = async () => {
     //   try {
-    //     const response = await api.get("link");
+    //     const response = await api.get("/private/stalls");
+    //     stalls.value.splice(0, stalls.value.length, ...response.data);
+    //   } catch (err) {
+    //     console.log(err.message);
+    //   }
+    // }
+
+    // Get canteens, floors, stalls data
+    // const canteens = ref([]);
+    // const getstallsData = async () => {
+    //   try {
+    //     const response = await api.get("/private/canteens");
     //     stalls.value.splice(0, stalls.value.length, ...response.data);
     //   } catch (err) {
     //     console.log(err.message);
@@ -151,27 +182,15 @@ export default defineComponent({
     //   stallFloor: newStall.stallFloor.value, 
     //   canteenId: newStall.canteenId.value，
     // }).then ((res) => {
-      // if (res.status === 200 && res.data !== undefined) {
-      //     updateToken(res.data.token);
-      // }
-      // if (res.status === 404){
-      //   console.log('error')
-      // }
+    // if (res.status === 200 && res.data !== undefined) {
+    //     updateToken(res.data.token);
+    // }
+    // if (res.status === 404){
+    //   console.log('error')
+    // }
     //  
     // })
 
-    // const postStallStatus = () => {
-    // api.post('Api_Link', {
-    //   stallStatus: stalls.stallStatus.value,
-    // }).then ((res) => {
-      // if (res.status === 200 && res.data !== undefined) {
-      //     updateToken(res.data.token);
-      // }
-      // if (res.status === 404){
-      //   console.log('error')
-      // }
-    //  
-    // })
 
     // onMounted(() => {
     //   getstallsData()
@@ -182,16 +201,15 @@ export default defineComponent({
       orgStall,
       newStall,
       stalls: ref(stalls),
+      confirmChangeStatus,
+      // getstallsData,
       canteen: [
         '桃李园', '紫荆园', '桃李园', '万人食堂'
       ],
       floor: [
-        1,2,3,4
+        1, 2, 3, 4
       ],
       creatable,
-      confirmChangeStatus,
-      postStatusChange,
-      doSomething,
       add,
       cancel,
       save,
