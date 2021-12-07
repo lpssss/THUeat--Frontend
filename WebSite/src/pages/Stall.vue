@@ -21,6 +21,7 @@
         :score="stallData.data.stallRate"
         :scoreAmount="stallData.data.stallRateNumber"
         :stallAddress="stallData.data.stallAddress"
+        :stallName="stallData.data.stallName"
       />
     </div>
 

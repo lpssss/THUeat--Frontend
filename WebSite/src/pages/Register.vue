@@ -1,10 +1,9 @@
 <template>
   <div class="background"></div>
   <q-page class="row items-center justify-center">
-    <q-card class="register-card">
-      <h5 align="center">让我们加入吧!</h5>
-
-      <div class="q-pa-md">
+    <q-card class="register-card ">
+      <div class="q-pa-md ">
+        <div class="row justify-center text-h5 q-pa-md">让我们加入吧！</div>
         <q-form class="q-gutter-md" @submit="onSubmit">
           <q-input
             v-model="model.nickname"
@@ -12,8 +11,10 @@
             label="昵称"
             lazy-rules
           />
-          <!--          <q-input
-            v-model="model.username"
+
+          <q-input
+            v-model="model.email"
+            type="email"
             label="邮箱"
             lazy-rules
             :rules="[ val => val && val.length > 0 || '请输入你的邮箱']"
@@ -22,14 +23,14 @@
               <q-btn dense flat color="purple" icon="send" label="发送验证码" @click="sendauthcode"/>
             </template>
           </q-input>
+
           <q-input
             v-model="model.authcode"
-            type="number"
+            type="text"
             label="邮箱验证码"
             lazy-rules
             :rules="[ val => val && val.length > 0 || '请输入你的邮箱验证码']"
-
-          />-->
+          />
 
           <q-input
             v-model="model.password"
@@ -48,6 +49,7 @@
               />
             </template>
           </q-input>
+
           <q-input
             v-model="password"
             :rules="[(val) => val === model.password || '两次输入密码不一致']"
@@ -63,6 +65,7 @@
               />
             </template>
           </q-input>
+
           <div>
             <q-checkbox v-model="accept" label="接受条款" />
           </div>
@@ -92,12 +95,17 @@ export default {
       accept: false,
       model: {
         nickname: "",
+        email:"",
+        authcode:"",
         password: "",
       },
     };
   },
 
   methods: {
+    sendauthcode(){
+
+    },
     onSubmit() {
       if (this.accept !== true) {
         this.$q.notify({
@@ -166,6 +174,6 @@ export default {
   top: 50%
   transform: translate(-50%, -50%)
   width: 28rem
-  height: 32rem
+  height: 41rem
   border-radius: 10px
 </style>
