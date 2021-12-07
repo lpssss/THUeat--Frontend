@@ -13,10 +13,13 @@
 </template>
 
 <script>
-import {api} from "boot/axios";
+import {staffapi} from "boot/axios";
 import {ref} from "vue"
 import {useQuasar} from "quasar";
 import StallReviewsCard from "components/StallReviewsCard";
+import {STAFF_API_LINKS} from "app/api-links";
+
+const API_LINK = STAFF_API_LINKS.reviews;
 
 export default {
   name: "StallReviews",
@@ -29,9 +32,8 @@ export default {
     //功能：获取档口相关所有评论信息，失败会显示错误信息
     async function getReviewsData(){
       try {
-        const API_LINK="reviews"
-        const response = await api.get(API_LINK);
-        reviewsData.value = response.data;
+        const response = await staffapi.get(API_LINK);
+        reviewsData.value = response.data.data;
       } catch (err) {
         $q.notify({
           type:"error",
