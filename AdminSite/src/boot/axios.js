@@ -12,7 +12,7 @@ const { getToken } = useAppState();
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://linja19.pythonanywhere.com/",
   headers: { "Content-Type": "application/json" },
 });
 
