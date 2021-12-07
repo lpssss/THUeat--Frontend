@@ -33,6 +33,7 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     let currentUserType = getType().value;
+    console.log(from.name)
     if (from.name === undefined && to.name === 'login') {
       next();
     }
@@ -42,8 +43,15 @@ export default route(function (/* { store, ssrContext } */) {
     if (from.name === 'firstLoginSettings' && to.name === 'login') {
       next();
     }
+    if (from.name === undefined && to.name === 'firstLoginSettings') {
+      next('login')
+    }
     if (to.meta.permissions[0] === currentUserType) {
-      next();
+      if (to.name === 'firstLoginSettings' && from.name === undefined) {
+        next('login')
+      } else {
+        next();
+      }
     } else {
       resetState();
       next('login')

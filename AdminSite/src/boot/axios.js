@@ -12,7 +12,7 @@ const { getToken } = useAppState();
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "http://linja19.pythonanywhere.com/",
+  baseURL: "http://linja19.pythonanywhere.com/api",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -24,7 +24,7 @@ export default boot(({ app }) => {
 
   if (token !== null) {
     api.interceptors.request.use(async (req) => {
-      req.headers.Authorization = `token ${token}`;
+      req.headers.Authorization = "token " + token;
       return req;
     });
   }
