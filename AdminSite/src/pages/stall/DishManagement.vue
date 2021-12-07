@@ -20,11 +20,14 @@
 </template>
 
 <script>
-import { api } from "boot/axios";
+import { staffapi } from "boot/axios";
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import DishesTable from "components/DishesTable";
 import DishCreateForm from "components/DishCreateForm";
+import {STAFF_API_LINKS} from "app/api-links";
+
+const API_LINK = STAFF_API_LINKS.dishes;
 
 export default {
   name: "DishManagement",
@@ -46,8 +49,7 @@ export default {
     //功能：提交菜品创建表格，并显示后端创建结果（成功 & 失败）
     function createDish(newDishData) {
       async function sendData() {
-        const API_LINK = "dishes-post";
-        return await api.post(API_LINK, newDishData);
+        return await staffapi.post(API_LINK, newDishData);
       }
       sendData()
         .then((res) => {
@@ -78,9 +80,9 @@ export default {
     //功能：获取所有菜品信息，失败则显示错误信息
     async function getDishData() {
       try {
-        const API_LINK = "dishes";
-        const response = await api.get(API_LINK);
-        curDishData.value = response.data;
+        const response = await staffapi.get(API_LINK);
+        console.log(response.data.data)
+        curDishData.value = response.data.data;
       } catch (err) {
         $q.notify({
           type: "error",

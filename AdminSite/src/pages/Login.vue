@@ -61,29 +61,33 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import useAppState from "src/store/userAppState.js";
-import { api } from 'boot/axios'
+import axios from "axios";
 
 
-const { updateToken, updateFirstLogin, updateType, resetState } = useAppState();
+const { updateToken, updateType, resetState, getToken } = useAppState();
 
 
 export default defineComponent({
   setup () {
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('用户名');
-    const password = ref('123456');
+    const name = ref('thueatadmin');
+    const password = ref('thueat2021admin');
     const isPwd = ref(true);
-    const acceptclause = ref(true);
+    const acceptclause = ref(false);
 
 
     const login = async () => {
       if (name.value.length > 0 && password.value.length >= 6) {
-        const res = await api.get("/user");
-        await api.get('/user').then((res) => {
+        await axios.post('https://linja19.pythonanywhere.com/api/private/authorization', {
+          name: name.value,
+          password: password.value
+
+        }).then((res) => {
           if (res.status === 200 && res.data !== undefined) {
-            updateToken(res.data.token);
-            updateType(res.data.type);
+            updateToken(res.data.data.token);
+            updateType(res.data.data.type);
+            console.log(getToken())
             if (res.data.firstLogin === true) {
 
               // Route to First login page
@@ -91,8 +95,8 @@ export default defineComponent({
             }
             else {
               // Route to normal page
-              switch (res.data.type) {
-                case "super":
+              switch (res.data.data.type) {
+                case "superadmin":
                   router.push('/superadmin');
                   break;
                 case "admin":
@@ -109,7 +113,7 @@ export default defineComponent({
                 textColor: "white",
                 icon: "cloud_done",
                 message: "登录成功",
-                timeout: 500,
+                timeout: 1000,
               });
             }
           }
@@ -144,59 +148,11 @@ export default defineComponent({
           textColor: "white",
           icon: "warning",
           message: "密码不能小于6位数",
-          timeout: 500
+          timeout: 1000
         });
       }
       else {
         login()
-
-        // const login = async () => {
-        //   console.log('b');
-
-        //   const res = await api.get("/user");
-        //   console.log(res);
-
-        // await api.get('/user').then((res) => {
-
-
-
-        //   if (res.status === 200 && res.data !== undefined) {
-        //     updateToken(res.data.token);
-        //     updateType(res.data.type);
-        //     if (res.data.firstLogin === true) {
-        //       // Route to First login page
-        //       router.push({ path: 'firstLoginSettings' })
-        //     }
-        //     else {
-        //       // Route to normal page
-        //       switch (res.data.type) {
-        //         case "super":
-        //           // code block
-        //           router.push({ path: 'superadmin' });
-        //           break;
-        //         case "admin":
-        //           // code block
-        //           router.push({ path: 'admin' });
-        //           break;
-        //         case "staff":
-        //           // code block
-        //           router.push({ path: 'staff' });
-        //           break;
-        //         default:
-        //           // code block
-        //           router.push({ path: '/' });
-        //       }
-        //       // this.$q.notify({
-        //       //   color: "green-4",
-        //       //   textColor: "white",
-        //       //   icon: "cloud_done",
-        //       //   message: "登录成功",
-        //       //   timeout: 500,
-        //       // });
-        //     }
-        //   }
-        // })
-        //}
       }
     }
     onMounted(() => {

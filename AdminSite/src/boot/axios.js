@@ -1,9 +1,8 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
-import useAppState from "src/store/userAppState.js";
+import userAppState from "src/store/userAppState.js";
 
-
-const { getToken } = useAppState();
+const { getToken } = userAppState();
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -12,10 +11,14 @@ const { getToken } = useAppState();
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "http://linja19.pythonanywhere.com/",
+  baseURL: "https://linja19.pythonanywhere.com/api",
   headers: { "Content-Type": "application/json" },
 });
 
+const staffapi = axios.create({
+  baseURL: "https://linja19.pythonanywhere.com/api/private/mystall",
+  headers: { "Content-Type": "application/json" },
+});
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -24,7 +27,12 @@ export default boot(({ app }) => {
 
   if (token !== null) {
     api.interceptors.request.use(async (req) => {
-      req.headers.Authorization = `token ${token}`;
+      req.headers.Authorization = "token " + token;
+      return req;
+    });
+
+    staffapi.interceptors.request.use(async (req) => {
+      req.headers.Authorization = "Token " + token;
       return req;
     });
   }
@@ -38,4 +46,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api };
+export { api, staffapi };

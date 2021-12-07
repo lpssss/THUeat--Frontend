@@ -13,48 +13,48 @@ const routes = [
     path: "/superadmin/",
     component: () => import("src/layouts/superadminLayout.vue"),
     meta: {
-      permissions: ['super']
+      permissions: ['superadmin']
     },
     children: [
       {
         path: "", component: () => import("pages/school/schoolDashboard.vue"),
         meta: {
-          permissions: ['super']
+          permissions: ['superadmin']
         }
       },
       {
         path: "schooladminMaintenance",
         component: () => import("pages/school/schooladminMaintenance.vue"),
         meta: {
-          permissions: ['super']
+          permissions: ['superadmin']
         }
       },
       {
         path: "stallCreation",
         component: () => import("pages/school/stallCreation.vue"),
         meta: {
-          permissions: ['super']
+          permissions: ['superadmin']
         }
       },
       {
         path: "staffMaintenance",
         component: () => import("pages/school/staffMaintenance.vue"),
         meta: {
-          permissions: ['super']
+          permissions: ['superadmin']
         }
       },
       {
         path: "userMaintenance",
         component: () => import("pages/school/userMaintenance.vue"),
         meta: {
-          permissions: ['super']
+          permissions: ['superadmin']
         }
       },
       {
         path: "settings",
         component: () => import("pages/school/settings.vue"),
         meta: {
-          permissions: ['super']
+          permissions: ['superadmin']
         }
       },
     ],
