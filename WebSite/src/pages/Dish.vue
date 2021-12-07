@@ -16,7 +16,7 @@
 
     <q-card flat bordered class="bg-purple-10086" style="width:100%">
       <q-card-section class="q-pa-md">
-        <q-btn size="sm" round color="primary" icon="thumb_up" />
+        <q-btn size="sm" round color="primary" icon="thumb_up" @click="postDishLikes" />
         <span class="q-px-sm text-caption text-grey"> {{ dishData.data.dishLikes }} </span>
         <div class="dish-price">
           <q-icon name="attach_money" style="font-size: 1.5rem" />
@@ -48,7 +48,8 @@ import axios from "axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import { watch } from 'vue';
-import {useRoute} from 'vue-router'
+import { useStore } from "vuex";
+import {useRoute, useRouter} from 'vue-router'
 
 export default {
   name: "Dish",
@@ -59,6 +60,8 @@ export default {
     },
   setup() {
     const route=useRoute()
+    const store=useStore()
+    const router=useRouter()
     let id=route.query.dishID
     let API_LINK = `http://localhost:3000/dishes/?dishID=${id}`; // 之后放真正的API
     //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
@@ -79,11 +82,22 @@ export default {
     },{
       immediate:true
     });
-    //getDishData();
+
+    function postDishLikes(){
+      console.log(store._state.data.login.loginStatus);
+      if (!store._state.data.login.loginStatus) {
+        router.push("/login");
+      }
+      else {
+        console.log('click thumb successfully')
+      }
+
+    }
 
     return {
       slide: ref('first'),
       dishData,
+      postDishLikes
     };
   },
 };

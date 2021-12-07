@@ -19,7 +19,7 @@
       <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
     </div>
         <div class="col-2">
-      <q-btn color="purple-8"  icon-right="send" label="去评价" @click="$router.push('/comment')">
+      <q-btn color="purple-8"  icon-right="send" label="去评价" @click="$router.push({path:'/comment',query:{stallName:stallName}})">
 
       </q-btn>
     </div>
@@ -45,6 +45,10 @@ export default defineComponent({
         stallAddress: {
             type: String,
             default:'#'
+        },
+        stallName: {
+          type: String,
+          required: true
         },
 
     },

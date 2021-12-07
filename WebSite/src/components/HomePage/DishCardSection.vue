@@ -66,22 +66,28 @@ export default defineComponent({
         var dishID = ID;
         var API_LINK = `http://localhost:3000/dishes/${dishID}`
         console.log(this.isDishLike)
-        if(this.isDishLike == true){
-          axios.delete(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
-            console.log(response.data)
-            this.isDishLike = false
-            this.$router.go(0)
-          });
-        }
-        else if(this.isDishLike == false){
-          axios.post(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
-            console.log(response.data)
-            this.isDishLike = true
-            this.$router.go(0)
-          });
-        }
+                    if(!this.$store.state.login.loginStatus){
+                      this.$router.push('/login')
+                    }
+                    else{
+                      if(this.isDishLike == true){
+                        axios.delete(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
+                          console.log(response.data)
+                          this.isDishLike = false
+                          this.$router.go(0)
+                        });
+                      }
+                      else if(this.isDishLike == false){
+                        axios.post(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
+                          console.log(response.data)
+                          this.isDishLike = true
+                          this.$router.go(0)
+                        });
+                      }
+                    }
+       
       }
-  
+ 
     }
 })
 </script>
