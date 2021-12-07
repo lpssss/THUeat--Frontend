@@ -12,7 +12,7 @@ const { getToken } = useAppState();
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "http://linja19.pythonanywhere.com/",
+  baseURL: "http://linja19.pythonanywhere.com/api/",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -26,7 +26,7 @@ export default boot(({ app }) => {
       return req;
     });
   }
-  
+
   app.config.globalProperties.$axios = axios
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
