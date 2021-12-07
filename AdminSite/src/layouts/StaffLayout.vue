@@ -68,6 +68,11 @@ const linksList = [
     title: '菜品记录',
     icon: 'restaurant',
     to: '/staff/dishes'
+  },
+  {
+    title: '设置',
+    icon: 'settings',
+    to: '/staff/settings'
   }
 ];
 
