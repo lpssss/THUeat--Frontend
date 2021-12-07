@@ -68,7 +68,7 @@
   </div>
   <q-dialog v-model="showImageGallery" full-width persistent>
     <q-card>
-      <ImageGallery :images="stallImages" />
+      <ImageGallery />
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat label="关闭" v-close-popup />
       </q-card-actions>
@@ -77,10 +77,12 @@
 </template>
 
 <script>
-import { api } from "boot/axios";
 import { ref, reactive, watch } from "vue";
-import { useQuasar } from "quasar";
 import ImageGallery from "components/ImageGallery";
+import { STAFF_API_LINKS } from "app/api-links";
+import { useStore } from "vuex";
+
+const API_LINK = STAFF_API_LINKS.dashboard;
 
 //档口信息表格的column名字
 const STALL_DETAILS_COLUMNS = [
@@ -94,72 +96,43 @@ export default {
   name: "StallDetailsTable",
   components: { ImageGallery },
   props: {
-    stallDetailsData: {
-      type: Object,
-      required: true,
-    },
-    stallImages: {
-      type: Array,
-      required: true,
-    },
     rowsTitle: {
       type: Array,
       required: true,
     },
   },
-  emits:["updateData"],
-  setup(props,context) {
+  emits: ["updateDetailsData", "updateImagesData"],
+  setup() {
     //showImageGallery: 控制图片库的开关
     //myStallDetails: 重新复制档口信息，以直接修改档口信息
-    const $q = useQuasar();
-    const showImageGallery= ref(false);
-    const myStallDetails = reactive( {...props.stallDetailsData} );
+    const store = useStore();
+    const showImageGallery = ref(false);
+    const myStallDetails = reactive({
+      ...store.state.stallDetails.stallDetailsData,
+    });
 
-    //输入1个数据：需要POST去后端的档口信息（不包括上传和删除的图片），Object
-    //输出1个数据：后端的回应，Object
-    //功能：POST 数据去后端
-    async function postData(data) {
-      const API_LINK = "mystall-post";
-      return await api.post(API_LINK, data);
+    const newImage = ref(null);
+
+    function addImages(images) {
+      newImage.value = images.value;
+      console.log(images.value[0]);
+      console.log(newImage.value.length);
     }
-    //输入1个数据：需要POST去后端的档口信息（包括修改后的信息和删减后的图片，不包括上传的图片），Object
-    //功能：运行POST函数，并显示后端操作结果（成功 & 失败）
-    function saveChanges(data) {
-      console.log(data);
-      postData(data)
-        .then((response) => {
-          console.log(response);
-          if (response.status === 201) {
-            $q.notify({
-              type: "success",
-              message: "修改成功",
-            });
-            context.emit("updateData",data)
-          }
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-          $q.notify({
-            type: "error",
-            message: "修改失败，请刷新页面重试",
-          });
-        });
-    }
+
     //功能：在任一档口信息有修改后自动POST去后端
     watch(
       () => myStallDetails,
-      (newState) => {
-        saveChanges({ ...newState });
+      (newDetails) => {
+        store.dispatch("stallDetails/saveDetailsChanges", newDetails);
       },
       { deep: true }
     );
-
     return {
       STALL_DETAILS_COLUMNS,
       OPERATION_TIME_OPTIONS,
       myStallDetails,
       showImageGallery,
-      saveChanges,
+      addImages,
     };
   },
 };
