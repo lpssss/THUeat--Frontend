@@ -95,15 +95,15 @@ export default defineComponent({
   },
   setup () {
     
-    const DISH_API_LINK = "https://linja19.pythonanywhere.com/api/dishes";
-    const STALL_API_LINK = "https://linja19.pythonanywhere.com/api/stalls";
+    const DISH_API_LINK = "dishes";
+    const STALL_API_LINK = "stalls";
 
     const dishData = reactive({ data: {} });
     const stallData = reactive({ data: {} });
 
     const getDishData = async () => {
       try {
-        const response = await axios.get(DISH_API_LINK);
+        const response = await api.get(DISH_API_LINK);
         dishData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
@@ -115,7 +115,7 @@ export default defineComponent({
     };
     const getStallData = async () => {
       try {
-        const response = await axios.get(STALL_API_LINK);
+        const response = await api.get(STALL_API_LINK);
         stallData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
