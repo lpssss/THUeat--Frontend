@@ -33,7 +33,6 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     let currentUserType = getType().value;
-    console.log(from.name)
     if (from.name === undefined && to.name === 'login') {
       next();
     }
