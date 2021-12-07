@@ -44,6 +44,7 @@
 <script>
 import { ref, defineComponent, reactive } from "vue"
 import axios from "axios";
+import { api } from "boot/axios";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import DishCardSection from "components/HomePage/DishCardSection";
 import StallCardSection from "components/HomePage/StallCardSection";
@@ -94,8 +95,8 @@ export default defineComponent({
   },
   setup () {
     
-    const DISH_API_LINK = "http://localhost:3000/dishes";
-    const STALL_API_LINK = "http://localhost:3000/stalls";
+    const DISH_API_LINK = "https://linja19.pythonanywhere.com/api/dishes";
+    const STALL_API_LINK = "https://linja19.pythonanywhere.com/api/stalls";
 
     const dishData = reactive({ data: {} });
     const stallData = reactive({ data: {} });
@@ -103,15 +104,19 @@ export default defineComponent({
     const getDishData = async () => {
       try {
         const response = await axios.get(DISH_API_LINK);
-        dishData.data = response.data;
+        dishData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
+        $q.notify({
+          type: "error",
+          message: "获取数据失败，请刷新页面重试",
+        });
       }
     };
     const getStallData = async () => {
       try {
         const response = await axios.get(STALL_API_LINK);
-        stallData.data = response.data;
+        stallData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
       }

@@ -131,11 +131,11 @@ export default defineComponent({
 
     const route=useRoute()
     let name=route.query.stallName
-    let API_LINK = `http://localhost:3000/stallData/?stallName=${name}`; // 之后放真正的API
+    //let API_LINK = `stallData/?stallName=${name}`; // 之后放真正的API
 
     watch(()=>route.query,()=>{
       name=route.query.stallName
-      API_LINK=`http://localhost:3000/stallData/?stallName=${name}`
+      //API_LINK=`stallData/?stallName=${name}`
       console.log("watch",route.query.stallName)
     },{
       immediate:true
