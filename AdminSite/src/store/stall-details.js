@@ -18,7 +18,7 @@ const stallDetails = {
     updateDetails(state, details) {
       Object.assign(state.stallDetailsData, details);
     },
-    hideImage(state, targetImg) {
+    hideImage(state, { targetImg }) {
       const idx = state.stallImagesData.indexOf(targetImg);
       console.log(idx);
       state.stallImagesData.splice(idx, 1);
@@ -60,27 +60,38 @@ const stallDetails = {
     //输出1个数据：后端的回应，Object
     //功能：POST 数据去后端
     async postData({ commit }, { nDetails, dImage, nImage, message, type }) {
-      const formData = constructFormData(nDetails, dImage, nImage);
+      const formData = constructFormData(
+        nDetails,
+        dImage,
+        nImage,
+        "stallImages"
+      );
       console.log();
       for (let pair of formData.entries()) {
         console.log(pair[0] + ", " + pair[1]);
       }
-
-      const response = await staffapi.post(API_LINK, formData);
-      console.log(response);
-      if (response.status === 200) {
-        Notify.create({
-          type: "success",
-          message: message.success,
-        });
-        if (type === "details") {
-          commit("updateDetails", nDetails);
-        } else if (type === "images") {
-          if (response.data.data.stallImages.length !== 0) {
-            commit("addImages", response.data.data.stallImages);
+      try {
+        const response = await staffapi.post(API_LINK, formData);
+        console.log(response);
+        if (response.status === 200) {
+          Notify.create({
+            type: "success",
+            message: message.success,
+          });
+          if (type === "details") {
+            commit("updateDetails", nDetails);
+          } else if (type === "images") {
+            if (response.data.data.stallImages.length !== 0) {
+              commit("addImages", response.data.data.stallImages);
+            }
           }
+        } else {
+          Notify.create({
+            type: "error",
+            message: message.error,
+          });
         }
-      } else {
+      } catch (err) {
         Notify.create({
           type: "error",
           message: message.error,
