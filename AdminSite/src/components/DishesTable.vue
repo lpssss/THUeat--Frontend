@@ -14,10 +14,9 @@
         </tr>
       </thead>
       <DishesTableRow
-        v-for="rowData in rowsData"
-        :key="rowData.dishID"
-        :row-data="rowData"
-        @updateRow="(data)=>$emit('updateRow',data)"
+        v-for="dishDetails in dishesDetails"
+        :key="dishDetails.dishID"
+        :row-data="dishDetails"
       />
     </q-markup-table>
   </div>
@@ -25,6 +24,8 @@
 
 <script>
 import DishesTableRow from "components/DishesTableRow";
+import {computed} from 'vue'
+import {useStore} from "vuex";
 
 //columns 包含所有菜品信息
 const COLUMNS_TITLE = [
@@ -41,15 +42,15 @@ const COLUMNS_TITLE = [
 export default {
   name: "DishesTable",
   components: { DishesTableRow },
-  props: {
-    rowsData: {
-      type: Array,
-      required: true,
-    },
-  },
   setup() {
+    const store=useStore()
+    const dishesDetails=computed(()=>store.state.dishesDetails.dishesDetailsData)
+    // const dishesImages=computed(()=>store.state.dishesDetails.dishesDetailsData)
+    console.log(dishesDetails)
     return {
       COLUMNS_TITLE,
+      dishesDetails,
+      // dishesImages
     };
   },
 };

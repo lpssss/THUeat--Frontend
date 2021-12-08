@@ -5,16 +5,15 @@
 <!--备注：由于API fetch有延时，因此为了避免warning，使用v-if在获得数据后才开始render-->
 <!--pending：创建新菜品的POST返回-->
 <template>
-  <template v-if="curDishData.length">
+  <template v-if="$store.state.dishesDetails.dishesDetailsData.length">
     <DishCreateForm
       v-if="openDishCreateForm"
       ref="dishForm"
-      @createDish="createDish"
       @closeForm="openDishCreateForm = false"
     />
     <template v-else>
       <q-btn color="primary" @click="openDishCreateForm = true">创建</q-btn>
-      <DishesTable :rows-data="curDishData" @updateRow="updateRow"/>
+      <DishesTable />
     </template>
   </template>
 </template>
@@ -26,6 +25,7 @@ import { useQuasar } from "quasar";
 import DishesTable from "components/DishesTable";
 import DishCreateForm from "components/DishCreateForm";
 import {STAFF_API_LINKS} from "app/api-links";
+import {useStore} from "vuex";
 
 const API_LINK = STAFF_API_LINKS.dishes;
 
@@ -37,44 +37,21 @@ export default {
     //curDishData: 菜品信息表格的数据
     //dishForm: 用来控制DishCreateForm (template ref)
     const $q = useQuasar();
+    const store=useStore()
     const openDishCreateForm = ref(false);
-    const curDishData = ref([]);
     const dishForm = ref();
 
-    function updateRow(data){
-      const targetIdx=curDishData.value.findIndex(item=>item.dishID===data.dishID)
-      curDishData.value[targetIdx]=data
-    }
-
-    //功能：提交菜品创建表格，并显示后端创建结果（成功 & 失败）
-    function createDish(newDishData) {
-      async function sendData() {
-        return await staffapi.post(API_LINK, newDishData);
-      }
-      sendData()
-        .then((res) => {
-          if (res.status === 201) {
-            $q.notify({
-              type: "success",
-              message: "创建成功",
-            });
-            curDishData.value.push({
-              ...newDishData,
-              dishID: "random",
-              dishLikes: "0",
-              dishStatus: true,
-            }); //需要返回dishID和dishLikes
-            openDishCreateForm.value = false;
-            dishForm.value.resetForm();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          $q.notify({
-            type: "error",
-            message: "创建失败，请重新创建",
-          });
-        });
+    function arrangeData(data){
+      let dishesDetails=[]
+      let dishesImages=[]
+      data.forEach((item)=>{
+        const {dishImages,...dishDetails}=item
+        dishesDetails.push(dishDetails)
+        dishesImages.push({dishID:item.dishID,dishImages})
+      })
+      console.log(dishesImages)
+      console.log(dishesDetails)
+      return [dishesDetails,dishesImages]
     }
 
     //功能：获取所有菜品信息，失败则显示错误信息
@@ -82,8 +59,10 @@ export default {
       try {
         const response = await staffapi.get(API_LINK);
         console.log(response.data.data)
-        curDishData.value = response.data.data;
+        const [dishesDetails,dishesImages]=arrangeData(response.data.data)
+        store.commit("dishesDetails/initialize",{details:dishesDetails,images:dishesImages})
       } catch (err) {
+        console.log(err)
         $q.notify({
           type: "error",
           message: "获取数据失败，请刷新页面重试",
@@ -95,10 +74,7 @@ export default {
 
     return {
       openDishCreateForm,
-      curDishData,
       dishForm,
-      updateRow,
-      createDish,
     };
   },
 };
