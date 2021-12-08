@@ -4,36 +4,34 @@
     <q-card class="register-card ">
       <div class="q-pa-md ">
         <div class="row justify-center text-h5 q-pa-md">让我们加入吧！</div>
-        <q-form class="q-gutter-md" @submit="onSubmit">
+        <q-form class="q-gutter-md" >
           <q-input
-            v-model="model.nickname"
+            v-model="name"
             :rules="[(val) => (val && val.length > 0) || '请输入你的昵称']"
             label="昵称"
             lazy-rules
           />
 
           <q-input
-            v-model="model.email"
+            v-model="email"
             type="email"
             label="邮箱"
             lazy-rules
             :rules="[ val => val && val.length > 0 || '请输入你的邮箱']"
           >
-            <template v-slot:after>
-              <q-btn dense flat color="purple" icon="send" label="发送验证码" @click="sendauthcode"/>
-            </template>
+
           </q-input>
 
           <q-input
-            v-model="model.authcode"
-            type="text"
-            label="邮箱验证码"
+            v-model="tel"
+            type="tel"
+            label="手机号"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || '请输入你的邮箱验证码']"
+            :rules="[ val => val && val.length === 11 || '请输入你的手机号']"
           />
 
           <q-input
-            v-model="model.password"
+            v-model="password"
             :rules="[
               (val) => (val && val.length >= 6) || '密码长度不能少于6位',
             ]"
@@ -51,8 +49,8 @@
           </q-input>
 
           <q-input
-            v-model="password"
-            :rules="[(val) => val === model.password || '两次输入密码不一致']"
+            v-model="repeat_password"
+            :rules="[(val) => val === password || '两次输入密码不一致']"
             :type="isPwd ? 'password' : 'text'"
             label="确认密码"
             lazy-rules
@@ -67,12 +65,27 @@
           </q-input>
 
           <div>
-            <q-checkbox v-model="accept" label="接受条款" />
+            <q-checkbox v-model="acceptclause" label="接受条款" />
           </div>
 
           <div class="row justify-evenly">
             <div>
-              <q-btn align="right" color="primary" label="注册" type="submit" />
+              <q-btn align="right" color="primary" label="注册" @click="onRegister"  />
+              <q-dialog v-model="authForm" persistent transition-show="scale" transition-hide="scale">
+                <q-card style="min-width: 350px">
+                  <q-card-section>
+                    <div class="text-h6">验证码</div>
+                  </q-card-section>
+
+                  <q-card-section class="q-pt-none">
+                    <q-input dense v-model="authcode" autofocus @keyup.enter="prompt = false" />
+                  </q-card-section>
+
+                  <q-card-actions align="right" class="text-primary">
+                    <q-btn flat label="ok" @click="verification" />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
             </div>
             <div>
               <router-link to="/login">已有账号？点击登录</router-link>
@@ -85,73 +98,167 @@
 </template>
 
 <script>
-//import EssentialLink from "../components/EssentialLink";
-export default {
-  //components: {EssentialLink},
-  data() {
-    return {
-      password: "",
-      isPwd: true,
-      accept: false,
-      model: {
-        nickname: "",
-        email:"",
-        authcode:"",
-        password: "",
-      },
-    };
-  },
+import { defineComponent, ref, onMounted } from 'vue';
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
+import useAppState from "src/store/userAppState.js";
+import axios from "axios";
+import { api } from "boot/axios";
+import { useStore } from "vuex";
 
-  methods: {
-    sendauthcode(){
+const { updateToken, updateType, resetState, getToken } = useAppState();
 
-    },
-    onSubmit() {
-      if (this.accept !== true) {
-        this.$q.notify({
+export default defineComponent({
+  setup () {
+    const store = useStore();
+    const router = useRouter();
+    const $q = useQuasar();
+    const name = ref('liwei');
+    const email= ref('1249103659@qq.com');
+    const tel = ref('18234684756');
+    const password = ref('liweipassword');
+    const repeat_password = ref('liweipassword');
+    const isPwd = ref(true);
+    const acceptclause = ref(false);
+    let authForm= ref(false)
+    const authcode=ref()
+
+    const verification=async()=>{
+      await axios.post('https://linja19.pythonanywhere.com/api/users/verification', {
+        userName: name.value,
+        verificationNumber:authcode.value
+      }).then((res) => {
+        console.log(res)
+        if (res.data.code === 200 ) {
+          console.log('验证成功')
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "注册成功",
+            timeout: 500,
+          })
+          router.push('/login')
+        }
+        else if (res.data.code === 400 ) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.message,
+            timeout: 1000,
+          });
+        }
+
+      })
+    }
+    const register = async () => {
+      if (name.value.length > 0 && password.value.length >= 6) {
+        await axios.post('https://linja19.pythonanywhere.com/api/users/', {
+          userName: name.value,
+          userEmail:email.value,
+          userPhone:tel.value,
+          password:password.value
+
+        }).then((res) => {
+          console.log(res)
+          if (res.data.code === 200 ) {
+            console.log('只剩验证码')
+            authForm.value=true
+            // updateToken(res.data.data.token);
+            // updateType(res.data.data.type);
+            // console.log(getToken())
+            //.onOk(data => {
+            //    verification(data)
+            //    console.log('>>>> OK, received', data)
+            //
+            //
+            // })
+
+          }
+          else if (res.data.code === 400 ) {
+            $q.notify({
+              color: "red-5",
+              textColor: "white",
+              icon: "warning",
+              message: res.data.message,
+              timeout: 1000,
+            });
+          }
+
+        })
+      }
+    }
+
+    const onRegister = () => {
+      console.log('点击注册')
+      if(name.value.length===0){
+        $q.notify({
           color: "red-5",
           textColor: "white",
           icon: "warning",
-          message: "请先接受条款",
-        });
-      } else {
-        let form = {
-          nickname: this.model.nickname,
-          password: this.model.password,
-        };
-        this.$http
-          .post("http://localhost:3000/users", this.model)
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        this.$q.notify({
-          color: "green-4",
-          textColor: "white",
-          icon: "cloud_done",
-          message: "注册成功",
+          message: "请输入昵称",
           timeout: 1000,
         });
-        setTimeout(() => {
-          this.$router.push("/login");
-        }, 3000);
       }
-    },
-    /*sendauthcode(){
-      let from={
-        email:this.model.username,
-        actions:"注册"
+      else if(email.value.length<7){
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "请输入正确的邮箱",
+          timeout: 1000,
+        });
       }
-      this.$http.post('authcode',from).then(res=>{
-        console.log(res);
-      }).catch(err=>{
-        console.log(err);
-      })
-    }*/
-  },
-};
+      else if(tel.value.length!==11){
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "请输入正确的手机号",
+          timeout: 1000,
+        });
+      }
+      else if(password.value.length<6){
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "密码长度最少为6位",
+          timeout: 1000,
+        });
+      }
+      else if(password.value!==repeat_password.value){
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "两次输入密码不一致",
+          timeout: 1000,
+        });
+      }
+      else if (acceptclause.value !== true) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "请接受条款",
+          timeout: 1000,
+        });
+      }
+
+      else {
+
+        register()
+      }
+    }
+    onMounted(() => {
+      resetState();
+    })
+    return { name, email, tel, password, repeat_password, isPwd, acceptclause,  onRegister, register,authForm,authcode,verification }
+  }
+})
+
 </script>
 
 <style lang="sass" scoped>
