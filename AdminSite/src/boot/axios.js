@@ -23,19 +23,17 @@ const staffapi = axios.create({
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
-  const token = getToken().value;
+  api.interceptors.request.use(async (req) => {
+    const token = getToken().value;
+    if (token !== null) req.headers.Authorization = "Token " + token;
+    return req;
+  });
 
-  if (token !== null) {
-    api.interceptors.request.use(async (req) => {
-      req.headers.Authorization = "token " + token;
-      return req;
-    });
-
-    staffapi.interceptors.request.use(async (req) => {
-      req.headers.Authorization = "Token " + token;
-      return req;
-    });
-  }
+  staffapi.interceptors.request.use(function (req) {
+    const token = getToken().value;
+    if (token !== null) req.headers.Authorization = "Token " + token;
+    return req;
+  });
 
   app.config.globalProperties.$axios = axios;
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
