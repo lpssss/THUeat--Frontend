@@ -4,8 +4,14 @@
 <!--所需Props：档口信息数据stallDetailsData，档口图片链接stallImages，档口信息表格第一列每行的标题rowsTitle-->
 <!--发送Emits: 更新parent数据updateData-->
 <template>
-  <div class="q-pa-md">
-    <q-markup-table separator="cell" wrap-cells>
+    <q-card v-if="showImageGallery">
+      <q-card-actions align="right" class="bg-white text-teal">
+        <q-btn flat label="返回" @click="showImageGallery=false" />
+      </q-card-actions>
+      <ImageGallery :my-images="myImages" type="stallDetails"/>
+    </q-card>
+  <div class="q-pa-md" v-else>
+    <q-markup-table separator="cell" wrap-cells style="table-layout: fixed">
       <thead>
         <tr>
           <th
@@ -20,7 +26,7 @@
       <tbody>
         <tr v-for="rowTitle in rowsTitle" :key="rowTitle.engTitle">
           <td class="text-center">{{ rowTitle.title }}</td>
-          <td class="text-center">
+          <td class="text-center"  style="white-space:normal">
             <template v-if="rowTitle.engTitle !== 'stallImages'">
               {{ myStallDetails[rowTitle.engTitle] }}
             </template>
@@ -57,7 +63,6 @@
                   dense
                   autofocus
                   counter
-                  autogrow
                 />
               </q-popup-edit>
             </template>
@@ -66,18 +71,11 @@
       </tbody>
     </q-markup-table>
   </div>
-  <q-dialog v-model="showImageGallery" full-width persistent>
-    <q-card>
-      <ImageGallery />
-      <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn flat label="关闭" v-close-popup />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+
 </template>
 
 <script>
-import { ref, reactive, watch } from "vue";
+import {ref, reactive, watch, computed} from "vue";
 import ImageGallery from "components/ImageGallery";
 import { STAFF_API_LINKS } from "app/api-links";
 import { useStore } from "vuex";
@@ -101,7 +99,6 @@ export default {
       required: true,
     },
   },
-  emits: ["updateDetailsData", "updateImagesData"],
   setup() {
     //showImageGallery: 控制图片库的开关
     //myStallDetails: 重新复制档口信息，以直接修改档口信息
@@ -110,7 +107,7 @@ export default {
     const myStallDetails = reactive({
       ...store.state.stallDetails.stallDetailsData,
     });
-
+    const myImages = computed(() => store.state.stallDetails.stallImagesData);
     const newImage = ref(null);
 
     function addImages(images) {
@@ -132,6 +129,7 @@ export default {
       OPERATION_TIME_OPTIONS,
       myStallDetails,
       showImageGallery,
+      myImages,
       addImages,
     };
   },
