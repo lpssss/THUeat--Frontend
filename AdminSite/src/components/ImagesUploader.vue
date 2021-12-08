@@ -44,6 +44,7 @@ export default {
       type: Boolean,
     },
   },
+  emits:["addedImages","uploadImages"],
   setup(props, context) {
     const $q = useQuasar();
     const chosenImages = ref(null);

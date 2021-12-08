@@ -4,18 +4,35 @@
 <!--所需Props：档口图片链接images-->
 <!--pending：保存更改（删除图片和上传图片-->
 <template>
-  <q-carousel v-model="curSlide" arrows navigation infinite animated>
+  <q-carousel
+    v-model="curSlide"
+    arrows
+    navigation
+    infinite
+    animated
+    control-color="primary"
+  >
     <q-carousel-slide v-for="idx in myImages.length" :name="idx" :key="idx">
-      <q-img class="rounded-borders full-height" :src="myImages[idx - 1]" />
+      <a :href="myImages[idx - 1]" target="_blank"
+        ><q-img
+          class="rounded-borders full-height"
+          fit="contain"
+          :ratio="4 / 3"
+          :src="myImages[idx - 1]"
+      /></a>
     </q-carousel-slide>
   </q-carousel>
-  <q-btn
-    color="red"
-    label="删除"
-    @click="confirmDeleteImage(myImages[curSlide - 1])"
-  />
+  <div class="q-pa-md">
+    <q-btn
+      color="red"
+      label="删除"
+      @click="confirmDeleteImage(myImages[curSlide - 1])"
+    />
+  </div>
   <ImagesUploader multiple @addedImages="addImages" ref="imageUploader" />
-  <q-btn color="primary" label="保存修改" @click="saveChanges" />
+  <div class="q-pa-md">
+    <q-btn color="primary" label="保存修改" @click="saveChanges" />
+  </div>
 </template>
 
 <script>
@@ -27,19 +44,34 @@ import { useStore } from "vuex";
 export default {
   name: "ImageGallery",
   components: { ImagesUploader },
-  setup() {
+  props:{
+    myImages:{
+      type:Array,
+      required:true
+    },
+    type:{
+      type:String,
+      required:true
+    },
+    args:{
+      type:Object
+    }
+  },
+  setup(props) {
     //curSlide：控制图片库滑动窗口的页面号码
     //myStallImages: 重新复制的档口信息，以直接修改images链接
     //imagesCount: 记录图片数量，以此控制滑动窗口页面号码
     //imageUploader: 用来控制ImageUploader(template ref)
+    console.log(props.myImages)
     const $q = useQuasar();
     const store = useStore();
     const curSlide = ref(1);
-    const myImages = computed(() => store.state.stallDetails.stallImagesData);
-    const imagesCount = computed(() => myImages.value.length);
+    // const myImages = computed(() => store.state.stallDetails.stallImagesData);
+    const imagesCount = computed(() => props.myImages.length);
     const newImages = ref(null);
     const hiddenImages = ref([]);
     const imageUploader = ref(null);
+    // console.log({a:"a",...props.args})
 
     //输入1个数据：需删除的图片Link
     //功能：打开“确认删除图片”窗口，确认后前端会将图片进行隐藏（未保存到后端）
@@ -53,16 +85,17 @@ export default {
       }).onOk(() => {
         console.log("delete: ", link);
         hiddenImages.value.push(link);
-        store.commit("stallDetails/hideImage", link);
+        store.commit(`${props.type}/hideImage`, {link,...props.args});
       });
     }
     function addImages(images) {
       newImages.value = images.value;
     }
     function saveChanges() {
-      store.dispatch("stallDetails/saveImagesChanges", {
+      store.dispatch(`${props.type}/saveImagesChanges`, {
         deleteImages: hiddenImages.value,
         newImages: newImages.value,
+        ...props.args
       });
       imageUploader.value.clearInput();
     }
@@ -76,7 +109,6 @@ export default {
     });
     return {
       curSlide,
-      myImages,
       imageUploader,
       confirmDeleteImage,
       addImages,
