@@ -68,16 +68,16 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('thueatadmin');
-    const password = ref('thueat2021admin');
+    const name = ref('Alice');
+    const password = ref('alicepassword');
     const isPwd = ref(true);
     const acceptclause = ref(false);
 
 
     const login = async () => {
       if (name.value.length > 0 && password.value.length >= 6) {
-        await axios.post('https://linja19.pythonanywhere.com/api/private/authorization', {
-          name: name.value,
+        await axios.post('https://linja19.pythonanywhere.com/api/authorization', {
+          userName: name.value,
           password: password.value
 
         }).then((res) => {
@@ -96,21 +96,12 @@ export default defineComponent({
               timeout: 500,
             })
           }
-          else if (res.data.code === 400){
-            $q.notify({
-              color: "red-5",
-              textColor: "white",
-              icon: "warning",
-              message: "密码错误",
-              timeout: 1000,
-            })
-          }
           else if (res.data.code === 404){
             $q.notify({
               color: "red-5",
               textColor: "white",
               icon: "warning",
-              message: "用户名不存在",
+              message: "用户名不存在或密码错误",
               timeout: 1000,
             })
           }
@@ -119,7 +110,25 @@ export default defineComponent({
     }
 
     const onLogin = () => {
-      if (acceptclause.value !== true) {
+      if (name.value.length <= 0) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "请填写用户名",
+          timeout: 1000
+        });
+      }
+      else if (password.value.length < 6) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "密码不能少于6位",
+          timeout: 1000
+        });
+      }
+      else if (acceptclause.value !== true) {
         $q.notify({
           color: "red-5",
           textColor: "white",
@@ -128,24 +137,6 @@ export default defineComponent({
           timeout: 1000,
         });
       }
-        // if (name.value.length <= 0) {
-        //   $q.notify({
-        //     color: "red-5",
-        //     textColor: "white",
-        //     icon: "warning",
-        //     message: "请填写用户名",
-        //     timeout: 1000
-        //   });
-        // }
-        // if (password.value.length < 6) {
-        //   $q.notify({
-        //     color: "red-5",
-        //     textColor: "white",
-        //     icon: "warning",
-        //     message: "密码不能少于6位",
-        //     timeout: 1000
-        //   });
-      // }
       else {
         login()
       }
@@ -156,49 +147,7 @@ export default defineComponent({
     return { name, password, isPwd, acceptclause, onLogin }
   }
 })
-// export default {
-//   //components: {EssentialLink},
-//   data() {
-//     return {
-//       nickname: null,
-//       password: null,
-//       isPwd: true,
-//       acceptpw: false,
-//       acceptclause: false,
-//       onsubmit: false,
-//     };
-//   },
-//
-//   methods: {
-//     onSubmit() {
-//       if (this.acceptclause !== true) {
-//         this.$q.notify({
-//           color: "red-5",
-//           textColor: "white",
-//           icon: "warning",
-//           message: "请先接受条款",
-//           timeout: 500,
-//         });
-//       } else {
-//         this.onsubmit = true;
-//         let data = {
-//           nickname: this.nickname,
-//           password: this.password,
-//         };
-//         this.onsubmit = false;
-//         this.$q.notify({
-//           color: "green-4",
-//           textColor: "white",
-//           icon: "cloud_done",
-//           message: "登录成功",
-//           timeout: 500,
-//         });
-//         this.$store.commit("login/updateLoginStatus", true);
-//         this.$router.push({ name: "Index" }); //编程式导航
-//       }
-//     },
-//   },
-// };
+
 </script>
 
 <style lang="sass" scoped>
