@@ -15,7 +15,7 @@
           乐吃 - 管理员系统
         </q-toolbar-title>
 
-        <q-chip>用户名</q-chip>
+        <q-chip>{{ name }}</q-chip>
         <q-btn
           color="red"
           @click="logout"
@@ -52,6 +52,9 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import useAppState from "src/store/userAppState.js";
 import { useRouter } from "vue-router";
+
+const { getName } = useAppState();
+const name = getName();
 
 const linksList = [
   {
@@ -96,6 +99,7 @@ export default defineComponent({
       router.push('/');
     }
     return {
+      name,
       essentialLinks: linksList,
       leftDrawerOpen,
       logout,

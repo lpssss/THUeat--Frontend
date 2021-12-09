@@ -5,8 +5,9 @@ const STATE_NAME = "appState";
 
 const defaultState = {
   token: null,
-  vaildName: null,
+  validName: null,
   userType: null,
+  name: null
 };
 
 const getDefaultStatus = () => {
@@ -22,11 +23,14 @@ const getters = {
   getToken: () => {
     return computed(() => state.token);
   },
-  getvaildName: () => {
-    return computed(() => state.vaildName);
+  getvalidName: () => {
+    return computed(() => state.validName);
   },
   getType: () => {
     return computed(() => state.userType);
+  },
+  getName: () => {
+    return computed(() => state.name);
   },
 };
 
@@ -34,11 +38,14 @@ const actions = {
   updateToken: (token) => {
     state.token = token;
   },
-  updatevaildName: (vaildName) => {
-    state.vaildName = vaildName;
+  updatevalidName: (validName) => {
+    state.validName = validName;
   },
   updateType: (type) => {
     state.userType = type;
+  },
+  updateName: (name) => {
+    state.name = name;
   },
   resetState: () => {
     Object.assign(state, defaultState);
