@@ -17,12 +17,7 @@
       </div>
     </div>
     <h4 style="border-bottom: 1px solid">档口基本信息</h4>
-    <StallDetailsTable
-      :rows-title="STALL_DETAILS_TITLE"
-      :stall-details-data="myStallDetailsData"
-      :stall-images="myStallImages"
-      @updateData="updateData"
-    />
+    <StallDetailsTable :rows-title="STALL_DETAILS_TITLE" />
   </div>
 </template>
 
@@ -33,6 +28,10 @@ import { useQuasar } from "quasar";
 import DashboardCard from "components/DashboardCard";
 import StallDetailsTable from "components/StallDetailsTable";
 import { STAFF_API_LINKS } from "app/api-links";
+import userAppState from "src/store/userAppState.js";
+import { useStore } from "vuex";
+
+const { getToken } = userAppState();
 
 const API_LINK = STAFF_API_LINKS.dashboard;
 
@@ -66,20 +65,17 @@ export default {
     // myDashboardData：整理后的统计数据
     // myStallDetailsData：整理后的档口信息(不包括图片）
     // myStallImages：整理后的图片链接
+    console.log(getToken().value);
+    const store = useStore();
     const $q = useQuasar();
     const myDashboardData = ref([]);
     const myStallDetailsData = reactive({});
     const myStallImages = ref([]);
 
-    function updateData(data) {
-      Object.assign(myStallDetailsData, data);
-    }
-
     //输出1个数据：显示面板页面所需数据，Object
     //功能：从API 获取显示面板所需数据
     async function getDashboardData() {
       const response = await staffapi.get(API_LINK);
-      //console.log(response.data)
       return response.data.data; //真实数据埋在第二个data内
     }
 
@@ -113,6 +109,10 @@ export default {
     getDashboardData()
       .then((data) => {
         arrangeData(data);
+        store.commit("stallDetails/initialize", {
+          details: myStallDetailsData,
+          images: myStallImages.value,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -126,8 +126,6 @@ export default {
       STALL_DETAILS_TITLE,
       myDashboardData,
       myStallDetailsData,
-      myStallImages,
-      updateData,
     };
   },
 };
