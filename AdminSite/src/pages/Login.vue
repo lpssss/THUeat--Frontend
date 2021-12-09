@@ -64,7 +64,7 @@ import useAppState from "src/store/userAppState.js";
 import axios from "axios";
 
 
-const { updateToken, updateType, resetState, getToken } = useAppState();
+const { updateToken, updateType, updateName, updatevalidName, resetState } = useAppState();
 
 
 export default defineComponent({
@@ -76,20 +76,21 @@ export default defineComponent({
     const isPwd = ref(true);
     const acceptclause = ref(false);
 
-
-    const login = async () => {
-      if (name.value.length > 0 && password.value.length >= 6) {
-        await axios.post('https://linja19.pythonanywhere.com/api/private/authorization', {
+    const login = () => {
+      if (name.value.length > 0 && password.value.length >= 6 && acceptclause.value === true) {
+        axios.post('https://linja19.pythonanywhere.com/api/private/authorization', {
           name: name.value,
           password: password.value
 
         }).then((res) => {
-          if (res.status === 200 && res.data !== undefined) {
+          if (res.data.code === 200 && res.data !== undefined) {
             updateToken(res.data.data.token);
             updateType(res.data.data.type);
-            console.log(getToken())
-            if (res.data.firstLogin === true) {
+            updateName(res.data.data.name);
+            updatevalidName(res.data.data.validName)
 
+
+            if (res.data.firstLogin === true) {
               // Route to First login page
               router.push("/firstLoginSettings");
             }
@@ -116,12 +117,19 @@ export default defineComponent({
                 timeout: 1000,
               });
             }
+          } else {
+            $q.notify({
+              color: "red-5",
+              textColor: "white",
+              icon: "warning",
+              message: res.data.message,
+              timeout: 1000,
+            });
+
           }
         })
       }
     }
-
-
 
     const onLogin = () => {
       if (acceptclause.value !== true) {
