@@ -14,7 +14,7 @@ Quasar相关测试：https://quasar.dev/quasar-cli/testing-and-auditing, https:/
 注：私人页面已安装 quasar test extension, 公共页面由渊升负责处理
 
 # 网站上线啦！
-公共页面：https://thueat-public-site.vercel.app/
+公共页面：https://thueat.vercel.app/
 
-私人页面： https://thu-eat-frontend.vercel.app/
+私人页面： https://thueat-admin.vercel.app/
 
