@@ -73,7 +73,7 @@ const stallDetails = {
       try {
         const response = await staffapi.post(API_LINK, formData);
         console.log(response);
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           Notify.create({
             type: "success",
             message: message.success,
