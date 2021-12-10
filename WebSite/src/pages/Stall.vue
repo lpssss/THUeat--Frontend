@@ -77,6 +77,7 @@
 <script>
 import { ref, defineComponent, reactive, watch } from "vue";
 import axios from "axios";
+import { api } from "boot/axios";
 import {useRoute} from 'vue-router'
 import StallPictureSection from  "components/StallPage/StallPictureSection";
 import StallIntroSection from "components/StallPage/StallIntroSection";
@@ -102,25 +103,25 @@ export default defineComponent({
   },
   setup (){
     const route=useRoute()
-    let name=route.query.stallName
-    let API_LINK = `http://localhost:3000/stallData/?stallName=${name}`; // 之后放真正的API
+    let id=route.query.stallID
+    let API_LINK = `stalls/${id}`; // 之后放真正的API
 
     const stallData = reactive({ data: {} });
 
     const getStallData = async () => {
       try {
-        const response = await axios.get(API_LINK);
-        stallData.data = response.data[0];
+        const response = await api.get(API_LINK);
+        stallData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
       }
     };
 
     watch(()=>route.query,()=>{
-      name=route.query.stallName
-      API_LINK=`http://localhost:3000/stallData/?stallName=${name}`
+      id=route.query.stallID
+      API_LINK=`stalls/${id}`
       getStallData();
-      console.log("watch",route.query.stallName)
+      console.log("watch",route.query.stallID)
     },{
       immediate:true
     });

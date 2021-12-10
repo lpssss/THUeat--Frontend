@@ -46,6 +46,7 @@
 
 <script>
 import { defineComponent, reactive, watch  } from "vue";
+import { api } from "boot/axios";
 import axios from "axios";
 import {useRoute} from 'vue-router'
 import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetailSection";
@@ -83,20 +84,19 @@ export default defineComponent({
   setup() {
     const route=useRoute()
     let id=route.query.canteenID
-    let API_LINK = `http://localhost:3000/canteens/?canteenID=${id}`; // 之后放真正的API
-    //const API_LINK = "http://localhost:3000/canteenData/?canteenID=c1"; // 之后放真正的API
+    let API_LINK = `canteens/${id}`; // 之后放真正的API`http://localhost:3000/canteens/?canteenID=${id}`
     const canteenData = reactive({ data: {} });
     const getCanteenData = async () => {
       try {
-        const response = await axios.get(API_LINK);
-        canteenData.data = response.data[0];
+        const response = await api.get(API_LINK);
+        canteenData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
       }
     };
     watch(()=>route.query,()=>{
       id=route.query.canteenID
-      API_LINK=`http://localhost:3000/canteens/?canteenID=${id}`
+      API_LINK=`canteens/${id}`
       getCanteenData()
       console.log("watch",route.query.canteenID)
     },{

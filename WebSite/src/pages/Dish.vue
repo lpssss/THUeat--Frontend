@@ -45,6 +45,7 @@
 <script>
 import { ref, reactive } from "vue";
 import axios from "axios";
+import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import { watch } from 'vue';
@@ -63,20 +64,20 @@ export default {
     const store=useStore()
     const router=useRouter()
     let id=route.query.dishID
-    let API_LINK = `http://localhost:3000/dishes/?dishID=${id}`; // 之后放真正的API
+    let API_LINK = `dishes/${id}`; // 之后放真正的API
     //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
     const dishData = reactive({ data: {} });
     const getDishData = async () => {
       try {
-        const response = await axios.get(API_LINK);
-        dishData.data = response.data[0];
+        const response = await api.get(API_LINK);
+        dishData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
       }
     };
     watch(()=>route.query,()=>{
       id=route.query.dishID
-      API_LINK=`http://localhost:3000/dishes/?dishID=${id}`
+      API_LINK=`dishes/${id}`
       getDishData()
       console.log("watch",route.query.dishID)
     },{
