@@ -10,6 +10,12 @@
     >
       <q-input
         filled
+        label="用户实名"
+        v-model="ValidName"
+        disable
+      />
+      <q-input
+        filled
         label="用户名"
         v-model="name"
         lazy-rules
@@ -43,7 +49,7 @@
       <div style="margin-left:50%;">
         <q-btn
           color="green"
-          @click="save()"
+          @click="save"
         >保存</q-btn>
       </div>
     </div>
@@ -55,21 +61,27 @@ import { defineComponent, ref } from 'vue'
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import useAppState from "src/store/userAppState.js";
+import axios from "axios";
 
-const { resetState } = useAppState();
+const { resetState, getName, getvalidName, getToken } = useAppState();
 
 export default defineComponent({
   setup () {
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('庄家菘1');
+    const ValidName = ref(getvalidName().value);
+    const name = ref(getName().value);
     const oldPassword = ref('');
     const password = ref('');
     const confirmPassword = ref('')
+    const token = ref(getToken().value)
 
-    //检查用户输入资料是否合格
+    //判断输入资料是否准确
+    let readySubmit = false;
     const checkInput = () => {
-      if (name.value.length <= 0) {
+      if (name.value.length > 0) {
+        readySubmit = true
+      } else {
         $q.notify({
           color: "red-5",
           textColor: "white",
@@ -78,41 +90,97 @@ export default defineComponent({
           timeout: 1000,
         });
       }
-      if ((oldPassword.value.length < 6 || password.value.length < 6 || confirmPassword.value.length < 6)) {
-        $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
-          message: "密码不能小于6位数",
-          timeout: 1000,
-        });
+
+      if (readySubmit === true) {
+        if (oldPassword.value.length < 6) {
+          readySubmit = false
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "旧密码不能小于6",
+            timeout: 1000,
+          });
+        }
       }
-      if ((password.value !== confirmPassword.value)) {
-        $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
-          message: "新密码与确定密码不相等",
-          timeout: 1000,
-        });
+
+      if (readySubmit === true) {
+        if (password.value.length < 6) {
+          readySubmit = false
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "新密码不能小于6位数",
+            timeout: 1000,
+          });
+        }
       }
-    }
+
+      if (readySubmit === true) {
+        if (confirmPassword.value !== password.value) {
+          readySubmit = false
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "新密码与旧密码不相同",
+            timeout: 1000,
+          });
+        }
+      }
+    };
+
 
     //更新用户资料
     const save = () => {
       checkInput();
-      if ((password.value == confirmPassword.value) && (password.value.length > 5) && (name.value.length > 0)) {
+      if (readySubmit === true) {
+        postNewDetails()
         resetState();
-        router.push('/');
       }
     };
+
+    const postNewDetails = () => {
+      axios.post('https://linja19.pythonanywhere.com/api/private/details', {
+        token: token.value,
+        name: name.value,
+        phone: '',
+        oldPassword: oldPassword.value,
+        password: password.value
+
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "保存成功",
+            timeout: 1000,
+          });
+          router.push('/');
+        }
+        if (res.data.code !== 200) {
+          $q.notify({
+            color: "red-4",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.message,
+            timeout: 1000,
+          });
+        }
+      })
+    }
     return {
+      token,
+      ValidName,
+      name,
       password,
       oldPassword,
       confirmPassword,
       checkInput,
-      save,
-      name
+      save
+
     }
   }
 })
