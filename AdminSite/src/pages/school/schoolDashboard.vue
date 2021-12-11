@@ -41,7 +41,7 @@
                 style="text-align: center;"
               >
                 <q-icon name="badge" />
-                {{ adminStatistics.adminNumber }}
+                {{ adminStatistics.staffNumber }}
               </q-card-section>
             </q-card>
           </div>
@@ -77,7 +77,7 @@
                 style="text-align: center;"
               >
                 <q-icon name="trending_up" />
-                {{ adminStatistics.userLoginRate }}
+                {{ adminStatistics.userLoginRate }} %
               </q-card-section>
             </q-card>
           </div>
@@ -118,7 +118,7 @@
             round
             color="red"
             icon="close"
-            @click="deleteRecord(props.row.noticeId)"
+            @click="deleteRecord(props.row.noticeID)"
           />
         </q-td>
       </template>
@@ -127,6 +127,7 @@
   </div>
 
   <!-- Create new notice -->
+  <!-- 在这里加入html的设计 -->
   <div
     class="q-pa-md"
     style="margin-left:10%; margin-right:10%;"
@@ -137,6 +138,7 @@
       class="q-gutter-md"
       style="max-width: 100%"
     >
+
       <q-input
         filled
         v-model="newNotice.noticeTitle"
@@ -171,15 +173,16 @@
           />
         </template>
       </q-file>
+
       <div style="margin-left:45%;">
         <q-btn
           style="margin-right:10px;"
           color="red"
-          @click="cancel()"
+          @click="cancel"
         >取消</q-btn>
         <q-btn
           color="green"
-          @click="save()"
+          @click="save"
         >创建</q-btn>
       </div>
     </div>
@@ -190,7 +193,7 @@
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useQuasar } from "quasar";
-// import { api } from 'boot/axios'
+import { api } from 'boot/axios';
 
 // Table columns title
 const columns = [
@@ -200,33 +203,6 @@ const columns = [
   { name: 'btnDelete', align: 'left', field: 'delete' }
 ]
 
-const adminStatistics = {
-  userNumber: 123,
-  adminNumber: 123,
-  stallNumber: 123,
-  userLoginRate: 0.8 * 100 + '%'
-}
-
-const notices = [
-  {
-    noticeTitle: '图片一',
-    noticeId: '123',
-    noticeWords: '内容一',
-    noticeImage: 'test'
-  },
-  {
-    noticeTitle: '图片二',
-    noticeId: '1234',
-    noticeWords: '内容二',
-    noticeImage: 'test'
-  },
-  {
-    noticeTitle: '图片三',
-    noticeId: '12345',
-    noticeWords: '内容三',
-    noticeImage: 'test'
-  }
-]
 export default defineComponent({
   setup () {
     const creatable = ref(false);
@@ -246,45 +222,43 @@ export default defineComponent({
       creatable.value = false
     };
     const save = () => {
-      // const postNewNotice = () => {
-      // api.post('Api_Link', {
-      //   noticeTitle: newNotice.noticeTitle.value,
-      //   noticeWords: newNotice.noticeWords.value,
-      //   noticeImage: newNotice.noticeImage.value,
-      // }).then ((res) => {
-      // if (res.status === 200 && res.data !== undefined) {
-      //     updateToken(res.data.token);
-      // }
-      // if (res.status === 404){
-      //   console.log('error')
-      // }
-      //  
-      // })
+      //在这里加post功能
       creatable.value = false;
     };
 
-    const deleteRecord = (item) => {
+    //更改档主状态
+    const deleteRecord = (id) => {
+      api.delete('private/notices/' + id, {
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          getNoticesData()
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "删除成功",
+            timeout: 1000,
+          });
+
+        }
+        if (res.data.code !== 200) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.message,
+            timeout: 1000,
+          });
+        }
+      })
+    }
+
+    // Get Notices Data
+    const notices = ref([]);
+    const getNoticesData = async () => {
       try {
-        api.delete("/private/notices/", { params: { noticeID: item } }).then((res) => {
-          if (res.status === 200 && res.data !== undefined) {
-            getNoticesData();
-            $q.notify({
-              color: "green-4",
-              textColor: "white",
-              icon: "cloud_done",
-              message: "删除成功",
-              timeout: 1000,
-            });
-          } else {
-            $q.notify({
-              color: "red-5",
-              textColor: "white",
-              icon: "warning",
-              message: "删除失败",
-              timeout: 500,
-            });
-          }
-        })
+        const response = await api.get("/private/notices");
+        notices.value.splice(0, notices.value.length, ...response.data.data);
       } catch (err) {
         $q.notify({
           color: "red-5",
@@ -296,38 +270,43 @@ export default defineComponent({
       }
     }
 
-    // }
-    // Get Notices Data
-    // const notices = ref([]);
-    // const getNoticesData = async () => {
-    //   try {
-    //     const response = await api.get("/private/notices);
-    //     notices.value.splice(0, notices.value.length, ...response.data);
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // }
-
     // Get admin Statistics Data
-    // const adminStatistics = ref([]);
-    // const getAdminStatisticsData = async () => {
-    //   try {
-    //     const response = await api.get("/private/adminStatistics");
-    //     adminStatistics.value.splice(0, adminStatistics.value.length, ...response.data);
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // }
+    const adminStatistics = reactive({
+      userNumber: null,
+      adminNumber: null,
+      stallNumber: null,
+      userLoginRate: null
+    }
 
-    // onMounted(() => {
-    //   getNoticesData();
-    //   getAdminStatisticsData();
-    // })
+    );
+    const getAdminStatisticsData = async () => {
+      try {
+        const response = await api.get("/private/adminStatistics");
+        adminStatistics.userNumber = response.data.data.userNumber;
+        adminStatistics.staffNumber = response.data.data.staffNumber;
+        adminStatistics.stallNumber = response.data.data.stallNumber;
+        adminStatistics.userLoginRate = response.data.data.userLoginRate;
+
+      } catch (err) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: err.message,
+          timeout: 1000,
+        });
+      }
+    }
+
+    onMounted(() => {
+      getAdminStatisticsData();
+      getNoticesData();
+    })
 
     return {
       columns,
-      adminStatistics: ref(adminStatistics),
-      notices: ref(notices),
+      adminStatistics,
+      notices,
       creatable,
       orgNotice,
       newNotice,
