@@ -1,5 +1,7 @@
 <template>
   <q-page >
+    <div v-if="Object.keys(noticeData).length">
+
     <div class="q-pa-md">
       <q-carousel
         arrows
@@ -8,9 +10,9 @@
         height="400px"
       >
         <HomePageAnnouncementSection
-          v-for="announcement in announcements"
-          v-bind="announcement"
-          :key="announcement.name"
+          v-for="notice in noticeData.data"
+          v-bind="notice"
+          :key="notice.noticeTitle"
         />
       </q-carousel>
     </div>
@@ -37,6 +39,7 @@
         v-bind="dish"
         :key="dish.dishID"
       />   
+    </div>
     </div>
   </q-page>
 </template>
@@ -97,9 +100,11 @@ export default defineComponent({
     
     const DISH_API_LINK = "dishes";
     const STALL_API_LINK = "stalls";
+    const NOTICE_API_LINK = "notice";
 
     const dishData = reactive({ data: {} });
     const stallData = reactive({ data: {} });
+    const noticeData = reactive({ data: {} });
 
     const getDishData = async () => {
       try {
@@ -122,15 +127,29 @@ export default defineComponent({
       }
     };
 
+    const getNoticeData = async () => {
+      try {
+        const response = await api.get(NOTICE_API_LINK);
+        noticeData.data = response.data.data;
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
     getDishData();
     getStallData();
-    
+    getNoticeData();
+
+    const slide = ref();
+    slide.value = 'first';
+
     return {
-      slide: ref('first'),
+      slide: ref("THUeat通告"),
       announcements: announcements,
       homePageBanner: homePageBanner,
       dishData,
       stallData,
+      noticeData,
     }
   }
 })

@@ -1,8 +1,8 @@
 <template>
-    <q-carousel-slide :name="name" :img-src="imgSrc">
+    <q-carousel-slide :name="noticeTitle" :img-src="noticeImage">
         <div class="absolute-bottom custom-caption">
-            <div class="text-h5">{{ title }}</div>
-            <div class="text-subtitle2">{{ content }}</div>
+            <div class="text-h5">{{ noticeTitle }}</div>
+            <div class="text-subtitle2">{{ noticeWords }}</div>
         </div>
     </q-carousel-slide>
 </template>
@@ -12,22 +12,17 @@ import { ref, defineComponent } from 'vue'
 export default defineComponent({
     name: "HomePageAnnouncementSection",
     props: {
-        name: {
+        noticeTitle: {
             type: String,
-            default: "first"
+            default: "THUeat通告"
         },
 
-        title: {
-            type: String,
-            default: ''
-        },
-
-        content: {
+        noticeWords: {
             type: String,
             default: ''
         },
 
-        imgSrc: {
+        noticeImage: {
             type: String,
             default: '#'
         },
