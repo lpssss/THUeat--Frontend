@@ -89,7 +89,7 @@ const dishesDetails = {
       try {
         const response = await staffapi.post(API_LINK + "/" + dishID, formData);
         console.log(response);
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           Notify.create({
             type: "success",
             message: message.success,
@@ -132,7 +132,7 @@ const dishesDetails = {
       try {
         const response = await staffapi.post(API_LINK, formData);
         console.log(response);
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           Notify.create({
             type: "success",
             message: "创建菜品成功",
@@ -148,7 +148,7 @@ const dishesDetails = {
             message: "创建菜品失败，请刷新重试",
           });
         }
-        return response.status;
+        return response.data.status;
       } catch (err) {
         console.log(err);
         Notify.create({

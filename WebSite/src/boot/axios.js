@@ -1,7 +1,6 @@
-import { boot } from 'quasar/wrappers'
-import axios from 'axios'
+import { boot } from "quasar/wrappers";
+import axios from "axios";
 import useAppState from "src/store/userAppState.js";
-
 
 const { getToken } = useAppState();
 
@@ -18,22 +17,19 @@ const api = axios.create({
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
-  const token = getToken().value;
+  api.interceptors.request.use(async (req) => {
+    const token = getToken().value;
+    req.headers.Authorization = "Token " + token;
+    return req;
+  });
 
-  if (token !== null) {
-    api.interceptors.request.use(async (req) => {
-      req.headers.Authorization = `token ${token}`;
-      return req;
-    });
-  }
-
-  app.config.globalProperties.$axios = axios
+  app.config.globalProperties.$axios = axios;
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
 
-  app.config.globalProperties.$api = api
+  app.config.globalProperties.$api = api;
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
-})
+});
 
-export { api }
+export { api };
