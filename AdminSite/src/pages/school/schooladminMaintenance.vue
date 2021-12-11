@@ -26,41 +26,12 @@
             checked-icon="check"
             color="green"
             unchecked-icon="clear"
-            @click="confirmChangeStatus(props.row.adminStatus)"
+            @click="updateAdminStatus(props.row.adminID, props.row.adminStatus)"
           />
         </q-td>
       </template>
     </q-table>
   </div>
-
-  <!--   Confirm change status -->
-  <q-dialog
-    v-model="confirmChangeStatus"
-    persistent
-  >
-    <q-card>
-      <q-card-section class="row items-center">
-        <span class="q-ml-sm">您是否确定更改状态？</span>
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn
-          flat
-          label="取消"
-          color="primary"
-          @click="postStatusChange"
-          v-close-popup
-        />
-        <q-btn
-          flat
-          label="确定"
-          color="primary"
-          @click="postStatusChange"
-          v-close-popup
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
 
   <!-- Create new admin -->
   <div
@@ -76,7 +47,7 @@
     >
       <q-input
         filled
-        v-model="newAdmin.adminVaildName"
+        v-model="newAdmin.adminValidName"
         label="管理员姓名"
         stack-label
       />
@@ -90,11 +61,11 @@
         <q-btn
           style="margin-right:10px;"
           color="red"
-          @click="cancel()"
+          @click="cancel"
         >取消</q-btn>
         <q-btn
           color="green"
-          @click="save()"
+          @click="save"
         >创建</q-btn>
       </div>
     </div>
@@ -108,7 +79,7 @@ import { api } from 'boot/axios'
 
 // Table columns title
 const columns = [
-  { name: 'adminVaildName', align: 'left', label: '管理员姓名', field: 'adminVaildName', sortable: true },
+  { name: 'adminVaildName', align: 'left', label: '管理员姓名', field: 'adminValidName', sortable: true },
   { name: 'adminID', align: 'left', label: '管理员编号', field: 'adminID', sortable: true },
   { name: 'adminPhone', align: 'left', label: '联络号码', field: 'adminPhone' },
   { name: 'status', align: 'left', label: '激活状态', field: 'adminStatus', sortable: true },
@@ -119,97 +90,130 @@ export default defineComponent({
     const $q = useQuasar();
     const creatable = ref(false);
     const orgAdmin = {
-      adminVaildName: null,
-      adminPhone: null
+      adminValidName: '',
+      adminPhone: ''
     };
     const newAdmin = reactive({ ...orgAdmin });
+
     const add = () => {
       creatable.value = true;
       Object.assign(newAdmin, orgAdmin)
     };
+
     const cancel = () => {
       creatable.value = false
     };
 
+    //上传功能
     const save = () => {
-      creatable.value = false
+      checkInput();
+      if (readySubmit === true) {
+        createNewAdmin();
+        getAdminsData();
+        creatable.value = false;
+      }
     };
 
-    const confirmChangeStatus = (status) => {
-      // const postStallStatus = () => {
-      // api.post('Api_Link', {
-      //   stallStatus: status,
-      // }).then ((res) => {
-      // if (res.status === 200 && res.data !== undefined) {
-      // getAdminsData,
-      //      $q.notify({
-      //   color: "green-4",
-      //   textColor: "white",
-      //   icon: "cloud_done",
-      //   message: "修改成功",
-      //   timeout: 1000,
-      // });
-
-      // }
-      // if (res.status === 404){
-      //   console.log('error')
-      // }
-      //  
-      // })
-
-
-    };
-
-    // Get admins data
+    //获取管理员资料
     const admins = ref([]);
     const getAdminsData = async () => {
       try {
         const response = await api.get("/private/admins");
-        admins.value.splice(0, admins.value.length, ...response.data);
+        admins.value.splice(0, admins.value.length, ...response.data.data);
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: err.message,
+          timeout: 1000,
+        });
       }
     }
 
-    // Create new admin
-    // const saveNewAdmin = () => {
-    //   api.post('/private/admins', {
-    //     adminVaildName: newAdmin.adminVaildName.value,
-    //     adminPhone: newAdmin.adminPhone.value,
-    //   }).then((res) => {
-    //     if (res.status === 200 && res.data !== undefined) {
-    //       getAdminsData();
-    //       creatable.value = false;
-    //       $q.notify({
-    //         color: "green-4",
-    //         textColor: "white",
-    //         icon: "cloud_done",
-    //         message: "创建成功",
-    //         timeout: 1000,
-    //       });
-    //     }
-    //     if (res.status === 404) {
-    //       $q.notify({
-    //         color: "red-5",
-    //         textColor: "white",
-    //         icon: "warning",
-    //         message: "创建失败",
-    //         timeout: 1000,
-    //       });
-    //     }
-    //   })
-    // }
+    //判断资料输入不为空
+    let readySubmit = false;
+    const checkInput = () => {
+      if (newAdmin.adminValidName.length > 0) {
+        readySubmit = true
+      } else {
 
-    // const updateAdminStatus = (item) => {
-    // api.post('/private/admins/', , { params: { adminID: item } }).then ((res) => {
-    // if (res.status === 200 && res.data !== undefined) {
-    //     getAdminsData();
-    // }
-    // if (res.status === 404){
-    //   console.log('error')
-    // }
-    //  
-    // })
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "姓名不能为空",
+          timeout: 1000,
+        });
+      }
+      if (readySubmit === true) {
+        if (newAdmin.adminPhone.length > 0) {
+          readySubmit = true
+        } else {
+          readySubmit = false;
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "联络方式不能为空",
+            timeout: 1000,
+          });
+        }
+      }
+    }
+
+    //创建新管理员
+    const createNewAdmin = () => {
+      api.post('/private/admins', {
+        adminValidName: newAdmin.adminValidName,
+        adminPhone: newAdmin.adminPhone
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "创建成功",
+            timeout: 1000,
+          });
+        }
+        if (res.status === 404) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.message,
+            timeout: 1000,
+          });
+        }
+      })
+    }
+
+    //更改管理员的状态
+    const updateAdminStatus = (id, status) => {
+      api.post('/private/admins/' + id, {
+        adminStatus: status
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "修改状态成功",
+            timeout: 1000,
+          });
+        }
+        if (res.data.code !== 200) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.message,
+            timeout: 1000,
+          });
+        }
+      })
+    }
 
     onMounted(() => {
       getAdminsData()
@@ -217,15 +221,16 @@ export default defineComponent({
 
     return {
       columns,
-      admins: ref(admins),
+      admins,
       orgAdmin,
       newAdmin,
       creatable,
       add,
       cancel,
       save,
-      // saveNewAdmin,
-      confirmChangeStatus
+      readySubmit,
+      checkInput,
+      updateAdminStatus
     }
   }
 })

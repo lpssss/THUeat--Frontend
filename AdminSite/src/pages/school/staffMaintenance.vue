@@ -1,102 +1,116 @@
 <template>
-
-  <!-- Show staffs data -->
-  <div
-    class="q-pa-md"
-    v-if="editable == false"
-  >
-    <q-table
-      title="档主管理系统"
-      :rows="staffs"
-      :columns="columns"
-      row-key="name"
-      binary-state-sort
-    >
-      <template v-slot:top-right>
-        <q-btn
-          color="primary"
-          @click="add"
-        >创建</q-btn>
-      </template>
-
-      <template v-slot:body-cell-status="props">
-        <q-td :props="props">
-          <q-toggle
-            v-model="props.row.staffStatus"
-            checked-icon="check"
-            color="green"
-            unchecked-icon="clear"
-            @click="confirmChangeStatus(props.row.staffStatus)"
-          />
-        </q-td>
-      </template>
-    </q-table>
-  </div>
-
-  <!-- Create new staff -->
-  <div
-    class="q-pa-md"
-    style="margin-left:10%; margin-right:10%;"
-    v-if="editable == true"
-  >
-    <h4 style="border-bottom: 0.1px solid;">档主创建</h4>
-
+  <div>
+    <!-- Show staffs data -->
     <div
-      class="q-gutter-md"
-      style="max-width: 100%"
+      class="q-pa-md"
+      v-if="creatable == false"
     >
-      <q-input
-        filled
-        v-model="newStaff.staffVaildName"
-        label="档主姓名"
-        stack-label
-      />
-      <q-input
-        filled
-        v-model="newStaff.staffPhone"
-        label="档主联络号码"
-        stack-label
-      />
-      <q-select
-        filled
-        v-model="newStaff.canteenName"
-        :options="canteen"
-        label="食堂"
-      />
-      <q-select
-        filled
-        v-model="newStaff.stallFloor"
-        :options="floor"
-        label="楼层"
-      />
-      <q-select
-        filled
-        v-model="newStaff.stallName"
-        :options="stall"
-        label="档口"
-      />
-      <div style="margin-left:45%;">
-        <q-btn
-          style="margin-right:10px;"
-          color="red"
-          @click="cancel()"
-        >取消</q-btn>
-        <q-btn
-          color="green"
-          @click="save()"
-        >创建</q-btn>
+      <q-table
+        title="档主管理系统"
+        :rows="staffs"
+        :columns="columns"
+        row-key="name"
+        binary-state-sort
+      >
+        <template v-slot:top-right>
+          <q-btn
+            color="primary"
+            @click="add"
+          >创建</q-btn>
+        </template>
+
+        <template v-slot:body-cell-status="props">
+          <q-td :props="props">
+            <q-toggle
+              v-model="props.row.staffStatus"
+              checked-icon="check"
+              color="green"
+              unchecked-icon="clear"
+              @click="updateStaffStatus(props.row.staffID ,props.row.staffStatus)"
+            />
+          </q-td>
+        </template>
+      </q-table>
+    </div>
+
+    <!-- Create new staff -->
+    <div
+      class="q-pa-md"
+      style="margin-left:10%; margin-right:10%;"
+      v-if="creatable == true"
+    >
+      <h4 style="border-bottom: 0.1px solid;">档主创建</h4>
+
+      <div
+        class="q-gutter-md"
+        style="max-width: 100%"
+      >
+        <q-input
+          filled
+          v-model="newStaff.staffValidName"
+          label="档主姓名"
+          stack-label
+        />
+        <q-input
+          filled
+          v-model="newStaff.staffPhone"
+          label="档主联络号码"
+          stack-label
+        />
+        <q-select
+          outlined
+          v-model="selectedCanteen"
+          :options="canteens"
+          option-label="canteenName"
+          label="食堂"
+        >
+        </q-select>
+
+        <div v-if="selectedCanteen != null">
+          <q-select
+            outlined
+            v-model="selectedFloor"
+            :options="selectedCanteen.canteenFloors"
+            option-label="stallFloor"
+            label="楼层"
+          >
+          </q-select>
+        </div>
+
+        <div v-if="selectedFloor != null">
+          <q-select
+            outlined
+            v-model="selectedStall"
+            :options="selectedFloor.stalls"
+            option-label="stallName"
+            label="档口"
+          >
+          </q-select>
+        </div>
+
+        <div style="margin-left:45%;">
+          <q-btn
+            style="margin-right:10px;"
+            color="red"
+            @click="cancel"
+          >取消</q-btn>
+          <q-btn
+            color="green"
+            @click="save"
+          >创建</q-btn>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
+import { defineComponent, ref, reactive, onMounted, watch } from 'vue';
 import { useQuasar } from "quasar";
-// import { api } from 'boot/axios'
+import { api } from 'boot/axios'
 
 const columns = [
-  { name: 'staffVaildName', align: 'left', label: '档主姓名', field: 'staffVaildName', sortable: true },
+  { name: 'staffVaildName', align: 'left', label: '档主姓名', field: 'staffValidName', sortable: true },
   { name: 'staffID', align: 'left', label: '职员编号', field: 'staffID', sortable: true },
   { name: 'canteenName', align: 'left', label: '食堂名字', field: 'canteenName', sortable: true },
   { name: 'stallFloor', align: 'left', label: '楼层', field: 'stallFloor', sortable: true },
@@ -105,133 +119,257 @@ const columns = [
   { name: 'status', align: 'left', label: '激活状态', field: 'staffStatus', sortable: true },
 ]
 
-const staffs = [
-  {
-    staffVaildName: '李先生',
-    staffID: 'W0001',
-    stallName: '麻辣香锅档',
-    canteenName: '紫荆园',
-    stallFloor: 1,
-    staffPhone: '12345',
-    staffStatus: false
-  },
-  {
-    staffVaildName: '黄女士',
-    staffID: 'W0002',
-    canteenName: '桃李园',
-    stallName: '麻辣香锅档',
-    stallFloor: 2,
-    staffPhone: '12345',
-    staffStatus: true
-  },
-  {
-    staffVaildName: '李先生',
-    staffID: 'W0003',
-    stallName: '鸡饭档',
-    canteenName: '桃李园',
-    stallFloor: 3,
-    staffPhone: '12345',
-    staffStatus: true
-  }
-]
-
 export default defineComponent({
   setup () {
-    const editable = ref(false);
+    const $q = useQuasar();
+    const creatable = ref(false);
     const orgStaff = {
-      staffVaildName: null,
-      staffPhone: null,
-      canteenName: null,
-      stallFloor: null,
-      stallName: null
+      staffValidName: '',
+      staffPhone: '',
+      canteenID: '',
+      stallFloor: '',
+      stallID: ''
     };
 
     const newStaff = reactive({ ...orgStaff });
 
+    const selectedCanteen = ref(null);
+    const selectedFloor = ref(null);
+    const selectedStall = ref(null);
+    const canteens = ref([]);
+
+    watch(selectedCanteen, (currentValue, oldValue) => {
+      if (currentValue != null) {
+        if (oldValue != currentValue) {
+          newStaff.canteenID = currentValue.canteenID
+          selectedFloor.value = null
+          selectedStall.value = null
+        }
+      }
+    });
+
+    watch(selectedFloor, (currentValue, oldValue) => {
+      if (currentValue != null) {
+        if (oldValue != currentValue) {
+          newStaff.stallFloor = currentValue.stallFloor
+          selectedStall.value = null
+        }
+      }
+
+    });
+
+    watch(selectedStall, (currentValue, oldValue) => {
+      if (currentValue != null) {
+        if (oldValue != currentValue) {
+          newStaff.stallID = currentValue.stallID
+        }
+      }
+    });
+
+    //判断资料输入不为空
+    let readySubmit = false;
+    const checkInput = () => {
+      if (newStaff.staffValidName.length > 0) {
+        readySubmit = true
+      } else {
+        readySubmit = false;
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "档主名字不能为空",
+          timeout: 1000,
+        });
+      }
+      if (readySubmit === true) {
+        if (newStaff.staffPhone.length > 0) {
+          readySubmit = true
+        } else {
+          readySubmit = false;
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "档主联络号码不能为空",
+            timeout: 1000,
+          });
+        }
+      }
+      if (readySubmit === true) {
+        if (newStaff.canteenID !== '') {
+          readySubmit = true
+        } else {
+          readySubmit = false;
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "食堂名字不能为空",
+            timeout: 1000,
+          });
+        }
+      }
+      if (readySubmit === true) {
+        if (newStaff.stallFloor !== '') {
+          readySubmit = true
+        } else {
+          readySubmit = false;
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "楼层不能为空",
+            timeout: 1000,
+          });
+        }
+      }
+      if (readySubmit === true) {
+        if (newStaff.stallName !== '') {
+          readySubmit = true
+        } else {
+          readySubmit = false;
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "档口不能为空",
+            timeout: 1000,
+          });
+        }
+      }
+
+    }
+
     const add = () => {
-      editable.value = true;
+      creatable.value = true;
+      selectedCanteen.value = null;
+      selectedFloor.value = null;
+      selectedStall.value = null;
       Object.assign(newStaff, orgStaff)
     };
+
     const cancel = () => {
-      editable.value = false
+      creatable.value = false
     };
+
+    //上传功能
     const save = () => {
-      editable.value = false
+      checkInput();
+      if (readySubmit === true) {
+        postNewStaff();
+        getstaffsData();
+        creatable.value = false
+      }
     };
 
-    const confirmChangeStatus = (status) => {
-      // const postStaffStatus = () => {
-      // api.post('Api_Link', {
-      //   stallStatus: status,
-      // }).then ((res) => {
-      // if (res.status === 200 && res.data !== undefined) {
-      // getAdminsData,
-      //      $q.notify({
-      //   color: "green-4",
-      //   textColor: "white",
-      //   icon: "cloud_done",
-      //   message: "修改成功",
-      //   timeout: 1000,
-      // });
+    //更改档主状态
+    const updateStaffStatus = (id, status) => {
+      api.post('private/staffs/' + id, {
+        staffStatus: status,
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          getstaffsData()
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "修改状态成功",
+            timeout: 1000,
+          });
 
-      // }
-      // if (res.status === 404){
-      //   console.log('error')
-      // }
-      //  
-      // })
-    };
+        }
+        if (res.data.code !== 200) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.data.message,
+            timeout: 1000,
+          });
+        }
+      })
+    }
+
+    //获取已创建并整理好的档主基本信息
+    const staffs = ref([]);
+    const getstaffsData = async () => {
+      try {
+        const response = await api.get("/private/staffs");
+        staffs.value.splice(0, staffs.value.length, ...response.data.data);
+      } catch (err) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: err.message,
+          timeout: 1000,
+        });
+      }
+    }
+
+    //获取全校食堂、楼层、档口信息
+    const getCanteenData = async () => {
+      try {
+        const response = await api.get("/private/canteens");
+        canteens.value = response.data.data;
+      } catch (err) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: err.message,
+          timeout: 1000,
+        });
+      }
+    }
+
+    //Post 功能
+    const postNewStaff = () => {
+      api.post('/private/staffs', {
+        staffValidName: newStaff.staffValidName,
+        staffPhone: newStaff.staffPhone,
+        staffStallID: newStaff.stallID
+
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          $q.notify({
+            color: "green-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "档主创建成功",
+            timeout: 1000,
+          });
+        }
+        if (res.data.code !== 200) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: res.data.message,
+            timeout: 1000,
+          });
+        }
+
+      })
+    }
 
 
-    // const staffs = ref([]);
-    // const getstaffsData = async () => {
-    //   try {
-    //     const response = await api.get("/private/staffs");
-    //     staffs.value.splice(0, staffs.value.length, ...response.data);
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // }
-
-    // const postNewStaff = () => {
-    // api.post('Api_Link', {
-    //   staffVaildName: newStaff.staffVaildName.value,
-    //   staffPhone: newStaff.staffPhone.value, 
-    //   canteenId: newStaff.canteenId.value，
-    //   stallFloor: newStaff.stallFloor.value，
-    //   stallId: newStaff.stallId.value，
-
-    // }).then ((res) => {
-    // if (res.status === 200 && res.data !== undefined) {
-    //     updateToken(res.data.token);
-    // }
-    // if (res.status === 404){
-    //   console.log('error')
-    // }
-    //  
-    // })
-
-
-    // onMounted(() => {
-    //   getstaffsData()
-    // })
+    onMounted(() => {
+      getstaffsData();
+      getCanteenData()
+    })
 
     return {
       columns,
-      staffs: ref(staffs),
+      staffs,
       orgStaff,
       newStaff,
-      canteen: [
-        '桃李园', '紫荆园', '桃李园', '万人食堂'
-      ],
-      floor: [
-        1, 2, 3, 4
-      ],
-      stall: [
-        '档口1', '档口2', '档口3'
-      ],
-      editable,
-      confirmChangeStatus,
+      selectedCanteen,
+      selectedFloor,
+      selectedStall,
+      canteens,
+      creatable,
+      updateStaffStatus,
       add,
       cancel,
       save,

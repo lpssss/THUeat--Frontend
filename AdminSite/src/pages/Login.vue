@@ -76,6 +76,7 @@ export default defineComponent({
     const isPwd = ref(true);
     const acceptclause = ref(false);
 
+    //Post及Route功能
     const login = () => {
       if (name.value.length > 0 && password.value.length >= 6 && acceptclause.value === true) {
         axios.post('https://linja19.pythonanywhere.com/api/private/authorization', {
@@ -90,7 +91,7 @@ export default defineComponent({
             updatevalidName(res.data.data.validName)
 
 
-            if (res.data.firstLogin === true) {
+            if (res.data.data.firstLogin === true) {
               // Route to First login page
               router.push("/firstLoginSettings");
             }
@@ -131,6 +132,7 @@ export default defineComponent({
       }
     }
 
+    //登入功能
     const onLogin = () => {
       if (acceptclause.value !== true) {
         $q.notify({
@@ -163,6 +165,7 @@ export default defineComponent({
         login()
       }
     }
+
     onMounted(() => {
       resetState();
     })
