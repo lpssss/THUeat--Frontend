@@ -81,12 +81,7 @@ const linksList = [
     title: '普通用户管理',
     icon: 'person',
     to: '/superadmin/userMaintenance'
-  },
-  {
-    title: '设置',
-    icon: 'settings',
-    to: '/superadmin/settings'
-  },
+  }
 ];
 
 export default defineComponent({
