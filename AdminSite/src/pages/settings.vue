@@ -115,7 +115,13 @@ export default defineComponent({
           details.name = response.data.data.name,
           details.phone = response.data.data.phone
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: err.message,
+          timeout: 1000,
+        });
       }
     }
 
@@ -208,6 +214,7 @@ export default defineComponent({
 
     };
 
+    //Post功能
     const postNewDetails = () => {
       axios.post('https://linja19.pythonanywhere.com/api/private/details', {
         token: token.value,

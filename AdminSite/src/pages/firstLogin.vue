@@ -141,6 +141,7 @@ export default defineComponent({
       }
     };
 
+    //Post 功能
     const postNewDetails = () => {
       axios.post('https://linja19.pythonanywhere.com/api/private/details', {
         token: token.value,
