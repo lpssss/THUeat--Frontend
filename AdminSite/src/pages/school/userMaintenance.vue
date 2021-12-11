@@ -14,7 +14,7 @@
             checked-icon="check"
             color="green"
             unchecked-icon="clear"
-            @click="confirmChangeStatus(props.row.userStatus)"
+            @click="updateUserStatus(props.row.userID, props.row.userStatus)"
           ></q-toggle>
         </q-td>
       </template>
@@ -28,6 +28,7 @@ import { api } from 'boot/axios'
 import { useQuasar } from "quasar";
 import { defineComponent, ref, onMounted } from 'vue'
 
+//Table column title
 const columns = [
   { name: 'userName', align: 'left', label: '用户姓名', field: 'userName', sortable: true },
   { name: 'userID', align: 'left', label: '用户编号', field: 'userID', sortable: true },
@@ -35,72 +36,63 @@ const columns = [
   { name: 'status', align: 'left', label: '激活', field: 'userStatus', sortable: true },
 ]
 
-const users = [
-  {
-    userName: '李先生',
-    userID: 'U0001',
-    userEmail: 'test1@mail.com',
-    userStatus: false
-  },
-  {
-    userName: '黄女士',
-    userID: 'U0002',
-    userEmail: 'test2@mail.com',
-    userStatus: true
-  },
-  {
-    userName: '李先生',
-    userID: 'U0003',
-    userEmail: 'test3@mail.com',
-    userStatus: true
-  }
-]
-
 export default defineComponent({
   setup () {
+    const $q = useQuasar();
 
-    const confirmChangeStatus = (status) => {
-      // const postStallStatus = () => {
-      // api.post('Api_Link', {
-      //   userStatus: status,
-      // }).then ((res) => {
-      // if (res.status === 200 && res.data !== undefined) {
-      // getAdminsData,
-      //      $q.notify({
-      //   color: "green-4",
-      //   textColor: "white",
-      //   icon: "cloud_done",
-      //   message: "修改成功",
-      //   timeout: 1000,
-      // });
+    //更改用户状态
+    const updateUserStatus = (id, status) => {
+      api.post('/private/users/' + id, {
+        userStatus: status,
+      }).then((res) => {
+        if (res.data.code === 200 && res.data !== undefined) {
+          getUsersData(),
+            $q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              message: "修改状态成功",
+              timeout: 1000,
+            });
 
-      // }
-      // if (res.status === 404){
-      //   console.log('error')
-      // }
-      //  
-      // })
+        }
+        if (res.status === 404) {
+          $q.notify({
+            color: "red-4",
+            textColor: "white",
+            icon: "warning",
+            message: "修改失败",
+            timeout: 1000,
+          });
+        }
+      })
     };
 
+    //获取普通用户资料
+    const users = ref([]);
+    const getUsersData = async () => {
+      try {
+        const response = await api.get("/private/users");
+        users.value.splice(0, users.value.length, ...response.data.data);
+      } catch (err) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: err.message,
+          timeout: 1000,
+        });
+      }
+    }
 
-    // const usersApi = ref([]);
-    // const getUsersData = async () => {
-    //   try {
-    //     const response = await api.get("/usertest");
-    //     usersApi.value.splice(0, usersApi.value.length, ...response.data);
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // }
-
-    // onMounted(() => {
-    //   getUsersData()
-    // })
+    onMounted(() => {
+      getUsersData()
+    })
 
     return {
       columns,
-      users: ref(users),
-      confirmChangeStatus,
+      users,
+      updateUserStatus,
     }
   }
 })
