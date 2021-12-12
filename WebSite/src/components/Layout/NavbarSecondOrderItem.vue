@@ -19,6 +19,10 @@ export default defineComponent({
       type: String,
       required: true
     },
+    canteenType: {
+      type: Number,
+      required: true
+    },
   }
 })
 </script>

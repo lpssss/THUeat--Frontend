@@ -53,9 +53,16 @@ export default defineComponent({
     const secondOrderTitle = ref([])
     const getSecondOrderTitle=async ()=>{
       //const API_LINK = 'navigations'
-      const response=await api.get(`navigations?canteenType=${props.titleEng}`)
-      secondOrderTitle.value = response.data.data
-      console.log(secondOrderTitle.value)
+      const response = await api.get(`navigations`)//?canteenType=${props.titleEng}`)
+      var responseData = []
+      for (var key in response.data.data) {
+        if (response.data.data[key].canteenType == props.titleEng) {
+          responseData.push(response.data.data[key])
+        }
+      }
+      console.log(responseData)
+      secondOrderTitle.value = responseData;
+      console.log(props.titleEng)
     }
     if(props.secondOrderStatus)
       getSecondOrderTitle()
