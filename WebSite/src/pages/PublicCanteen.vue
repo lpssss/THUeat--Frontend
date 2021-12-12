@@ -17,7 +17,7 @@
       <CanteenBasicDetailSection
         :canteen-address="canteenData.data.canteenAddress"
         :contacts="canteenData.data.canteenPhone"
-        :operation-time="canteenData.data.canteenOperationtime"
+        :operation-time="canteenData.data.canteenOperationTime"
       />
     </div>
 
@@ -59,15 +59,15 @@ import BannerSection from "components/Layout/BannerSection";
 const canteenPageBanner = {
   information:{
     content: "基本信息",
-    change: true
+    change: false
   },
   introduction:{
     content: "食堂简介",
-    change: true
+    change: false
   },
   stalls: {
     content: "档口",
-    change: false
+    change: true
   }
 };
 
@@ -84,7 +84,7 @@ export default defineComponent({
   setup() {
     const route=useRoute()
     let id=route.query.canteenID
-    let API_LINK = `canteens/${id}`; // 之后放真正的API`http://localhost:3000/canteens/?canteenID=${id}`
+    let API_LINK = `canteens/${id}`; 
     const canteenData = reactive({ data: {} });
     const getCanteenData = async () => {
       try {

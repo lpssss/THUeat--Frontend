@@ -12,7 +12,7 @@ export default defineComponent({
   name: "NavbarSecondOrderItem",
   props: {
     canteenID: {
-      type: String,
+      type: Number,
       required: true
     },
     canteenName: {
