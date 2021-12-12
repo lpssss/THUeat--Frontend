@@ -9,9 +9,9 @@
         >
           <HomePageAnnouncementSection
             name="first"
-            :title="stallData.data.stallName"
-            :content="stallData.data.stallDescribe"
-            :imgSrc="stallData.data.stallImage"
+            :noticeTitle="stallData.data.stallName"
+            :noticeWords="stallData.data.stallDescribe"
+            :noticeImage="stallData.data.stallImages[0]"
           />
         </q-carousel>
       </div>

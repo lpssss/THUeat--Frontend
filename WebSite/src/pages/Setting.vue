@@ -176,12 +176,12 @@ export default defineComponent({
     const user = ref();
     const image = ref();
 
-    const API_LINK = "http://localhost:3000/usersDetails"; // 之后放真正的API
+    const API_LINK = "user/details"; // 之后放真正的API
     const userDetailData = reactive({ data: {} });
     const getUserData = async () => {
       try {
-        const response = await axios.get(API_LINK);
-        userDetailData.data = response.data;
+        const response = await api.get(API_LINK);
+        userDetailData.data = response.data.data;
       } catch (err) {
         console.log(err.message);
       }

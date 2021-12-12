@@ -1,6 +1,6 @@
 <template>
     <q-card class="my-card">
-        <q-img :src="stallImage" :alt="stallName" class="q-card-img"/>
+        <q-img :src="stallImages" :alt="stallName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
           <div class="text-h6"> <router-link :to="{path:'/stall',query:{stallID:stallID}}">{{stallName}}</router-link> </div>
@@ -38,7 +38,7 @@ export default defineComponent({
     name: "StallCardSection",
     props: {
         stallID: {
-          type: String,
+          type: Number,
           required: true
         },
 
@@ -67,7 +67,7 @@ export default defineComponent({
             default: ''
         },
 
-        stallImage: {
+        stallImages: {
             type: String,
             default: '#'
         },

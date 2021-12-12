@@ -1,6 +1,6 @@
 <template>
     <q-card class="my-card-canteenstall">
-        <q-img :src="stallImage" :alt="stallName" class="q-card-img"/>
+        <q-img :src=stallImages :alt=stallName class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
           <div class="text-h6"> {{stallName}} </div>
@@ -61,7 +61,7 @@ export default defineComponent({
             default: ''
         },
 
-        stallImage: {
+        stallImages: {
             type: String,
             default: '#'
         },

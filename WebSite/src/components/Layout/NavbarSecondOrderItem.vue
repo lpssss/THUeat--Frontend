@@ -12,11 +12,15 @@ export default defineComponent({
   name: "NavbarSecondOrderItem",
   props: {
     canteenID: {
-      type: String,
+      type: Number,
       required: true
     },
     canteenName: {
       type: String,
+      required: true
+    },
+    canteenType: {
+      type: Number,
       required: true
     },
   }

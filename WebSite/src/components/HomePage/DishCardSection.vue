@@ -1,6 +1,6 @@
 <template>
     <q-card class="my-card">
-        <q-img :src="dishImage" :alt="dishName" class="q-card-img"/>
+        <q-img :src="dishImages" :alt="dishName" class="q-card-img"/>
 
         <q-card-section class="q-pb-none">
           <div class="text-h6"><router-link :to="{path:'/dish',query:{dishID:dishID}}">{{ dishName }}</router-link></div>
@@ -33,7 +33,7 @@ export default defineComponent({
     name: "DishCardSection",
     props: {
         dishID: {
-          type: String,
+          type: Number,
           required: true
         },
         dishName: {
@@ -56,7 +56,7 @@ export default defineComponent({
             default: ''
         },
 
-        dishImage: {
+        dishImages: {
             type: String,
             default: '#'
         },

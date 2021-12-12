@@ -22,6 +22,7 @@
 <script>
 import {defineComponent, onMounted, ref} from "vue";
 import axios from 'axios'
+import { api } from "boot/axios";
 import NavbarSecondOrderItem from "components/Layout/NavbarSecondOrderItem";
 
 
@@ -33,7 +34,7 @@ export default defineComponent({
       required: true
     },
     titleEng: {
-      type: String,
+      type: Number,
       required: true
     },
     secondOrderStatus: {
@@ -49,11 +50,19 @@ export default defineComponent({
 
   setup(props) {
     //console.log(props.title,props.titleEng,props.secondOrderStatus)
-    const secondOrderTitle=ref([])
+    const secondOrderTitle = ref([])
     const getSecondOrderTitle=async ()=>{
-      const response=await axios.get(`http://localhost:3000/navigation?canteenType=${props.titleEng}`)
-      secondOrderTitle.value=response.data
-      //console.log(secondOrderTitle)
+      //const API_LINK = 'navigations'
+      const response = await api.get(`navigations`)//?canteenType=${props.titleEng}`)
+      var responseData = []
+      for (var key in response.data.data) {
+        if (response.data.data[key].canteenType == props.titleEng) {
+          responseData.push(response.data.data[key])
+        }
+      }
+      console.log(responseData)
+      secondOrderTitle.value = responseData;
+      console.log(props.titleEng)
     }
     if(props.secondOrderStatus)
       getSecondOrderTitle()
