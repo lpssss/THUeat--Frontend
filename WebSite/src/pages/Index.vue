@@ -131,6 +131,7 @@ export default defineComponent({
       try {
         const response = await api.get(NOTICE_API_LINK);
         noticeData.data = response.data.data;
+        //console.log(noticeData.data[0])
       } catch (err) {
         console.log(err.message);
       }
@@ -140,16 +141,15 @@ export default defineComponent({
     getStallData();
     getNoticeData();
 
-    const slide = ref();
-    slide.value = 'first';
+    //const slide = ref();
+    //slide.value = noticeData.data[0].noticeTitle;
 
     return {
-      slide: ref("THUeat通告"),
-      announcements: announcements,
       homePageBanner: homePageBanner,
       dishData,
       stallData,
       noticeData,
+      slide: ref(1),
     }
   }
 })

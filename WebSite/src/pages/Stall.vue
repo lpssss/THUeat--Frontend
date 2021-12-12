@@ -11,7 +11,7 @@
             name="first"
             :noticeTitle="stallData.data.stallName"
             :noticeWords="stallData.data.stallDescribe"
-            :imgSrc="stallData.data.stallImage"
+            :noticeImage="stallData.data.stallImages[0]"
           />
         </q-carousel>
       </div>

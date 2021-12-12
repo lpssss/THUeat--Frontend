@@ -1,5 +1,5 @@
 <template>
-    <q-carousel-slide :name="noticeTitle" :img-src="noticeImage">
+    <q-carousel-slide :name=noticeTitle :img-src=noticeImage>
         <div class="absolute-bottom custom-caption">
             <div class="text-h5">{{ noticeTitle }}</div>
             <div class="text-subtitle2">{{ noticeWords }}</div>
@@ -14,7 +14,7 @@ export default defineComponent({
     props: {
         noticeTitle: {
             type: String,
-            default: "THUeat通告"
+            default: "first"
         },
 
         noticeWords: {
