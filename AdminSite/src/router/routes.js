@@ -50,13 +50,6 @@ const routes = [
           permissions: ['superadmin']
         }
       },
-      {
-        path: "settings",
-        component: () => import("pages/school/settings.vue"),
-        meta: {
-          permissions: ['superadmin']
-        }
-      },
     ],
   },
   {
@@ -96,7 +89,7 @@ const routes = [
       },
       {
         path: "settings",
-        component: () => import("pages/school/settings.vue"),
+        component: () => import("pages/settings.vue"),
         meta: {
           permissions: ['admin']
         }
@@ -133,7 +126,7 @@ const routes = [
       },
       {
         path: "settings",
-        component: () => import("pages/stall/StaffSettings.vue"),
+        component: () => import("pages/settings.vue"),
         meta: {
           permissions: ['staff']
         }
