@@ -78,7 +78,9 @@
                   </q-card-section>
 
                   <q-card-section class="q-pt-none">
-                    <q-input dense v-model="authcode" autofocus @keyup.enter="prompt = false" />
+                    <q-input dense v-model="authcode" autofocus @keyup.enter="prompt = false"
+                             lazy-rules
+                             :rules="[ val => val && val.length === 6 || '请输入正确的验证码']"/>
                   </q-card-section>
 
                   <q-card-actions align="right" class="text-primary">
@@ -124,33 +126,43 @@ export default defineComponent({
     const authcode=ref()
 
     const verification=async()=>{
-      await axios.post('https://linja19.pythonanywhere.com/api/users/verification', {
-        userName: name.value,
-        verificationNumber:authcode.value
-      }).then((res) => {
-        console.log(res)
-        if (res.data.code === 200 ) {
-          console.log('验证成功')
-          $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "注册成功",
-            timeout: 500,
-          })
-          router.push('/login')
-        }
-        else if (res.data.code === 400 ) {
-          $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
-            message: res.data.message,
-            timeout: 1000,
-          });
-        }
+      if(authcode.value && authcode.value.length===6){
+        await axios.post('https://linja19.pythonanywhere.com/api/users/verification', {
+          userName: name.value,
+          verificationNumber:authcode.value
+        }).then((res) => {
+          if (res.data.code === 200 ) {
+            $q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              message: "注册成功",
+              timeout: 500,
+            })
+            router.push('/login')
+          }
+          else if (res.data.code === 400 ) {
+            $q.notify({
+              color: "red-5",
+              textColor: "white",
+              icon: "warning",
+              message: res.data.message,
+              timeout: 1000,
+            });
+          }
 
-      })
+        })
+      }
+      else {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "请输入正确的验证码",
+          timeout: 1000,
+        });
+      }
+
     }
     const register = async () => {
       if (name.value.length > 0 && password.value.length >= 6) {
@@ -161,19 +173,8 @@ export default defineComponent({
           password:password.value
 
         }).then((res) => {
-          console.log(res)
           if (res.data.code === 200 ) {
-            console.log('只剩验证码')
             authForm.value=true
-            // updateToken(res.data.data.token);
-            // updateType(res.data.data.type);
-            // console.log(getToken())
-            //.onOk(data => {
-            //    verification(data)
-            //    console.log('>>>> OK, received', data)
-            //
-            //
-            // })
 
           }
           else if (res.data.code === 400 ) {
@@ -191,7 +192,6 @@ export default defineComponent({
     }
 
     const onRegister = () => {
-      console.log('点击注册')
       if(name.value.length===0){
         $q.notify({
           color: "red-5",
