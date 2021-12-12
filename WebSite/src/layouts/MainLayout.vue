@@ -20,7 +20,7 @@
           <q-chip>
             <q-avatar>
               <img
-                src="https://cdn.quasar.dev/img/boy-avatar.png"
+                :src="userDetailData.data.userImage"
                 alt="userAvatar"
               />
             </q-avatar>
@@ -66,10 +66,11 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed , reactive} from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import NavbarFirstOrderItem from "components/Layout/NavbarFirstOrderItem";
+import { api } from 'boot/axios'
 
 const firstOrderTitle = [
   {
@@ -99,10 +100,27 @@ export default defineComponent({
       get: () => $store.state.login.loginStatus,
       set: (newState) => $store.commit("login/updateLoginStatus", newState),
     });
+
+    const API_LINK = "users/details"; 
+    const userDetailData = reactive({ data: {} });
+    const getUserData = async () => {
+      try {
+        const response = await api.get(API_LINK);
+        userDetailData.data = response.data.data;
+        console.log(userDetailData.data)
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+
     function onItemClick(){
       router.push('/setting')
     }
+    
+    getUserData();
+
     return {
+      userDetailData,
       firstOrderTitle,
       loginStatus,
       leftDrawerOpen,

@@ -143,10 +143,13 @@
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import axios from "axios";
+import useAppState from "src/store/userAppState.js";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import BannerSection from "components/Layout/BannerSection";
 import StallCardSection from "components/HomePage/StallCardSection";
 import { api } from 'boot/axios'
+
+const { updateToken} = useAppState();
 
 const settingPageBanners = {
   setting: {
@@ -176,12 +179,13 @@ export default defineComponent({
     const user = ref();
     const image = ref();
 
-    const API_LINK = "user/details"; // 之后放真正的API
+    const API_LINK = "users/details"; // 之后放真正的API
     const userDetailData = reactive({ data: {} });
     const getUserData = async () => {
       try {
         const response = await api.get(API_LINK);
         userDetailData.data = response.data.data;
+        console.log(userDetailData.data)
       } catch (err) {
         console.log(err.message);
       }
