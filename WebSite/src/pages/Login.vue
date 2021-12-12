@@ -28,7 +28,6 @@
               </template>
             </q-input>
             <div>
-              <!--            <q-checkbox v-model="acceptpw" label="记住密码" />-->
               <q-checkbox v-model="acceptclause" label="接受条款" />
             </div>
 
@@ -43,7 +42,6 @@
               </div>
               <div>
                 <router-link to="/register">还没有账号？点我注册</router-link>
-                <!--              <router-view></router-view>-->
               </div>
             </div>
           </q-form>
@@ -81,11 +79,10 @@ export default defineComponent({
           password: password.value
 
         }).then((res) => {
-          console.log(res)
           if (res.data.code === 200 && res.data !== undefined) {
             updateToken(res.data.data.token);
             updateType(res.data.data.type);
-            console.log(getToken())
+            getToken()
             store.commit("login/updateLoginStatus",true)
             router.push("/")
             $q.notify({
@@ -101,7 +98,16 @@ export default defineComponent({
               color: "red-5",
               textColor: "white",
               icon: "warning",
-              message: "用户名不存在或密码错误",
+              message: res.data.message,
+              timeout: 1000,
+            })
+          }
+          else if (res.data.code === 400){
+            $q.notify({
+              color: "red-5",
+              textColor: "white",
+              icon: "warning",
+              message: res.data.message,
               timeout: 1000,
             })
           }
