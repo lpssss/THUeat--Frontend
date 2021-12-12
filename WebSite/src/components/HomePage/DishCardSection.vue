@@ -33,7 +33,7 @@ export default defineComponent({
     name: "DishCardSection",
     props: {
         dishID: {
-          type: String,
+          type: Number,
           required: true
         },
         dishName: {

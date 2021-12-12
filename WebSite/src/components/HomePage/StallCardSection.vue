@@ -38,7 +38,7 @@ export default defineComponent({
     name: "StallCardSection",
     props: {
         stallID: {
-          type: String,
+          type: Number,
           required: true
         },
 
