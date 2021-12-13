@@ -3,7 +3,7 @@
   <!--  Show Statistics Data -->
   <div
     class="q-pa-md"
-    v-if="creatable == false"
+    v-if="creatable === false"
   >
     <div class="row q-mb-lg">
       <div class="col-12">
@@ -131,7 +131,7 @@
   <div
     class="q-pa-md"
     style="margin-left:10%; margin-right:10%;"
-    v-if="creatable == true"
+    v-if="creatable === true"
   >
     <h4 style="border-bottom: 0.1px solid;">创建新广告或通告</h4>
     <div
@@ -151,28 +151,7 @@
         label="内容"
         stack-label
       />
-      <q-file
-        filled
-        bottom-slots
-        v-model="newNotice.noticeImage"
-        label="图片"
-        counter
-      >
-        <template v-slot:prepend>
-          <q-icon
-            name="cloud_upload"
-            @click.stop
-            class=""
-          />
-        </template>
-        <template v-slot:append>
-          <q-icon
-            name="close"
-            @click.stop="model = null"
-            class="cursor-pointer"
-          />
-        </template>
-      </q-file>
+      <ImagesUploader ref="imageUploader" @addedImages="addImages" />
 
       <div style="margin-left:45%;">
         <q-btn
@@ -194,6 +173,8 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios';
+import {ADMIN_API_LINKS} from "app/api-links";
+import ImagesUploader from "components/ImagesUploader";
 
 // Table columns title
 const columns = [
@@ -204,19 +185,24 @@ const columns = [
 ]
 
 export default defineComponent({
+  components: {ImagesUploader},
   setup () {
     const creatable = ref(false);
     const orgNotice = {
       noticeTitle: null,
       noticeWords: null,
-      noticeImage: null
     };
     const newNotice = reactive({ ...orgNotice });
+    const imageUploader=ref(null)
+    const newImages=ref(null)
     const $q = useQuasar();
+    const NOTICE_API=ADMIN_API_LINKS.notices
+    const STAT_API=ADMIN_API_LINKS.adminStatistics
 
     const add = () => {
       creatable.value = true;
       Object.assign(newNotice, orgNotice)
+      imageUploader.value.clearInput()
     };
     const cancel = () => {
       creatable.value = false
@@ -224,30 +210,41 @@ export default defineComponent({
     const save = () => {
       //在这里加post功能
       creatable.value = false;
+      let formData=new FormData()
+      for(let key in newNotice){
+        formData.append(key,newNotice[key])
+      }
+      if(newImages.value!==null){
+        formData.append("noticeImage",newImages.value)
+      }
+      // TODO 这里写api post，data是 formData
+
+      //清空暂存图片的ref
+      newImages.value=null
+
     };
+
+    const addImages=(images)=>{
+      console.log(images.value)
+      newImages.value=images.value
+    }
 
     //更改档主状态
     const deleteRecord = (id) => {
-      api.delete('private/notices/' + id, {
+      api.delete(NOTICE_API+ '/' + id, {
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200) {
           getNoticesData()
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type:"success",
             message: "删除成功",
-            timeout: 1000,
           });
 
         }
         if (res.data.code !== 200) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
       })
@@ -257,15 +254,12 @@ export default defineComponent({
     const notices = ref([]);
     const getNoticesData = async () => {
       try {
-        const response = await api.get("/private/notices");
+        const response = await api.get(NOTICE_API);
         notices.value.splice(0, notices.value.length, ...response.data.data);
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -281,7 +275,7 @@ export default defineComponent({
     );
     const getAdminStatisticsData = async () => {
       try {
-        const response = await api.get("/private/adminStatistics");
+        const response = await api.get(STAT_API);
         adminStatistics.userNumber = response.data.data.userNumber;
         adminStatistics.staffNumber = response.data.data.staffNumber;
         adminStatistics.stallNumber = response.data.data.stallNumber;
@@ -289,11 +283,8 @@ export default defineComponent({
 
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -310,6 +301,8 @@ export default defineComponent({
       creatable,
       orgNotice,
       newNotice,
+      imageUploader,
+      addImages,
       deleteRecord,
       add,
       cancel,
