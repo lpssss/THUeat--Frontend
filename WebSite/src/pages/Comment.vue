@@ -8,7 +8,12 @@
       <div class="col-3 q-pa-md" align="right"></div>
       <div class="col-3 q-pa-md" align="left">
         <div style="max-width: 200px">
-          <q-select multiple v-model="dishModel" :options="dishOptions" label="您想评价的菜品" />
+          <q-select
+            multiple
+            v-model="dishModel"
+            :options="dishOptions"
+            label="您想评价的菜品"
+          />
         </div>
       </div>
 
@@ -46,7 +51,11 @@
               @selectLabel="updateTags"
             />
             -->
-            <q-option-group :options="options" type="checkbox" v-model="group" />
+            <q-option-group
+              :options="options"
+              type="checkbox"
+              v-model="group"
+            />
           </div>
         </div>
       </div>
@@ -58,14 +67,10 @@
       <div class="col-3 q-pa-md" align="right"></div>
       <div class="col-3 q-pa-md" align="left">
         <div class="q-pl-none">
-          <q-file
-            v-model="files"
-            label="上传图片"
-            filled
+          <ImagesUploader
+            ref="imageUploader"
+            @addedImages="addImages"
             multiple
-            style="max-width: 300px"
-            :filter="checkFileType"
-            @rejected="onRejected"
           />
         </div>
       </div>
@@ -83,12 +88,13 @@ import { useQuasar } from "quasar";
 import axios from "axios";
 import BannerSection from "components/Layout/BannerSection";
 import { useStore } from "vuex";
-import { useRouter,useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { api } from "boot/axios";
+import ImagesUploader from "components/ImagesUploader";
 
 const commentBanner = {
   content: "评价页",
-  change: false
+  change: false,
 };
 
 const dishOptions = ["宫保鸡丁", "鱼香茄子", "麻辣香锅", "北京烤鸭"];
@@ -96,26 +102,27 @@ const dishOptions = ["宫保鸡丁", "鱼香茄子", "麻辣香锅", "北京烤�
 const options = [
   { label: "好吃", value: "好吃" },
   { label: "太甜了", value: "太甜了" },
-  { label: "太咸了", value: "太咸了" }
+  { label: "太咸了", value: "太咸了" },
 ];
 
 export default defineComponent({
   name: "Comment",
   components: {
+    ImagesUploader,
     BannerSection,
     //LabelSection
   },
 
   data() {
     return {
-      acceptclause: false
+      acceptclause: false,
     };
   },
 
   methods: {
-    updateTags: function(data) {
+    updateTags: function (data) {
       console.log(data);
-    }
+    },
   },
 
   setup() {
@@ -127,76 +134,83 @@ export default defineComponent({
     const ratingModel = ref(0);
     const text = ref();
     const group = ref([]);
-    const files = ref([]);
 
-    const route=useRoute()
-    let name=route.query.stallName
+    const route = useRoute();
+    let name = route.query.stallName;
     //let API_LINK = `stallData/?stallName=${name}`; // 之后放真正的API
 
-    watch(()=>route.query,()=>{
-      name=route.query.stallName
-      //API_LINK=`stallData/?stallName=${name}`
-      console.log("watch",route.query.stallName)
-    },{
-      immediate:true
-    });
+    //Image Uploader 相关
+    const imageUploader = ref(null);
+    const newImages = ref(null);
+    const addImages = (images) => {
+      newImages.value = images.value;
+    };
 
-    function checkFileType(files) {
-      return files.filter(file => file.type === "image/png" | "image/jpg");
-    }
+    watch(
+      () => route.query,
+      () => {
+        name = route.query.stallName;
+        //API_LINK=`stallData/?stallName=${name}`
+        console.log("watch", route.query.stallName);
+      },
+      {
+        immediate: true,
+      }
+    );
 
-    function onRejected(rejectedEntries) {
-      // Notify plugin needs to be installed
-      // https://quasar.dev/quasar-plugins/notify#Installation
-      $q.notify({
-        type: "negative",
-        message: `${rejectedEntries.length} 个文件上传失败`
-      });
-    }
     //点击提交评论按钮后确认是否是登录状态，如果不是，跳转到登陆页面
     function onComment() {
       console.log(store._state.data.login.loginStatus);
       if (!store._state.data.login.loginStatus) {
         router.push("/login");
       }
-      if (ratingModel.value == 0) {
+      if (ratingModel.value === 0) {
         $q.notify({
           color: "red-5",
           textColor: "white",
           icon: "warning",
           message: "请先对档口进行打分",
-          timeout: 500
+          timeout: 500,
         });
       } else {
-        var date = new Date();
+        const date = new Date();
         console.log("submit successfully");
-        console.log(group.value)
-        console.log(date)
+        console.log(group.value);
+        console.log(date);
+        //生成form data
+        let formData = new FormData();
+        formData.append("reviewDateTime", date);
+        formData.append("rate", ratingModel.value);
+        formData.append("reviewComment", text.value);
+        // TODO 这个标签是string还是array？和后端确认一下
+        formData.append("reviewTags");
+        // TODO 这个所选择的菜品是array？如果是array，可以直接使用下面图片的写法，把newImages改成”所选择菜品的array“，reviewImages改成dishID即可
+        formData.append("dishID");
 
-        api
-          .post("users/password", {
-            reviewDateTime: date,
-            rate: ratingModel,
-            reviewComment: text,
-            reviewImages: files,
-            reviewTags: group,
-            dishID: dishModel,
-          })
-          .then(res => {
-            if (res.status === 200) {
-              updateToken(res.data.token);
-            }
-            if (res.status === 404) {
-              console.log("error");
-            }
-          });
+        //添加图片进form data
+        if (newImages.value !== null && newImages.value.length !== 0) {
+          newImages.value.forEach((item) =>
+            formData.append("reviewImages", item)
+          );
+        } else {
+          formData.append("reviewImages", "");
+        }
+        // TODO POST 的API记得改，然后response要怎么处理记得加上
+        api.post("users/password", formData).then((res) => {
+          if (res.status === 200) {
+            updateToken(res.data.token);
+          }
+          if (res.status === 404) {
+            console.log("error");
+          }
+        });
       }
     }
 
     return {
-      checkFileType,
-      onRejected,
       onComment,
+      addImages,
+      imageUploader,
       text,
       dishModel,
       ratingModel,
@@ -204,8 +218,7 @@ export default defineComponent({
       commentBanner: commentBanner,
       group,
       options: options,
-      files
     };
-  }
+  },
 });
 </script>
