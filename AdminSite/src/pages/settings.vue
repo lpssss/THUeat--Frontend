@@ -1,19 +1,8 @@
 <template>
-  <div
-    class="q-pa-md"
-    style="margin-left:10%; margin-right:10%;"
-  >
-    <h4 style="border-bottom: 0.1px solid;">设置</h4>
-    <div
-      class="q-gutter-md"
-      style="max-width: 100%"
-    >
-      <q-input
-        filled
-        label="真实姓名"
-        disable
-        v-model="details.validName"
-      />
+  <div class="q-pa-md" style="margin-left: 10%; margin-right: 10%">
+    <h4 style="border-bottom: 0.1px solid">设置</h4>
+    <div class="q-gutter-md" style="max-width: 100%">
+      <q-input filled label="真实姓名" disable v-model="details.validName" />
       <q-input
         filled
         label="用户名"
@@ -48,51 +37,47 @@
         type="password"
       />
 
-      <div style="margin-left:45%;">
-        <q-btn
-          style="margin-right:10px;"
-          color="red"
-          @click="cancel"
-        >取消</q-btn>
-        <q-btn
-          color="green"
-          @click="save"
-        >保存</q-btn>
+      <div style="margin-left: 45%">
+        <q-btn style="margin-right: 10px" color="red" @click="cancel"
+          >取消</q-btn
+        >
+        <q-btn color="green" @click="save">保存</q-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import axios from "axios";
-import { api } from 'boot/axios'
+import { defineComponent, onMounted, reactive, ref } from "vue";
+import { api } from "boot/axios";
 import { useQuasar } from "quasar";
 import useAppState from "src/store/userAppState.js";
+import { ADMIN_API_LINKS } from "app/api-links";
 
 const { getToken } = useAppState();
 
 export default defineComponent({
-  setup () {
+  setup() {
     const $q = useQuasar();
-    const token = ref(getToken().value)
+    const token = ref(getToken().value);
+    const DETAIL_LINK = ADMIN_API_LINKS.personalDetails;
 
     //用户资料模板
     const details = reactive({
-      validName: '',
-      name: '',
-      phone: '',
-      oldPassword: '',
-      password: '',
-      confirmPassword: ''
-    })
+      validName: "",
+      name: "",
+      phone: "",
+      oldPassword: "",
+      password: "",
+      confirmPassword: "",
+    });
 
     //还原版面
     const cancel = () => {
       getDetails();
-      details.oldPassword = '';
-      details.password = '';
-      details.confirmPassword = ''
+      details.oldPassword = "";
+      details.password = "";
+      details.confirmPassword = "";
     };
 
     //上传用户更新资料
@@ -101,65 +86,52 @@ export default defineComponent({
       if (readySubmit === true) {
         postNewDetails();
         getDetails();
-        details.oldPassword = '';
-        details.password = '';
-        details.confirmPassword = ''
+        details.oldPassword = "";
+        details.password = "";
+        details.confirmPassword = "";
       }
     };
 
     //获取用户资料
     const getDetails = async () => {
       try {
-        const response = await api.get("/private/details");
-        details.validName = response.data.data.validName,
-          details.name = response.data.data.name,
-          details.phone = response.data.data.phone
+        const response = await api.get(DETAIL_LINK);
+        details.validName = response.data.data.validName;
+        details.name = response.data.data.name;
+        details.phone = response.data.data.phone;
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: err.message,
-          timeout: 1000,
         });
       }
-    }
+    };
 
     //判断输入资料是否准确
     let readySubmit = false;
     const checkInput = () => {
       if (details.name.length > 0) {
-        readySubmit = true
+        readySubmit = true;
       } else {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: "用户名不能为空",
-          timeout: 1000,
         });
       }
 
       if (readySubmit === true) {
         if (details.phone == null) {
-          readySubmit = false
+          readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: "联络号码不能为空",
-            timeout: 1000,
           });
         } else {
-
           if (details.phone.length <= 0) {
-            readySubmit = false
+            readySubmit = false;
             $q.notify({
-              color: "red-5",
-              textColor: "white",
-              icon: "warning",
+              type: "error",
               message: "联络号码不能为空",
-              timeout: 1000,
             });
           }
         }
@@ -168,13 +140,10 @@ export default defineComponent({
       if (readySubmit === true) {
         if (details.oldPassword.length > 0) {
           if (details.oldPassword.length < 6) {
-            readySubmit = false
+            readySubmit = false;
             $q.notify({
-              color: "red-5",
-              textColor: "white",
-              icon: "warning",
+              type: "error",
               message: "旧密码不能小于6位数",
-              timeout: 1000,
             });
           }
         }
@@ -183,72 +152,57 @@ export default defineComponent({
       if (readySubmit === true) {
         if (details.password.length > 0) {
           if (details.password.length < 6) {
-            readySubmit = false
+            readySubmit = false;
             $q.notify({
-              color: "red-5",
-              textColor: "white",
-              icon: "warning",
+              type: "error",
               message: "新密码不能小于6位数",
-              timeout: 1000,
             });
           }
-
         }
       }
       if (readySubmit === true) {
         if (details.password.length > 0) {
-          if ((details.password !== details.confirmPassword)) {
-            readySubmit = false
+          if (details.password !== details.confirmPassword) {
+            readySubmit = false;
             $q.notify({
-              color: "red-5",
-              textColor: "white",
-              icon: "warning",
+              type: "error",
               message: "新密码与确定密码不相等",
-              timeout: 1000,
             });
           }
-
         }
       }
-
-
     };
 
     //Post功能
     const postNewDetails = () => {
-      axios.post('https://linja19.pythonanywhere.com/api/private/details', {
-        token: token.value,
-        name: details.name,
-        phone: details.phone,
-        oldPassword: details.oldPassword,
-        password: details.password
-
-      }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
-          $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "保存成功",
-            timeout: 1000,
-          });
-          cancel();
-        }
-        if (res.data.code !== 200) {
-          $q.notify({
-            color: "red-4",
-            textColor: "white",
-            icon: "warning",
-            message: res.data.message,
-            timeout: 1000,
-          });
-        }
-      })
-    }
+      api
+        .post(DETAIL_LINK, {
+          token: token.value,
+          name: details.name,
+          phone: details.phone,
+          oldPassword: details.oldPassword,
+          password: details.password,
+        })
+        .then((res) => {
+          if (res.data !== undefined && res.data.code === 200) {
+            $q.notify({
+              type: "success",
+              message: "保存成功",
+            });
+            cancel();
+          }
+          if (res.data.code !== 200) {
+            $q.notify({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        });
+    };
 
     onMounted(() => {
-      getDetails()
-    })
+      getDetails();
+    });
 
     return {
       save,
@@ -256,8 +210,8 @@ export default defineComponent({
       details,
       readySubmit,
       checkInput,
-      postNewDetails
-    }
-  }
-})
+      postNewDetails,
+    };
+  },
+});
 </script>
