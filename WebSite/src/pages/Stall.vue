@@ -20,8 +20,11 @@
       <StallIntroSection
         :score="stallData.data.stallRate"
         :scoreAmount="stallData.data.stallRateNumber"
-        :stallAddress="stallData.data.stallAddress"
+        :stallAddress="stallData.data.canteenName"
         :stallName="stallData.data.stallName"
+        :stallFloor="stallData.data.stallFloor"
+        :stallRateNumber="stallData.data.stallRateNumber"
+        :stallOperationtime="stallData.data.stallOperationtime"
       />
     </div>
 

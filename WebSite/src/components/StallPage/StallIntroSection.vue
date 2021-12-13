@@ -1,7 +1,9 @@
 <template>
     <q-card flat bordered style="width:100%">
     <q-card-section>
-      档口地址：{{ stallAddress }}
+      营业时间：{{ stallOperationtime }}
+      <br/>
+      档口楼层：{{stallFloor}}
     </q-card-section>
       <q-card-section>
         <div class="row justify-center">
@@ -16,7 +18,7 @@
         readonly
       />
       <!-- v-model无法传入prop的数据，需要修改 -->
-      <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ scoreAmount }})</span>
+      <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ stallRateNumber }})</span>
     </div>
         <div class="col-2">
       <q-btn color="purple-8"  icon-right="send" label="去评价" @click="$router.push({path:'/comment',query:{stallName:stallName}})">
@@ -36,9 +38,9 @@ export default defineComponent({
     props: {
         score: {
             type: Number,
-            default: 4
+            default: 5
         },
-        scoreAmount: {
+        stallRateNumber: {
             type: Number,
             default: 32
         },
@@ -50,7 +52,18 @@ export default defineComponent({
           type: String,
           required: true
         },
-
+        stallRate: {
+          type: String,
+          required: true
+        },
+        stallFloor: {
+          type:Number,
+          required: true
+        },
+        stallOperationtime: {
+          type:String,
+          required:true
+        }
     },
     setup(props) {
         return {

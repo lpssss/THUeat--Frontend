@@ -8,9 +8,9 @@
     >
       <HomePageAnnouncementSection
         name="first"
-        :title="dishData.data.dishName"
-        :content="dishData.data.dishIntro"
-        :imgSrc="dishData.data.dishImage"
+        :noticeTitle="dishData.data.dishName"
+        :noticeWords="dishData.data.dishIntro"
+        :noticeImage="dishData.data.dishImages"
       />
     </q-carousel>
 
@@ -60,6 +60,7 @@ export default {
     HomePageAnnouncementSection,
     },
   setup() {
+
     const route=useRoute();
     const store=useStore();
     const router=useRouter();
