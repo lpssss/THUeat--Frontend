@@ -3,7 +3,7 @@
   <!-- Show admins data -->
   <div
     class="q-pa-md"
-    v-if="creatable == false"
+    v-if="creatable === false"
   >
     <q-table
       title="普通管理员管理系统"
@@ -37,7 +37,7 @@
   <div
     class="q-pa-md"
     style="margin-left:10%; margin-right:10%;"
-    v-if="creatable == true"
+    v-if="creatable === true"
   >
     <h4 style="border-bottom: 0.1px solid;">管理员创建</h4>
 
@@ -76,6 +76,7 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
+import {ADMIN_API_LINKS} from "app/api-links";
 
 // Table columns title
 const columns = [
@@ -94,6 +95,7 @@ export default defineComponent({
       adminPhone: ''
     };
     const newAdmin = reactive({ ...orgAdmin });
+    const ADMIN_LINK=ADMIN_API_LINKS.admins
 
     const add = () => {
       creatable.value = true;
@@ -118,15 +120,12 @@ export default defineComponent({
     const admins = ref([]);
     const getAdminsData = async () => {
       try {
-        const response = await api.get("/private/admins");
+        const response = await api.get(ADMIN_LINK);
         admins.value.splice(0, admins.value.length, ...response.data.data);
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -139,11 +138,8 @@ export default defineComponent({
       } else {
 
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: "姓名不能为空",
-          timeout: 1000,
         });
       }
       if (readySubmit === true) {
@@ -152,11 +148,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: "联络方式不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -164,26 +157,20 @@ export default defineComponent({
 
     //创建新管理员
     const createNewAdmin = () => {
-      api.post('/private/admins', {
+      api.post(ADMIN_LINK, {
         adminValidName: newAdmin.adminValidName,
         adminPhone: newAdmin.adminPhone
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200 ) {
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type:"success",
             message: "创建成功",
-            timeout: 1000,
           });
         }
         if (res.status === 404) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
       })
@@ -191,25 +178,19 @@ export default defineComponent({
 
     //更改管理员的状态
     const updateAdminStatus = (id, status) => {
-      api.post('/private/admins/' + id, {
+      api.post(ADMIN_LINK + '/' + id, {
         adminStatus: status
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200 ) {
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type:"success",
             message: "修改状态成功",
-            timeout: 1000,
           });
         }
         if (res.data.code !== 200) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
       })

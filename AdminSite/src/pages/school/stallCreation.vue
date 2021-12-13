@@ -94,6 +94,7 @@
 import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
+import {ADMIN_API_LINKS} from "app/api-links";
 
 // Table columns title
 const columns = [
@@ -122,10 +123,12 @@ export default defineComponent({
     const selectedCanteen = ref(null);
     const selectedFloor = ref(null);
     const canteens = ref([]);
+    const STALL_LINK=ADMIN_API_LINKS.stalls
+    const CANTEEN_LINK=ADMIN_API_LINKS.canteens
 
     watch(selectedCanteen, (currentValue, oldValue) => {
       if (currentValue != null) {
-        if (oldValue != currentValue) {
+        if (oldValue !== currentValue) {
           newStall.canteenID = currentValue.canteenID
           selectedFloor.value = null
         }
@@ -135,7 +138,7 @@ export default defineComponent({
 
     watch(selectedFloor, (currentValue, oldValue) => {
       if (currentValue != null) {
-        if (oldValue != currentValue) {
+        if (oldValue !== currentValue) {
           newStall.stallFloor = currentValue.stallFloor
         }
       }
@@ -149,11 +152,8 @@ export default defineComponent({
       } else {
 
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: "食堂名字不能为空",
-          timeout: 1000,
         });
       }
       if (readySubmit === true) {
@@ -162,11 +162,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: "楼层不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -176,11 +173,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: "档口名字不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -199,26 +193,20 @@ export default defineComponent({
 
     //更改管理员的状态
     const updateStallStatus = (id, status) => {
-      api.post('/private/stalls/' + id, {
+      api.post(STALL_LINK + '/' + id, {
         stallStatus: status
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200) {
           getstallsData();
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type:"success",
             message: "修改状态成功",
-            timeout: 1000,
           });
         }
         if (res.status === 404) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
       })
@@ -238,15 +226,12 @@ export default defineComponent({
     const stalls = ref([]);
     const getstallsData = async () => {
       try {
-        const response = await api.get("/private/stalls");
+        const response = await api.get(STALL_LINK);
         stalls.value.splice(0, stalls.value.length, ...response.data.data);
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -254,15 +239,12 @@ export default defineComponent({
     //获取全校食堂、楼层、档口信息
     const getCanteenData = async () => {
       try {
-        const response = await api.get("/private/canteens");
+        const response = await api.get(CANTEEN_LINK);
         canteens.value = response.data.data;
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -270,27 +252,21 @@ export default defineComponent({
     //Post 功能
     const postNewStall = () => {
 
-      api.post('/private/stalls', {
+      api.post(STALL_LINK, {
         stallName: newStall.stallName,
         stallFloor: newStall.stallFloor,
         canteenID: newStall.canteenID
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200) {
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type:"success",
             message: "创建档口成功",
-            timeout: 1000,
           });
         }
         if (res.data.code !== 200) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
       })

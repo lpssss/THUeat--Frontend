@@ -27,6 +27,7 @@
 import { api } from 'boot/axios'
 import { useQuasar } from "quasar";
 import { defineComponent, ref, onMounted } from 'vue'
+import {ADMIN_API_LINKS} from "app/api-links";
 
 //Table column title
 const columns = [
@@ -39,30 +40,25 @@ const columns = [
 export default defineComponent({
   setup () {
     const $q = useQuasar();
+    const USER_LINK=ADMIN_API_LINKS.users
 
     //更改用户状态
     const updateUserStatus = (id, status) => {
-      api.post('/private/users/' + id, {
+      api.post(USER_LINK + '/' + id, {
         userStatus: status,
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
-          getUsersData(),
+        if (res.data !== undefined && res.data.code === 200) {
+          getUsersData()
             $q.notify({
-              color: "green-4",
-              textColor: "white",
-              icon: "cloud_done",
+              type:"success",
               message: "修改状态成功",
-              timeout: 1000,
             });
 
         }
         if (res.status === 404) {
           $q.notify({
-            color: "red-4",
-            textColor: "white",
-            icon: "warning",
+            type:"error",
             message: "修改失败",
-            timeout: 1000,
           });
         }
       })
@@ -72,15 +68,12 @@ export default defineComponent({
     const users = ref([]);
     const getUsersData = async () => {
       try {
-        const response = await api.get("/private/users");
+        const response = await api.get(USER_LINK);
         users.value.splice(0, users.value.length, ...response.data.data);
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
