@@ -202,10 +202,11 @@ export default defineComponent({
     const add = () => {
       creatable.value = true;
       Object.assign(newNotice, orgNotice)
-      imageUploader.value.clearInput()
     };
     const cancel = () => {
       creatable.value = false
+      //清空component里的图片
+      imageUploader.value.clearInput()
     };
     const save = () => {
       //在这里加post功能
@@ -221,11 +222,11 @@ export default defineComponent({
 
       //清空暂存图片的ref
       newImages.value=null
-
+      //清空component里的图片
+      imageUploader.value.clearInput()
     };
 
     const addImages=(images)=>{
-      console.log(images.value)
       newImages.value=images.value
     }
 
