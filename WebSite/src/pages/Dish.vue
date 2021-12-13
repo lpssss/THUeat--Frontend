@@ -44,7 +44,8 @@
 
 <script>
 import { ref, reactive } from "vue";
-import { watch, useStore } from 'vue';
+import { watch } from 'vue';
+import { useStore } from 'vuex';
 import {useRoute, useRouter} from 'vue-router'
 import { api } from "boot/axios";
 import axios from "axios";
@@ -59,10 +60,10 @@ export default {
     HomePageAnnouncementSection,
     },
   setup() {
-    const route=useRoute()
-    const store=useStore()
-    const router=useRouter()
-    
+    const route=useRoute();
+    const store=useStore();
+    const router=useRouter();
+
     let id=route.query.dishID
     let API_LINK = `dishes/${id}`; // 之后放真正的API
     //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
@@ -75,7 +76,7 @@ export default {
         console.log(err.message);
       }
     };
-    
+
     watch(()=>route.query,()=>{
       id=route.query.dishID
       API_LINK=`dishes/${id}`
