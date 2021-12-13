@@ -219,7 +219,9 @@ export default defineComponent({
         formData.append("noticeImage",newImages.value)
       }
       // TODO 这里写api post，data是 formData
+      api.post(NOTICE_API,formData).then((res)=>{
 
+      })
       //清空暂存图片的ref
       newImages.value=null
       //清空component里的图片
