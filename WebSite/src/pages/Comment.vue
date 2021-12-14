@@ -241,16 +241,19 @@ export default defineComponent({
          console.log(pair[0] + ", " + pair[1]);
         }
         // TODO POST 的API记得改，然后response要怎么处理记得加上
-        api.post("reviews", formData).then((res) => {
+
+        //console.log(stall_id)
+        api.post(`reviews?stallID=${stall_id}`, formData).then((res) => {
           if (res.data.code === 200) {
             //updateToken(res.data.token);
-
+            console.log(res.data)
             $q.notify({
               type: "success",
               message: "评论成功",
             });
           }
-          if (res.data.code === 404) {
+          if (res.data.code !== 200) {
+            console.log(res.data)
             $q.notify({
               type: "error",
               message: "评论失败",
