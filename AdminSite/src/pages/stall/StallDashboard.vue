@@ -23,7 +23,7 @@
 
 <script>
 import { staffapi } from "boot/axios";
-import { ref, reactive } from "vue";
+import {ref, reactive, watch} from "vue";
 import { useQuasar } from "quasar";
 import DashboardCard from "components/DashboardCard";
 import StallDetailsTable from "components/StallDetailsTable";
@@ -53,8 +53,8 @@ const STALL_DETAILS_TITLE = [
   { engTitle: "stallName", title: "档口名字", modifiable: false },
   { engTitle: "canteenName", title: "档口所属食堂", modifiable: false },
   { engTitle: "stallFloor", title: "档口楼层", modifiable: false },
-  { engTitle: "stallOperationtime", title: "档口运营时间", modifiable: true },
   { engTitle: "stallDescribe", title: "档口简介", modifiable: true },
+  { engTitle: "stallOperationtime", title: "档口运营时间", modifiable: true },
   { engTitle: "stallImages", title: "档口照片", modifiable: true },
 ];
 
@@ -71,10 +71,12 @@ export default {
     const myDashboardData = ref([]);
     const myStallDetailsData = reactive({});
     const myStallImages = ref([]);
+    const isLoading=ref(false)
 
     //输出1个数据：显示面板页面所需数据，Object
     //功能：从API 获取显示面板所需数据
     async function getDashboardData() {
+      isLoading.value=true
       const response = await staffapi.get(API_LINK);
       return response.data.data; //真实数据埋在第二个data内
     }
@@ -105,6 +107,17 @@ export default {
       Object.assign(myStallDetailsData, tempObj);
     }
 
+    watch(isLoading,(newState,_)=>{
+      if(newState){
+        $q.loading.show({
+          message: '页面加载中',
+        })
+      }
+      else{
+        $q.loading.hide()
+      }
+    })
+
     //功能：运行“获取数据函数”，失败则显示错误信息
     getDashboardData()
       .then((data) => {
@@ -113,6 +126,7 @@ export default {
           details: myStallDetailsData,
           images: myStallImages.value,
         });
+        isLoading.value=false
       })
       .catch((err) => {
         console.log(err);

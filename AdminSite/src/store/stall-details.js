@@ -66,14 +66,13 @@ const stallDetails = {
         nImage,
         "stallImages"
       );
-      console.log();
       for (let pair of formData.entries()) {
         console.log(pair[0] + ", " + pair[1]);
       }
       try {
         const response = await staffapi.post(API_LINK, formData);
         console.log(response);
-        if (response.data.status === 200) {
+        if (response.data.code === 200) {
           Notify.create({
             type: "success",
             message: message.success,
