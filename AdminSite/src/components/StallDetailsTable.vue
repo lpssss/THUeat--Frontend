@@ -12,8 +12,8 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-dialog v-model="modifyTime" full-width persistent>
-    <q-card>
+  <q-dialog v-model="modifyTime" persistent>
+    <q-card class="my-card">
       <OperationTimeEditor :my-stall-details="myStallDetails" @changeTime="changeTime" />
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat label="返回" v-close-popup />
@@ -167,4 +167,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 300px
+</style>

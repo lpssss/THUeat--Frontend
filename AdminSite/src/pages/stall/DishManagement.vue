@@ -13,14 +13,12 @@
     />
     <template v-else>
       <div class="q-pa-md row justify-end">
-        <div class="col-1">
           <q-btn
             color="primary"
             label="创建"
             @click="openDishCreateForm = true"
           />
         </div>
-      </div>
       <DishesTable />
     </template>
   </template>

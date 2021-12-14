@@ -1,75 +1,83 @@
 <template>
-  <div class="q-pa-md">
-    <q-radio v-model="newTimeType" val="standard" label="标准" />
-    <q-radio v-model="newTimeType" val="custom" label="自定义" />
+  <div class="q-pa-md row justify-center">
+    <div>
+      <q-radio v-model="newTimeType" val="standard" label="标准" />
+      <q-radio v-model="newTimeType" val="custom" label="自定义" />
+    </div>
     <template v-if="newTimeType === 'standard'">
-      <br />
-      <q-checkbox v-model="breakfast" label="早餐" />
-      <TimePicker
-        :lower-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['breakfast'].lowerLimitTime
-        "
-        :upper-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['breakfast'].upperLimitTime
-        "
-        :enable="breakfast"
-        :initial-start-time="
-          STANDARD_OPERATION_TIME_OPTIONS['breakfast'].startTime
-        "
-        :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['breakfast'].endTime"
-        ref="breakfastTime"
-      />
-      <br />
-      <q-checkbox v-model="lunch" label="午餐" />
-      <TimePicker
-        :lower-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['lunch'].lowerLimitTime
-        "
-        :upper-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['lunch'].upperLimitTime
-        "
-        :enable="lunch"
-        :initial-start-time="STANDARD_OPERATION_TIME_OPTIONS['lunch'].startTime"
-        :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['lunch'].endTime"
-        ref="lunchTime"
-      />
-      <br />
-      <q-checkbox v-model="dinner" label="晚餐" />
-      <TimePicker
-        :lower-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['dinner'].lowerLimitTime
-        "
-        :upper-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['dinner'].upperLimitTime
-        "
-        :enable="dinner"
-        :initial-start-time="
-          STANDARD_OPERATION_TIME_OPTIONS['dinner'].startTime
-        "
-        :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['dinner'].endTime"
-        ref="dinnerTime"
-      />
-      <br />
-      <q-checkbox v-model="supper" label="宵夜" />
-      <TimePicker
-        :lower-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['supper'].lowerLimitTime
-        "
-        :upper-limit-time="
-          STANDARD_OPERATION_TIME_OPTIONS['supper'].upperLimitTime
-        "
-        :enable="supper"
-        :initial-start-time="
-          STANDARD_OPERATION_TIME_OPTIONS['supper'].startTime
-        "
-        :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['supper'].endTime"
-        ref="supperTime"
-      />
-      <br />
+      <div>
+        <q-checkbox v-model="breakfast" label="早餐" />
+        <TimePicker
+          :lower-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['breakfast'].lowerLimitTime
+          "
+          :upper-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['breakfast'].upperLimitTime
+          "
+          :enable="breakfast"
+          :initial-start-time="
+            STANDARD_OPERATION_TIME_OPTIONS['breakfast'].startTime
+          "
+          :initial-end-time="
+            STANDARD_OPERATION_TIME_OPTIONS['breakfast'].endTime
+          "
+          ref="breakfastTime"
+        />
+      </div>
+      <div>
+        <q-checkbox v-model="lunch" label="午餐" />
+        <TimePicker
+          :lower-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['lunch'].lowerLimitTime
+          "
+          :upper-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['lunch'].upperLimitTime
+          "
+          :enable="lunch"
+          :initial-start-time="
+            STANDARD_OPERATION_TIME_OPTIONS['lunch'].startTime
+          "
+          :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['lunch'].endTime"
+          ref="lunchTime"
+        />
+      </div>
+      <div>
+        <q-checkbox v-model="dinner" label="晚餐" />
+        <TimePicker
+          :lower-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['dinner'].lowerLimitTime
+          "
+          :upper-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['dinner'].upperLimitTime
+          "
+          :enable="dinner"
+          :initial-start-time="
+            STANDARD_OPERATION_TIME_OPTIONS['dinner'].startTime
+          "
+          :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['dinner'].endTime"
+          ref="dinnerTime"
+        />
+      </div>
+      <div>
+        <q-checkbox v-model="supper" label="宵夜" />
+        <TimePicker
+          :lower-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['supper'].lowerLimitTime
+          "
+          :upper-limit-time="
+            STANDARD_OPERATION_TIME_OPTIONS['supper'].upperLimitTime
+          "
+          :enable="supper"
+          :initial-start-time="
+            STANDARD_OPERATION_TIME_OPTIONS['supper'].startTime
+          "
+          :initial-end-time="STANDARD_OPERATION_TIME_OPTIONS['supper'].endTime"
+          ref="supperTime"
+        />
+      </div>
     </template>
     <template v-else>
       <div class="q-pa-md">
-        <div>自定义时间:</div>
         <TimePicker
           :lower-limit-time="CUSTOM_OPERATION_TIME_OPTIONS.lowerLimitTime"
           :upper-limit-time="CUSTOM_OPERATION_TIME_OPTIONS.upperLimitTime"
@@ -80,8 +88,9 @@
         />
       </div>
     </template>
-
-    <q-btn color="primary" label="保存修改" @click="prepareSave" />
+    <div class="q-pt-md q-px-lg">
+      <q-btn color="primary" label="保存修改" @click="prepareSave" />
+    </div>
   </div>
 </template>
 

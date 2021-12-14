@@ -3,7 +3,7 @@
     <div class="background"></div>
     <q-page padding class="row items-center justify-center">
       <q-card class="login-card">
-        <h6 align="center">让我们开始吧!</h6>
+        <h6 class="text-center">让我们开始吧!</h6>
         <div class="q-pa-md">
           <q-form  class="q-gutter-md">
             <q-input
@@ -28,7 +28,7 @@
               </template>
             </q-input>
             <div>
-              <q-checkbox v-model="acceptclause" label="接受条款" />
+              <q-checkbox v-model="acceptclause" label="已阅读用户手册" />
             </div>
 
             <div class="row justify-evenly">
@@ -57,13 +57,11 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import useAppState from "src/store/userAppState.js";
 import axios from "axios";
-import { useStore } from "vuex";
 
 const { updateToken, updateType, resetState, getToken } = useAppState();
 
 export default defineComponent({
   setup () {
-    const store = useStore();
     const router = useRouter();
     const $q = useQuasar();
     const name = ref('Alice');
@@ -79,11 +77,9 @@ export default defineComponent({
           password: password.value
 
         }).then((res) => {
-          if (res.data.code === 200 && res.data !== undefined) {
+          if (res.data !== undefined && res.data.code === 200) {
             updateToken(res.data.data.token);
             updateType(res.data.data.type);
-            getToken()
-            store.commit("login/updateLoginStatus",true)
             router.push("/")
             $q.notify({
               color: "green-4",
@@ -139,7 +135,7 @@ export default defineComponent({
           color: "red-5",
           textColor: "white",
           icon: "warning",
-          message: "请接受条款",
+          message: "请先阅读用户手册",
           timeout: 1000,
         });
       }
