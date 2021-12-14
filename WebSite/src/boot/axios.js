@@ -19,7 +19,7 @@ export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
   api.interceptors.request.use(async (req) => {
     const token = getToken().value;
-    req.headers.Authorization = "Token " + token;
+    if(token!==null) req.headers.Authorization = "Token " + token;
     return req;
   });
 

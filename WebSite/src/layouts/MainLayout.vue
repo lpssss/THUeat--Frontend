@@ -1,5 +1,3 @@
-<!-- Pending task: Styling-->
-
 <template>
   <q-layout view="hHh LpR fFf">
     <q-header class="bg-primary text-white" elevated>
@@ -7,7 +5,7 @@
         <q-btn dense flat icon="menu" round @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <q-btn flat to='/' label='乐吃' id="main-title"/>
+          <q-btn flat to="/" label="乐吃" id="main-title" />
         </q-toolbar-title>
         <q-space />
         <q-btn
@@ -17,12 +15,9 @@
           @click="loginBtnClick"
         />
         <template v-else>
-          <q-chip>
+          <q-chip v-if="Object.keys(userDetailData.data).length">
             <q-avatar>
-              <img
-                :src="userDetailData.data.userImage"
-                alt="userAvatar"
-              />
+              <img :src="userDetailData.data.userImage" alt="userAvatar" />
             </q-avatar>
             用户名
           </q-chip>
@@ -57,20 +52,19 @@
       </q-list>
     </q-drawer>
 
-
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
-
 </template>
 
 <script>
-import { defineComponent, ref, computed , reactive} from "vue";
+import { defineComponent, ref, computed, reactive } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 import NavbarFirstOrderItem from "components/Layout/NavbarFirstOrderItem";
-import { api } from 'boot/axios'
+import { api } from "boot/axios";
+import userAppState from "src/store/userAppState";
+import { useQuasar } from "quasar";
 
 const firstOrderTitle = [
   {
@@ -86,38 +80,43 @@ const firstOrderTitle = [
     titleEng: 1,
     icon: "face",
     secondOrderStatus: true,
-  }
+  },
 ];
 
 export default defineComponent({
   name: "MainLayout",
   components: { NavbarFirstOrderItem },
   setup() {
+    const $q = useQuasar();
     const leftDrawerOpen = ref(false);
     const router = useRouter();
-    const $store = useStore();
-    const loginStatus = computed({
-      get: () => $store.state.login.loginStatus,
-      set: (newState) => $store.commit("login/updateLoginStatus", newState),
+    const { getToken, resetState } = userAppState();
+    const loginStatus = computed(() => {
+      const token = getToken().value;
+      return token !== null;
     });
-
-    const API_LINK = "users/details"; 
+    console.log(loginStatus.value);
+    const API_LINK = "users/details";
     const userDetailData = reactive({ data: {} });
     const getUserData = async () => {
       try {
         const response = await api.get(API_LINK);
         userDetailData.data = response.data.data;
-        console.log(userDetailData.data)
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "获取个人信息失败，请刷新重试",
+          timeout: 1000,
+        });
       }
     };
 
-    function onItemClick(){
-      router.push('/setting')
+    function onItemClick() {
+      router.push("/setting");
     }
-    
-    getUserData();
+    if (loginStatus.value) getUserData();
 
     return {
       userDetailData,
@@ -130,7 +129,18 @@ export default defineComponent({
       },
       loginBtnClick() {
         if (!loginStatus.value) router.push("/login");
-        else loginStatus.value = false;
+        else {
+          $q.dialog({
+            title: "确认登出",
+            message: "您是否确认要登出?",
+            ok: { push: true, label: "确认" },
+            cancel: { push: true, label: "取消" },
+            persistent: true,
+          }).onOk(() => {
+            resetState();
+            router.push("/");
+          });
+        }
       },
     };
   },
