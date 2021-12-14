@@ -11,7 +11,7 @@
           <q-select
             multiple
             v-model="dishModel"
-            :options="dishOptions"
+            :options="dishes.data"
             label="您想评价的菜品"
           />
         </div>
@@ -84,7 +84,7 @@
 
 <script>
 import { defineComponent, ref, reactive, computed, watch } from "vue";
-import { useQuasar } from "quasar";
+import { useQuasar, colors } from "quasar";
 import axios from "axios";
 import BannerSection from "components/Layout/BannerSection";
 import { useStore } from "vuex";
@@ -137,6 +137,7 @@ export default defineComponent({
 
     const route = useRoute();
     let name = route.query.stallName;
+    let stall_id = route.query.stallID;
     //let API_LINK = `stallData/?stallName=${name}`; // 之后放真正的API
 
     //Image Uploader 相关
@@ -150,13 +151,46 @@ export default defineComponent({
       () => route.query,
       () => {
         name = route.query.stallName;
+        stall_id = route.query.stallID;
         //API_LINK=`stallData/?stallName=${name}`
         console.log("watch", route.query.stallName);
+        //console.log("watch", route.query.stallID);
       },
       {
         immediate: true,
       }
     );
+
+    //获取stall的所有菜品数据
+    //let STALL_API_LINK = `stalls/${stall_id}`; 
+    const dishes = reactive({ 
+      data: [],
+      getID: {},
+    });
+    const stallDishesData = reactive({ data: {} });
+    const getStallData = async () => {
+      try {
+        const response = await api.get('stalls');
+        for (var key in response.data.data) {
+        if (response.data.data[key].stallName == name) {
+          //console.log(response.data.data[key])
+          stall_id = response.data.data[key].stallID;
+          break;
+        }
+      }
+        const response2 = await api.get(`stalls/${stall_id}`);
+        stallDishesData.data = response2.data.data.dishes;
+        for (var key in stallDishesData.data) {
+          dishes.data.push(stallDishesData.data[key].dishName)
+          dishes.getID[stallDishesData.data[key].dishName] = stallDishesData.data[key].dishID;
+        }
+        console.log(dishes)
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getStallData();
+    console.log(dishes)
 
     //点击提交评论按钮后确认是否是登录状态，如果不是，跳转到登陆页面
     function onComment() {
@@ -174,18 +208,24 @@ export default defineComponent({
         });
       } else {
         const date = new Date();
-        console.log("submit successfully");
-        console.log(group.value);
-        console.log(date);
+
         //生成form data
         let formData = new FormData();
         formData.append("reviewDateTime", date);
         formData.append("rate", ratingModel.value);
         formData.append("reviewComment", text.value);
-        // TODO 这个标签是string还是array？和后端确认一下
-        formData.append("reviewTags");
-        // TODO 这个所选择的菜品是array？如果是array，可以直接使用下面图片的写法，把newImages改成”所选择菜品的array“，reviewImages改成dishID即可
-        formData.append("dishID");
+
+        var selectTags = [];
+        for (var key in group.value) {
+          selectTags.push(group.value[key])
+        }
+        // tag传一个array
+        formData.append("reviewTags", selectTags);
+
+        dishModel.value.forEach((item) =>
+          formData.append("dishID", dishes.getID[item])
+          //console.log(dishes.getID[item])
+        );
 
         //添加图片进form data
         if (newImages.value !== null && newImages.value.length !== 0) {
@@ -195,12 +235,26 @@ export default defineComponent({
         } else {
           formData.append("reviewImages", "");
         }
+
+        console.log('*** formdata content ***')
+        for (let pair of formData.entries()) {
+         console.log(pair[0] + ", " + pair[1]);
+        }
         // TODO POST 的API记得改，然后response要怎么处理记得加上
         api.post("reviews", formData).then((res) => {
           if (res.data.code === 200) {
-            updateToken(res.data.token);
+            //updateToken(res.data.token);
+
+            $q.notify({
+              type: "success",
+              message: "评论成功",
+            });
           }
           if (res.data.code === 404) {
+            $q.notify({
+              type: "error",
+              message: "评论失败",
+            });
             console.log("error");
           }
         });
@@ -218,6 +272,8 @@ export default defineComponent({
       commentBanner: commentBanner,
       group,
       options: options,
+      dishes: dishes,
+      //stallData,
     };
   },
 });
