@@ -10,6 +10,7 @@
         title="档口创建系统"
         :rows="stalls"
         :columns="columns"
+        :loading="loading"
         row-key="name"
         binary-state-sort
       >
@@ -94,7 +95,7 @@
 import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
-import {ADMIN_API_LINKS} from "app/api-links";
+import { ADMIN_API_LINKS } from "app/api-links";
 
 // Table columns title
 const columns = [
@@ -102,13 +103,13 @@ const columns = [
   { name: 'stallID', align: 'left', label: '档口编号', field: 'stallID', sortable: true },
   { name: 'canteenName', align: 'left', label: '食堂名字', field: 'canteenName', sortable: true },
   { name: 'stallFloor', align: 'left', label: '楼层', field: 'stallFloor', sortable: true },
-  { name: 'status', align: 'left', label: '激活状态', field: 'stallStatus', sortable: true }
+  { name: 'status', align: 'left', label: '激活状态', field: 'stallStatus' }
 ]
 
 export default defineComponent({
   setup () {
     const $q = useQuasar();
-
+    const loading = ref(false)
     const creatable = ref(false);
 
     const orgStall = {
@@ -123,8 +124,8 @@ export default defineComponent({
     const selectedCanteen = ref(null);
     const selectedFloor = ref(null);
     const canteens = ref([]);
-    const STALL_LINK=ADMIN_API_LINKS.stalls
-    const CANTEEN_LINK=ADMIN_API_LINKS.canteens
+    const STALL_LINK = ADMIN_API_LINKS.stalls
+    const CANTEEN_LINK = ADMIN_API_LINKS.canteens
 
     watch(selectedCanteen, (currentValue, oldValue) => {
       if (currentValue != null) {
@@ -152,7 +153,7 @@ export default defineComponent({
       } else {
 
         $q.notify({
-          type:"error",
+          type: "error",
           message: "食堂名字不能为空",
         });
       }
@@ -162,7 +163,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "楼层不能为空",
           });
         }
@@ -173,7 +174,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "档口名字不能为空",
           });
         }
@@ -193,23 +194,34 @@ export default defineComponent({
 
     //更改管理员的状态
     const updateStallStatus = (id, status) => {
-      api.post(STALL_LINK + '/' + id, {
-        stallStatus: status
-      }).then((res) => {
-        if (res.data !== undefined && res.data.code === 200) {
-          getstallsData();
-          $q.notify({
-            type:"success",
-            message: "修改状态成功",
-          });
-        }
-        if (res.status === 404) {
-          $q.notify({
-            type:"error",
-            message: res.data.message,
-          });
-        }
+      $q.dialog({
+        title: "确认调整状态",
+        message: "您是否确认要调整此状态?",
+        ok: { push: true, label: "确认" },
+        cancel: { push: true, label: "取消" },
+        persistent: true,
+      }).onOk(() => {
+        api.post(STALL_LINK + '/' + id, {
+          stallStatus: status
+        }).then((res) => {
+          if (res.data !== undefined && res.data.code === 200) {
+            getstallsData();
+            $q.notify({
+              type: "success",
+              message: "修改状态成功",
+            });
+          }
+          if (res.status === 404) {
+            $q.notify({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        })
+      }).onCancel(() => {
+        getstallsData();
       })
+
     }
 
     //上传功能
@@ -226,11 +238,14 @@ export default defineComponent({
     const stalls = ref([]);
     const getstallsData = async () => {
       try {
+        loading.value = true;
         const response = await api.get(STALL_LINK);
         stalls.value.splice(0, stalls.value.length, ...response.data.data);
+        loading.value = false;
       } catch (err) {
+        loading.value = false;
         $q.notify({
-          type:"error",
+          type: "error",
           message: err.message,
         });
       }
@@ -243,7 +258,7 @@ export default defineComponent({
         canteens.value = response.data.data;
       } catch (err) {
         $q.notify({
-          type:"error",
+          type: "error",
           message: err.message,
         });
       }
@@ -259,13 +274,13 @@ export default defineComponent({
       }).then((res) => {
         if (res.data !== undefined && res.data.code === 200) {
           $q.notify({
-            type:"success",
+            type: "success",
             message: "创建档口成功",
           });
         }
         if (res.data.code !== 200) {
           $q.notify({
-            type:"error",
+            type: "error",
             message: res.data.message,
           });
         }
@@ -278,6 +293,7 @@ export default defineComponent({
     })
 
     return {
+      loading,
       columns,
       canteens,
       stalls,

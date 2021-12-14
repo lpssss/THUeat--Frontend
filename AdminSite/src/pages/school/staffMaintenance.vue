@@ -9,6 +9,7 @@
         title="档主管理系统"
         :rows="staffs"
         :columns="columns"
+        :loading=loading
         row-key="name"
         binary-state-sort
       >
@@ -108,7 +109,7 @@
 import { defineComponent, ref, reactive, onMounted, watch } from 'vue';
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
-import {ADMIN_API_LINKS} from "app/api-links";
+import { ADMIN_API_LINKS } from "app/api-links";
 
 const columns = [
   { name: 'staffVaildName', align: 'left', label: '档主姓名', field: 'staffValidName', sortable: true },
@@ -117,11 +118,12 @@ const columns = [
   { name: 'stallFloor', align: 'left', label: '楼层', field: 'stallFloor', sortable: true },
   { name: 'stallName', align: 'left', label: '档口名字', field: 'stallName', sortable: true },
   { name: 'staffPhone', align: 'left', label: '联络号码', field: 'staffPhone' },
-  { name: 'status', align: 'left', label: '激活状态', field: 'staffStatus', sortable: true },
+  { name: 'status', align: 'left', label: '激活状态', field: 'staffStatus' },
 ]
 
 export default defineComponent({
   setup () {
+    const loading = ref(false)
     const $q = useQuasar();
     const creatable = ref(false);
     const orgStaff = {
@@ -133,8 +135,8 @@ export default defineComponent({
     };
 
     const newStaff = reactive({ ...orgStaff });
-    const STAFF_LINK=ADMIN_API_LINKS.staffs
-    const CANTEEN_LINK=ADMIN_API_LINKS.canteens
+    const STAFF_LINK = ADMIN_API_LINKS.staffs
+    const CANTEEN_LINK = ADMIN_API_LINKS.canteens
 
     const selectedCanteen = ref(null);
     const selectedFloor = ref(null);
@@ -177,7 +179,7 @@ export default defineComponent({
       } else {
         readySubmit = false;
         $q.notify({
-          type:"error",
+          type: "error",
           message: "档主名字不能为空",
         });
       }
@@ -187,7 +189,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "档主联络号码不能为空",
           });
         }
@@ -198,7 +200,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "食堂名字不能为空",
           });
         }
@@ -209,7 +211,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "楼层不能为空",
           });
         }
@@ -220,7 +222,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "档口不能为空",
           });
         }
@@ -252,35 +254,49 @@ export default defineComponent({
 
     //更改档主状态
     const updateStaffStatus = (id, status) => {
-      api.post(STAFF_LINK+'/' + id, {
-        staffStatus: status,
-      }).then((res) => {
-        if (res.data !== undefined && res.data.code === 200) {
-          getstaffsData()
-          $q.notify({
-            type:"success",
-            message: "修改状态成功",
-          });
+      $q.dialog({
+        title: "确认调整状态",
+        message: "您是否确认要调整此状态?",
+        ok: { push: true, label: "确认" },
+        cancel: { push: true, label: "取消" },
+        persistent: true,
+      }).onOk(() => {
+        api.post(STAFF_LINK + '/' + id, {
+          staffStatus: status,
+        }).then((res) => {
+          if (res.data !== undefined && res.data.code === 200) {
+            getstaffsData()
+            $q.notify({
+              type: "success",
+              message: "修改状态成功",
+            });
 
-        }
-        if (res.data.code !== 200) {
-          $q.notify({
-            type:"error",
-            message: res.data.data.message,
-          });
-        }
+          }
+          if (res.data.code !== 200) {
+            $q.notify({
+              type: "error",
+              message: res.data.data.message,
+            });
+          }
+        })
+      }).onCancel(() => {
+        getstaffsData()
       })
+
     }
 
     //获取已创建并整理好的档主基本信息
     const staffs = ref([]);
     const getstaffsData = async () => {
       try {
+        loading.value = true;
         const response = await api.get(STAFF_LINK);
         staffs.value.splice(0, staffs.value.length, ...response.data.data);
+        loading.value = false;
       } catch (err) {
+        loading.value = true;
         $q.notify({
-          type:"error",
+          type: "error",
           message: err.message,
         });
       }
@@ -293,7 +309,7 @@ export default defineComponent({
         canteens.value = response.data.data;
       } catch (err) {
         $q.notify({
-          type:"error",
+          type: "error",
           message: err.message,
         });
       }
@@ -309,13 +325,13 @@ export default defineComponent({
       }).then((res) => {
         if (res.data !== undefined && res.data.code === 200) {
           $q.notify({
-            type:"success",
+            type: "success",
             message: "档主创建成功",
           });
         }
         if (res.data.code !== 200) {
           $q.notify({
-            type:"error",
+            type: "error",
             message: res.data.message,
           });
         }
@@ -323,13 +339,13 @@ export default defineComponent({
       })
     }
 
-
     onMounted(() => {
       getstaffsData();
       getCanteenData()
     })
 
     return {
+      loading,
       columns,
       staffs,
       orgStaff,
