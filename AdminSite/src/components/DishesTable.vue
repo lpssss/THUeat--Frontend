@@ -32,8 +32,8 @@ const COLUMNS_TITLE = [
   { engTitle: "dishID", title: "菜品编号" },
   { engTitle: "dishName", title: "菜品名称" },
   { engTitle: "dishPrice", title: "菜品价格" },
-  { engTitle: "dishAvailableTime", title: "菜品售卖时段" },
   { engTitle: "dishLikes", title: "菜品点赞数" },
+  { engTitle: "dishAvailableTime", title: "菜品售卖时段" },
   { engTitle: "dishIntro", title: "菜品简介" },
   { engTitle: "dishImage", title: "菜品图片" },
   { engTitle: "dishStatus", title: "激活状态" },
@@ -45,12 +45,9 @@ export default {
   setup() {
     const store=useStore()
     const dishesDetails=computed(()=>store.state.dishesDetails.dishesDetailsData)
-    // const dishesImages=computed(()=>store.state.dishesDetails.dishesDetailsData)
-    console.log(dishesDetails)
     return {
       COLUMNS_TITLE,
       dishesDetails,
-      // dishesImages
     };
   },
 };

@@ -21,7 +21,6 @@ const dishesDetails = {
     },
     hideImage(state, { targetImg, dishidx }) {
       const idx = state.dishesImagesData[dishidx].dishImages.indexOf(targetImg); //在目标dish中的images找寻目标Image
-      console.log(idx);
       state.dishesImagesData[dishidx].dishImages.splice(idx, 1);
     },
     addImages(state, { images, dishidx }) {
@@ -83,12 +82,8 @@ const dishesDetails = {
         nImage,
         "dishImages"
       );
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
       try {
         const response = await staffapi.post(API_LINK + "/" + dishID, formData);
-        console.log(response);
         if (response.data.code === 200) {
           Notify.create({
             type: "success",
@@ -111,7 +106,6 @@ const dishesDetails = {
           });
         }
       } catch (err) {
-        console.log(err);
         Notify.create({
           type: "error",
           message: message.error,
@@ -126,12 +120,8 @@ const dishesDetails = {
         "dishImages",
         true
       );
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
       try {
         const response = await staffapi.post(API_LINK, formData);
-        console.log(response);
         if (response.data.code === 200) {
           Notify.create({
             type: "success",
@@ -150,7 +140,6 @@ const dishesDetails = {
         }
         return response.data.code;
       } catch (err) {
-        console.log(err);
         Notify.create({
           type: "error",
           message: message.error,

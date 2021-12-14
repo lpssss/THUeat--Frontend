@@ -3,92 +3,109 @@
 <!--所需Components：图片库ImageGallery-->
 <!--发送Emits：updateRow更新Parent中的总菜品信息-->
 <template>
-    <tr>
-      <td class="text-left">{{ myRowData.dishID }}</td>
-      <td>
-        {{ myRowData.dishName }}
-        <q-popup-edit
-          v-model="myRowData.dishName"
-          v-slot="scope"
-          title="更新菜品名字"
-          auto-save
-        >
-          <q-input
-            v-model="scope.value"
-            dense
-            autofocus
-          />
-        </q-popup-edit>
-      </td>
-      <td>
-        {{ myRowData.dishPrice }}
-        <q-popup-edit
-          v-model="myRowData.dishPrice"
-          v-slot="scope"
-          title="更新菜品价格"
-          auto-save
-        >
-          <q-input type="number" v-model="scope.value" dense autofocus  />
-        </q-popup-edit>
-      </td>
-      <td>
-        {{sortedTime}}
-        <q-popup-edit
-          v-model="myRowData.dishAvailableTime"
-          v-slot="scope"
-          title="更新售卖时段"
-          auto-save
-        >
-          <q-select
-            v-model="scope.value"
-            :options="myRowData.stallOperationtime"
-            label="请选择时段"
-            multiple
-          />
-        </q-popup-edit>
-      </td>
-      <td>
-        {{ myRowData.dishLikes }}
-      </td>
-      <td>
-        {{ shortenIntro }}
-        <strong v-if="shorten">...查看更多</strong>
-        <q-popup-edit
-          v-model="myRowData.dishIntro"
-          v-slot="scope"
-          title="更新菜品简介"
-          auto-save
-        >
-          <q-input
-            v-model="scope.value"
-            dense
-            autofocus
-            counter
-            autogrow
-            type="textarea"
-          />
-        </q-popup-edit>
-      </td>
-      <td>
-        <q-btn
-          color="primary"
-          label="查看/编辑图片"
-          @click="showImageGallery = true"
+  <tr>
+    <td class="text-left">{{ myRowData.dishID }}</td>
+    <td>
+      {{ myRowData.dishName }}
+      <q-popup-edit
+        v-model="myRowData.dishName"
+        v-slot="scope"
+        title="更新菜品名字"
+        auto-save
+      >
+        <q-input
+          v-model="scope.value"
+          dense
+          autofocus
+          :rules="[
+            (val) => !!val || '* 不能为空',
+            (val) => val.length <= 10 || '最多10个字',
+          ]"
         />
-      </td>
-      <td>
-        <q-toggle
-          checked-icon="check"
-          color="green"
-          unchecked-icon="clear"
-          :model-value="Boolean(myRowData.dishStatus)"
-          @update:model-value="toggleStatus"
+      </q-popup-edit>
+    </td>
+    <td>
+      {{ myRowData.dishPrice }}
+      <q-popup-edit
+        v-model="myRowData.dishPrice"
+        v-slot="scope"
+        title="更新菜品价格"
+        auto-save
+      >
+        <q-input
+          v-model="scope.value"
+          dense
+          autofocus
+          fill-mask="0"
+          mask="#.##"
+          reverse-fill-mask
         />
-      </td>
-    </tr>
+      </q-popup-edit>
+    </td>
+    <td>
+      {{ myRowData.dishLikes }}
+    </td>
+    <td>
+      {{ sortedTime }}
+      <q-popup-edit
+        v-model="myRowData.dishAvailableTime"
+        v-slot="scope"
+        title="更新售卖时段"
+        auto-save
+      >
+        <q-select
+          v-model="scope.value"
+          :options="myRowData.stallOperationtime"
+          label="请选择时段"
+          multiple
+          :rules="[(val) => val.length >= 1 || '* 不能为空']"
+        />
+      </q-popup-edit>
+    </td>
+    <td>
+      {{ shortenIntro }}
+      <strong v-if="shorten">...查看更多</strong>
+      <q-popup-edit
+        v-model="myRowData.dishIntro"
+        v-slot="scope"
+        title="更新菜品简介"
+        auto-save
+      >
+        <q-input
+          v-model="scope.value"
+          dense
+          autofocus
+          counter
+          autogrow
+          type="textarea"
+          :rules="[(val) => !!val || '* 不能为空']"
+        />
+      </q-popup-edit>
+    </td>
+    <td>
+      <q-btn
+        color="primary"
+        label="查看/编辑图片"
+        @click="showImageGallery = true"
+      />
+    </td>
+    <td>
+      <q-toggle
+        checked-icon="check"
+        color="green"
+        unchecked-icon="clear"
+        :model-value="Boolean(myRowData.dishStatus)"
+        @update:model-value="toggleStatus"
+      />
+    </td>
+  </tr>
   <q-dialog v-model="showImageGallery" full-width persistent>
     <q-card>
-      <ImageGallery :my-images="myImages.dishImages" type="dishesDetails" :args="{dishidx}" />
+      <ImageGallery
+        :my-images="myImages.dishImages"
+        type="dishesDetails"
+        :args="{ dishidx }"
+      />
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat label="返回" v-close-popup />
       </q-card-actions>
@@ -130,24 +147,21 @@ export default {
     const myImages = computed(
       () => store.state.dishesDetails.dishesImagesData[dishidx.value]
     );
-    const sortedTime=computed(
-      ()=>{
-        if(myRowData.dishAvailableTime[0]==="自定义"){
-          return myRowData.dishAvailableTime[0]
-        }
-        else{
-          const itemOrder=["早餐","午餐","晚餐","宵夜"]
-          const tempArr=[...myRowData.dishAvailableTime]
-          tempArr.sort((a,b)=>itemOrder.indexOf(a)-itemOrder.indexOf(b))
-          return tempArr.join(", ")
-        }
+    const sortedTime = computed(() => {
+      if (myRowData.dishAvailableTime[0] === "自定义") {
+        return myRowData.dishAvailableTime[0];
+      } else {
+        const itemOrder = ["早餐", "午餐", "晚餐", "宵夜"];
+        const tempArr = [...myRowData.dishAvailableTime];
+        tempArr.sort((a, b) => itemOrder.indexOf(a) - itemOrder.indexOf(b));
+        return tempArr.join(", ");
       }
-    )
+    });
 
-    const shortenIntro = computed(() =>
-      myRowData.dishIntro.slice(0, 5)
+    const shortenIntro = computed(() => myRowData.dishIntro.slice(0, 5));
+    const shorten = computed(
+      () => shortenIntro.value.length < myRowData.dishIntro.length
     );
-    const shorten=computed(()=> shortenIntro.value.length<myRowData.dishIntro.length)
     // console.log(dishidx);
     // console.log(myImages);
     // console.log(myImages.value.dishImages)
@@ -184,7 +198,7 @@ export default {
       sortedTime,
       dishidx,
       shortenIntro,
-      shorten
+      shorten,
     };
   },
 };

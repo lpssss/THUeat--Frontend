@@ -7,20 +7,44 @@
   <div class="q-pa-md" style="margin-left: 10%; margin-right: 10%">
     <h4 style="border-bottom: 1px solid">菜品创建</h4>
     <q-form class="q-gutter-md" @submit="submitForm">
-      <q-input filled v-model="newDishData.dishName" label="菜品名字" />
-      <q-input filled v-model="newDishData.dishIntro" label="菜品简介" />
+      <q-input
+        filled
+        v-model="newDishData.dishName"
+        label="菜品名字"
+        hint="*必填，最多10个字"
+        :rules="[
+          (val) => !!val || '* 不能为空',
+          (val) => val.length <= 10 || '最多10个字',
+        ]"
+      />
+      <q-input
+        filled
+        v-model="newDishData.dishIntro"
+        label="菜品简介"
+        hint="*必填"
+        type="textarea"
+        :rules="[(val) => !!val || '* 不能为空']"
+      />
       <q-select
         filled
         v-model="newDishData.dishAvailableTime"
-        :options="DISH_AVAILABLE_TIME_OPTIONS"
+        :options="
+          $store.state.dishesDetails.dishesDetailsData[0].stallOperationtime
+        "
+        hint="*必填"
         label="售卖时段"
+        multiple
+        :rules="[(val) => val.length>=1 || '* 不能为空']"
       />
       <q-input
         v-model.number="newDishData.dishPrice"
-        type="number"
         filled
         style="max-width: 200px"
         label="菜品价格"
+        hint="*两位小数点"
+        fill-mask="0"
+        mask="#.##"
+        reverse-fill-mask
       />
       <ImagesUploader ref="imageUploader" @addedImages="addImages" multiple />
       <div style="margin-left: 45%">
@@ -41,15 +65,13 @@ import { reactive, ref } from "vue";
 import ImagesUploader from "components/ImagesUploader";
 import { useStore } from "vuex";
 
-//菜品售卖时段
-const DISH_AVAILABLE_TIME_OPTIONS = ["早上", "中午", "晚上"];
 //菜品创建表格初始数据（用来初始化和重置表格）
 const initialData = {
   dishName: "",
   dishIntro: "",
   dishPrice: 0,
   dishImage: "",
-  dishAvailableTime: "",
+  dishAvailableTime: [],
 };
 export default {
   name: "DishCreateForm",
@@ -82,14 +104,13 @@ export default {
           nImage: newImages.value,
         })
         .then((status) => {
-          if(status===200){
+          if (status === 200) {
             imageUploader.value.clearInput();
-            resetForm()
+            resetForm();
           }
         });
     }
     return {
-      DISH_AVAILABLE_TIME_OPTIONS,
       newDishData,
       imageUploader,
       resetForm,
