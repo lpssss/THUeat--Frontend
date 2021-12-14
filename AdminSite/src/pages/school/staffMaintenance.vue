@@ -3,12 +3,13 @@
     <!-- Show staffs data -->
     <div
       class="q-pa-md"
-      v-if="creatable == false"
+      v-if="creatable === false"
     >
       <q-table
         title="档主管理系统"
         :rows="staffs"
         :columns="columns"
+        :loading=loading
         row-key="name"
         binary-state-sort
       >
@@ -37,7 +38,7 @@
     <div
       class="q-pa-md"
       style="margin-left:10%; margin-right:10%;"
-      v-if="creatable == true"
+      v-if="creatable === true"
     >
       <h4 style="border-bottom: 0.1px solid;">档主创建</h4>
 
@@ -108,6 +109,7 @@
 import { defineComponent, ref, reactive, onMounted, watch } from 'vue';
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
+import { ADMIN_API_LINKS } from "app/api-links";
 
 const columns = [
   { name: 'staffVaildName', align: 'left', label: '档主姓名', field: 'staffValidName', sortable: true },
@@ -116,11 +118,12 @@ const columns = [
   { name: 'stallFloor', align: 'left', label: '楼层', field: 'stallFloor', sortable: true },
   { name: 'stallName', align: 'left', label: '档口名字', field: 'stallName', sortable: true },
   { name: 'staffPhone', align: 'left', label: '联络号码', field: 'staffPhone' },
-  { name: 'status', align: 'left', label: '激活状态', field: 'staffStatus', sortable: true },
+  { name: 'status', align: 'left', label: '激活状态', field: 'staffStatus' },
 ]
 
 export default defineComponent({
   setup () {
+    const loading = ref(false)
     const $q = useQuasar();
     const creatable = ref(false);
     const orgStaff = {
@@ -132,6 +135,8 @@ export default defineComponent({
     };
 
     const newStaff = reactive({ ...orgStaff });
+    const STAFF_LINK = ADMIN_API_LINKS.staffs
+    const CANTEEN_LINK = ADMIN_API_LINKS.canteens
 
     const selectedCanteen = ref(null);
     const selectedFloor = ref(null);
@@ -140,7 +145,7 @@ export default defineComponent({
 
     watch(selectedCanteen, (currentValue, oldValue) => {
       if (currentValue != null) {
-        if (oldValue != currentValue) {
+        if (oldValue !== currentValue) {
           newStaff.canteenID = currentValue.canteenID
           selectedFloor.value = null
           selectedStall.value = null
@@ -150,7 +155,7 @@ export default defineComponent({
 
     watch(selectedFloor, (currentValue, oldValue) => {
       if (currentValue != null) {
-        if (oldValue != currentValue) {
+        if (oldValue !== currentValue) {
           newStaff.stallFloor = currentValue.stallFloor
           selectedStall.value = null
         }
@@ -160,7 +165,7 @@ export default defineComponent({
 
     watch(selectedStall, (currentValue, oldValue) => {
       if (currentValue != null) {
-        if (oldValue != currentValue) {
+        if (oldValue !== currentValue) {
           newStaff.stallID = currentValue.stallID
         }
       }
@@ -174,11 +179,8 @@ export default defineComponent({
       } else {
         readySubmit = false;
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: "档主名字不能为空",
-          timeout: 1000,
         });
       }
       if (readySubmit === true) {
@@ -187,11 +189,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: "档主联络号码不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -201,11 +200,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: "食堂名字不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -215,11 +211,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: "楼层不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -229,11 +222,8 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: "档口不能为空",
-            timeout: 1000,
           });
         }
       }
@@ -264,45 +254,50 @@ export default defineComponent({
 
     //更改档主状态
     const updateStaffStatus = (id, status) => {
-      api.post('private/staffs/' + id, {
-        staffStatus: status,
-      }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
-          getstaffsData()
-          $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "修改状态成功",
-            timeout: 1000,
-          });
+      $q.dialog({
+        title: "确认调整状态",
+        message: "您是否确认要调整此状态?",
+        ok: { push: true, label: "确认" },
+        cancel: { push: true, label: "取消" },
+        persistent: true,
+      }).onOk(() => {
+        api.post(STAFF_LINK + '/' + id, {
+          staffStatus: status,
+        }).then((res) => {
+          if (res.data !== undefined && res.data.code === 200) {
+            getstaffsData()
+            $q.notify({
+              type: "success",
+              message: "修改状态成功",
+            });
 
-        }
-        if (res.data.code !== 200) {
-          $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
-            message: res.data.data.message,
-            timeout: 1000,
-          });
-        }
+          }
+          if (res.data.code !== 200) {
+            $q.notify({
+              type: "error",
+              message: res.data.data.message,
+            });
+          }
+        })
+      }).onCancel(() => {
+        getstaffsData()
       })
+
     }
 
     //获取已创建并整理好的档主基本信息
     const staffs = ref([]);
     const getstaffsData = async () => {
       try {
-        const response = await api.get("/private/staffs");
+        loading.value = true;
+        const response = await api.get(STAFF_LINK);
         staffs.value.splice(0, staffs.value.length, ...response.data.data);
+        loading.value = false;
       } catch (err) {
+        loading.value = true;
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -310,49 +305,39 @@ export default defineComponent({
     //获取全校食堂、楼层、档口信息
     const getCanteenData = async () => {
       try {
-        const response = await api.get("/private/canteens");
+        const response = await api.get(CANTEEN_LINK);
         canteens.value = response.data.data;
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
 
     //Post 功能
     const postNewStaff = () => {
-      api.post('/private/staffs', {
+      api.post(STAFF_LINK, {
         staffValidName: newStaff.staffValidName,
         staffPhone: newStaff.staffPhone,
         staffStallID: newStaff.stallID
 
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200) {
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
+            type: "success",
             message: "档主创建成功",
-            timeout: 1000,
           });
         }
         if (res.data.code !== 200) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
 
       })
     }
-
 
     onMounted(() => {
       getstaffsData();
@@ -360,6 +345,7 @@ export default defineComponent({
     })
 
     return {
+      loading,
       columns,
       staffs,
       orgStaff,

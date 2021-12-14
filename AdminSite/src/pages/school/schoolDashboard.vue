@@ -3,7 +3,7 @@
   <!--  Show Statistics Data -->
   <div
     class="q-pa-md"
-    v-if="creatable == false"
+    v-if="creatable === false"
   >
     <div class="row q-mb-lg">
       <div class="col-12">
@@ -89,6 +89,7 @@
       title="广告或通告管理"
       :rows="notices"
       :columns="columns"
+      :loading="loading"
       row-key="name"
       binary-state-sort
     >
@@ -99,13 +100,14 @@
         >创建</q-btn>
       </template>
 
-      <template v-slot:body-cell-status="props">
+      <template v-slot:body-cell-noticeImage="props">
         <q-td :props="props">
-          <q-toggle
-            v-model="props.row.status"
-            checked-icon="check"
-            color="green"
-            unchecked-icon="clear"
+          <q-img
+            class="cursor-pointer"
+            :src="props.row.noticeImage"
+            spinner-color="white"
+            style="height: 50px; width: 100px"
+            @click="openImage(props.row.noticeImage)"
           />
         </q-td>
       </template>
@@ -131,7 +133,7 @@
   <div
     class="q-pa-md"
     style="margin-left:10%; margin-right:10%;"
-    v-if="creatable == true"
+    v-if="creatable === true"
   >
     <h4 style="border-bottom: 0.1px solid;">创建新广告或通告</h4>
     <div
@@ -151,28 +153,10 @@
         label="内容"
         stack-label
       />
-      <q-file
-        filled
-        bottom-slots
-        v-model="newNotice.noticeImage"
-        label="图片"
-        counter
-      >
-        <template v-slot:prepend>
-          <q-icon
-            name="cloud_upload"
-            @click.stop
-            class=""
-          />
-        </template>
-        <template v-slot:append>
-          <q-icon
-            name="close"
-            @click.stop="model = null"
-            class="cursor-pointer"
-          />
-        </template>
-      </q-file>
+      <ImagesUploader
+        ref="imageUploader"
+        @addedImages="addImages"
+      />
 
       <div style="margin-left:45%;">
         <q-btn
@@ -194,25 +178,32 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios';
+import { ADMIN_API_LINKS } from "app/api-links";
+import ImagesUploader from "components/ImagesUploader";
 
 // Table columns title
 const columns = [
   { name: 'noticeTitle', align: 'left', label: '广告或通告名称', field: 'noticeTitle', sortable: true },
   { name: 'noticeWords', align: 'left', label: '内容', field: 'noticeWords', sortable: true },
-  { name: 'noticeImage', align: 'left', label: '图片', field: 'noticeImage', sortable: true },
+  { name: 'noticeImage', align: 'left', label: '图片', field: 'noticeImage' },
   { name: 'btnDelete', align: 'left', field: 'delete' }
 ]
 
 export default defineComponent({
+  components: { ImagesUploader },
   setup () {
+    const loading = ref(false)
     const creatable = ref(false);
     const orgNotice = {
       noticeTitle: null,
       noticeWords: null,
-      noticeImage: null
     };
     const newNotice = reactive({ ...orgNotice });
+    const imageUploader = ref(null)
+    const newImages = ref(null)
     const $q = useQuasar();
+    const NOTICE_API = ADMIN_API_LINKS.notices
+    const STAT_API = ADMIN_API_LINKS.adminStatistics
 
     const add = () => {
       creatable.value = true;
@@ -220,36 +211,77 @@ export default defineComponent({
     };
     const cancel = () => {
       creatable.value = false
+      //清空component里的图片
+      imageUploader.value.clearInput()
     };
     const save = () => {
       //在这里加post功能
       creatable.value = false;
-    };
-
-    //更改档主状态
-    const deleteRecord = (id) => {
-      api.delete('private/notices/' + id, {
-      }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+      let formData = new FormData()
+      for (let key in newNotice) {
+        formData.append(key, newNotice[key])
+      }
+      if (newImages.value !== null) {
+        formData.append("noticeImage", newImages.value)
+      }
+      // TODO 这里写api post，data是 formData
+      api.post(NOTICE_API, formData).then((res) => {
+        if (res.data !== undefined && res.data.code === 200) {
           getNoticesData()
           $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "删除成功",
-            timeout: 1000,
+            type: "success",
+            message: "创建成功",
           });
-
         }
         if (res.data.code !== 200) {
           $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
+            type: "error",
             message: res.data.message,
-            timeout: 1000,
           });
         }
+      })
+      //清空暂存图片的ref
+      newImages.value = null
+      //清空component里的图片
+      imageUploader.value.clearInput()
+    };
+
+    const addImages = (images) => {
+      newImages.value = images.value
+    }
+
+    const openImage = (image) => {
+      window.open(image)
+    }
+
+    //更改档主状态
+    const deleteRecord = (id) => {
+      $q.dialog({
+        title: "确认删除",
+        message: "您是否确认要删除此图片吗?",
+        ok: { push: true, label: "确认" },
+        cancel: { push: true, label: "取消" },
+        persistent: true,
+      }).onOk(() => {
+        api.delete(NOTICE_API + '/' + id, {
+        }).then((res) => {
+          if (res.data !== undefined && res.data.code === 200) {
+            getNoticesData()
+            $q.notify({
+              type: "success",
+              message: "删除成功",
+            });
+
+          }
+          if (res.data.code !== 200) {
+            $q.notify({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        })
+      }).onCancel(() => {
+        getNoticesData()
       })
     }
 
@@ -257,15 +289,15 @@ export default defineComponent({
     const notices = ref([]);
     const getNoticesData = async () => {
       try {
-        const response = await api.get("/private/notices");
+        loading.value = true;
+        const response = await api.get(NOTICE_API);
         notices.value.splice(0, notices.value.length, ...response.data.data);
+        loading.value = false;
       } catch (err) {
+        loading.value = false;
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -281,19 +313,15 @@ export default defineComponent({
     );
     const getAdminStatisticsData = async () => {
       try {
-        const response = await api.get("/private/adminStatistics");
+        const response = await api.get(STAT_API);
         adminStatistics.userNumber = response.data.data.userNumber;
         adminStatistics.staffNumber = response.data.data.staffNumber;
         adminStatistics.stallNumber = response.data.data.stallNumber;
         adminStatistics.userLoginRate = response.data.data.userLoginRate;
-
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type: "error",
           message: err.message,
-          timeout: 1000,
         });
       }
     }
@@ -304,16 +332,20 @@ export default defineComponent({
     })
 
     return {
+      loading,
       columns,
       adminStatistics,
       notices,
       creatable,
       orgNotice,
       newNotice,
+      imageUploader,
+      addImages,
       deleteRecord,
       add,
       cancel,
-      save
+      save,
+      openImage
     }
   }
 })

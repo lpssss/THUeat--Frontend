@@ -71,8 +71,8 @@ export default defineComponent({
   setup () {
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('thueatadmin');
-    const password = ref('thueat2021admin');
+    const name = ref('');
+    const password = ref('');
     const isPwd = ref(true);
     const acceptclause = ref(false);
 

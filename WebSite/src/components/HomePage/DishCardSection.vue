@@ -5,6 +5,7 @@
         <q-card-section class="q-pb-none">
           <div class="text-h6"><router-link :to="{path:'/dish',query:{dishID:dishID}}">{{ dishName }}</router-link></div>
           <div class="text-subtitle2"> {{ canteenName }} </div>
+          价格：{{dishPrice}} <br/>售卖时间：{{ dishAvailableTime }}
         </q-card-section>
 
         <q-card-section>
@@ -23,17 +24,18 @@
 <script>
 import { ref, defineComponent } from 'vue'
 import axios from "axios";
-
+import { api } from "boot/axios";
 export default defineComponent({
     setup () {
     return {
       isDishLike: ref(false),
+      code:"",
       }
     },
     name: "DishCardSection",
     props: {
         dishID: {
-          type: Number,
+          type: String,
           required: true
         },
         dishName: {
@@ -51,9 +53,17 @@ export default defineComponent({
             default: 5
         },
 
+        dishPrice: {
+            type: Number,
+            default: 1
+        },
+        dishAvailableTime: {
+            type:String,
+            default:'#'
+        },
         dishBestComment: {
             type: String,
-            default: ''
+            default: 'No comment.'
         },
 
         dishImages: {
@@ -62,29 +72,27 @@ export default defineComponent({
         },
     },
     methods:{
-      PostdishLikes(ID){
-        var dishID = ID;
-        var API_LINK = `http://localhost:3000/dishes/${dishID}`
-        console.log(this.isDishLike)
-                    if(!this.$store.state.login.loginStatus){
-                      this.$router.push('/login')
-                    }
-                    else{
-                      if(this.isDishLike == true){
-                        axios.delete(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
-                          console.log(response.data)
-                          this.isDishLike = false
-                          this.$router.go(0)
-                        });
-                      }
-                      else if(this.isDishLike == false){
-                        axios.post(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
-                          console.log(response.data)
-                          this.isDishLike = true
-                          this.$router.go(0)
-                        });
-                      }
-                    }
+      PostdishLikes(ID){
+        var dishID = ID;
+        var API_LINK = `dishes/${dishID}`
+
+        var that=this;
+        if(!this.$store.state.login.loginStatus){
+          this.$router.push('/login')
+        }
+        else{
+          var req; 
+          api.post(API_LINK,NaN).then(function(response){
+            that.code = response.data.code;
+            console.log("post ,Get data:"+that.code);
+          });
+
+          if(that.code == "400"){
+            api.delete(API_LINK,NaN).then(function(response){
+              console.log("Delete ,Get data:"+response.data.code)
+            });
+          }
+        }
        
       }
  

@@ -24,7 +24,7 @@
       </q-card-section>
 
       <q-card-section vertical class="q-pt-none" >
-        <q-img :src="reviewImage"/>
+        <q-img :src="reviewImages" class="q-card-img"/>
       </q-card-section>
 
 
@@ -35,16 +35,28 @@
 
       <q-btn label="More" flat color="grey"  dense @click="dialog = true" >
 
-          <q-dialog v-model="dialog" persistent>
+            <q-dialog v-model="dialog" persistent>
             <q-card>
+                <q-card-section >
+                完整评论内容<br/>
+                <q-item-label caption>
+                {{ reviewDateTime }}
+                </q-item-label>
+                <q-separator />
+                <div class="ellipsis-2-lines" >
+                {{ reviewComment }}
+                </div>
+              </q-card-section>
               <q-card-section >
-                档主回复
+                档主回复<br/>
+                <q-item-label caption>
+                {{ replyDateTime }}
+                </q-item-label>
+                <q-separator />
+                <div class="ellipsis-2-lines" >
+                {{ replyComment }}
+                </div>
               </q-card-section>
-              <q-separator />
-              <q-card-section class="row items-center">
-                <span class="q-ml-sm">{{ replyComment }}</span>
-              </q-card-section>
-
 
               <!-- Notice v-close-popup -->
               <q-card-actions align="right">
@@ -101,10 +113,15 @@ export default defineComponent({
             type:String,
             default:''
         },
-        reviewImage: {
+        replyDateTime: {
+            type:String,
+            default:''
+        },
+        reviewImages: {
             type:String,
             default:'#'
         },
+
 
     },
      methods:{

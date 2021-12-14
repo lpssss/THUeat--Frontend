@@ -5,22 +5,14 @@
     </div>
 
     <div
-      class="q-pa-md" 
+      class="q-pa-md"
       align="center"
     >
       <q-avatar size="100px" font-size="52px" text-color="white">
         <img :src="userDetailData.data.userImage" alt="头像" />
       </q-avatar>
       <div class="q-pt-md row justify-center items-center">
-        <q-file
-          class="q-pa-md item-center"
-          align="center"
-          style="max-width: 150px"
-          name="poster_file"
-          v-model="image"
-          filled
-          label="上传头像"
-        />
+        <ImagesUploader ref="imageUploader" @addedImages="addImages" />
       </div>
     </div>
 
@@ -70,7 +62,7 @@
 
     <div class="q-pb-lg text-black" align="center">
       <div class="q-pt-md">
-        <q-btn @click="postNewDetails()">确认更改个人信息</q-btn>
+        <q-btn @click="postNewDetails">确认更改个人信息</q-btn>
       </div>
     </div>
 
@@ -119,7 +111,7 @@
 
     <div class="q-pb-lg text-black" align="center">
       <div class="q-pt-md">
-        <q-btn @click="postNewPassword()">确认更改密码</q-btn>
+        <q-btn @click="postNewPassword">确认更改密码</q-btn>
       </div>
     </div>
 
@@ -142,12 +134,12 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import axios from "axios";
 import useAppState from "src/store/userAppState.js";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import BannerSection from "components/Layout/BannerSection";
 import StallCardSection from "components/HomePage/StallCardSection";
 import { api } from 'boot/axios'
+import ImagesUploader from "components/ImagesUploader";
 
 const { updateToken} = useAppState();
 
@@ -167,6 +159,7 @@ const options = ["清华学生", "校外人员"];
 export default defineComponent({
   name: "Settings",
   components: {
+    ImagesUploader,
     CommentCardSection,
     BannerSection
   },
@@ -178,6 +171,8 @@ export default defineComponent({
     const email = ref();
     const user = ref();
     const image = ref();
+    const imageUploader=ref(null)
+    const newImage=ref(null)
 
     const API_LINK = "users/details"; // 之后放真正的API
     const userDetailData = reactive({ data: {} });
@@ -191,17 +186,32 @@ export default defineComponent({
       }
     };
 
+    const addImages=(images)=>{
+      newImage.value=images.value
+    }
+
     const postNewDetails = () => {
       //console.log(user.value)
-      api.post('users/details', {
-        userName: user.value,
-        userPhone: telephone.value,
-        userImage: image.value,
-        userEmial: email.value,
-        
-      }).then ((res) => {
+      let formData=new FormData()
+      formData.append("userName",user.value)
+      formData.append("userEmail",email.value)
+      formData.append("userPhone",telephone.value)
+      if(newImage.value!==null)
+        formData.append("userImage",newImage.value)
+      else
+        formData.append("userImage","")
+      //用来检查formData里面的数据
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
+      api.post(API_LINK, formData).then ((res) => {
+        // TODO POST了过后怎么处理response 写在这里
        if (res.status === 200 ) {
+          console.log(res)
            updateToken(res.data.token);
+
+           //上传成功后，清空Image Uploader包含的图片
+         imageUploader.value.clearInput()
        }
       if (res.status === 404){
          console.log('error')
@@ -240,6 +250,8 @@ export default defineComponent({
       email,
       user,
       image,
+      imageUploader,
+      addImages,
       postNewDetails,
       postNewPassword,
     }

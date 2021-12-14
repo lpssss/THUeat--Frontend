@@ -8,9 +8,9 @@
     >
       <HomePageAnnouncementSection
         name="first"
-        :title="dishData.data.dishName"
-        :content="dishData.data.dishIntro"
-        :imgSrc="dishData.data.dishImage"
+        :noticeTitle="dishData.data.dishName"
+        :noticeWords="dishData.data.dishIntro"
+        :noticeImage="dishData.data.dishImages"
       />
     </q-carousel>
 
@@ -23,7 +23,11 @@
           {{ dishData.data.dishPrice }}元
         </div>
         <q-icon name="schedule" style="font-size: 1.5rem" />
-          {{ dishData.data.dishAvailableTime }}
+          <div>菜品售卖时间</div>
+          <div v-for="time in dishData.data.dishAvailableTime.length" :key="time">
+            {{time}}
+          </div>
+
         <div>
 
         </div>
@@ -44,10 +48,10 @@
 
 <script>
 import { ref, reactive } from "vue";
-import { watch, useStore } from 'vue';
+import { watch } from 'vue';
+import { useStore } from 'vuex';
 import {useRoute, useRouter} from 'vue-router'
 import { api } from "boot/axios";
-import axios from "axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 
@@ -58,10 +62,11 @@ export default {
     HomePageAnnouncementSection,
     },
   setup() {
-    const route=useRoute()
-    const store=useStore()
-    const router=useRouter()
-    
+
+    const route=useRoute();
+    const store=useStore();
+    const router=useRouter();
+
     let id=route.query.dishID
     let API_LINK = `dishes/${id}`; // 之后放真正的API
     //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
@@ -74,7 +79,7 @@ export default {
         console.log(err.message);
       }
     };
-    
+
     watch(()=>route.query,()=>{
       id=route.query.dishID
       API_LINK=`dishes/${id}`
