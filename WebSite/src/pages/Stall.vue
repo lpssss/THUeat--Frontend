@@ -40,15 +40,14 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="dish" label="菜品" />
-          <q-tab name="comments" label="评价" />
+          <q-tab name="dish" label="推荐菜品" />
+          <q-tab name="comments" label="用餐者评价" />
         </q-tabs>
 
         <q-separator />
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="dish">
-            <div class="text-h6">推荐菜品</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <DishCardSection
                 v-for="dish in stallData.data.dishes"
@@ -60,7 +59,6 @@
           </q-tab-panel>
 
           <q-tab-panel name="comments">
-            <div class="text-h6">用餐者评价</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <CommentCardSection
                 v-for="review in stallData.data.reviews"
@@ -89,7 +87,6 @@ import DishCardSection from "components/HomePage/DishCardSection";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import Pagination from 'components/StallPage/Pagination.vue';
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
-
 
 export default defineComponent({
   name: "Stall",
