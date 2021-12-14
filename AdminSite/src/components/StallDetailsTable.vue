@@ -4,13 +4,23 @@
 <!--所需Props：档口信息数据stallDetailsData，档口图片链接stallImages，档口信息表格第一列每行的标题rowsTitle-->
 <!--发送Emits: 更新parent数据updateData-->
 <template>
-    <q-card v-if="showImageGallery">
+  <q-dialog v-model="showImageGallery" full-width persistent>
+    <q-card>
+      <ImageGallery :my-images="myImages" type="stallDetails" />
       <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn flat label="返回" @click="showImageGallery=false" />
+        <q-btn flat label="返回" v-close-popup />
       </q-card-actions>
-      <ImageGallery :my-images="myImages" type="stallDetails"/>
     </q-card>
-  <div class="q-pa-md" v-else>
+  </q-dialog>
+  <q-dialog v-model="modifyTime" full-width persistent>
+    <q-card>
+      <OperationTimeEditor :my-stall-details="myStallDetails" @changeTime="changeTime" />
+      <q-card-actions align="right" class="bg-white text-teal">
+        <q-btn flat label="返回" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <div class="q-pa-md">
     <q-markup-table separator="cell" wrap-cells style="table-layout: fixed">
       <thead>
         <tr>
@@ -26,43 +36,56 @@
       <tbody>
         <tr v-for="rowTitle in rowsTitle" :key="rowTitle.engTitle">
           <td class="text-center">{{ rowTitle.title }}</td>
-          <td class="text-center"  style="white-space:normal">
-            <template v-if="rowTitle.engTitle !== 'stallImages'">
+          <td class="text-center" style="white-space: pre-wrap">
+            <template
+              v-if="
+                rowTitle.engTitle === 'stallName' ||
+                rowTitle.engTitle === 'stallFloor' ||
+                rowTitle.engTitle === 'canteenName'
+              "
+            >
               {{ myStallDetails[rowTitle.engTitle] }}
             </template>
-            <template v-else>
+            <template v-if="rowTitle.engTitle === 'stallOperationtime'">
+              <div
+                v-for="time in myStallDetails[rowTitle.engTitle]"
+                :key="time.name"
+                class="q-py-xs"
+              >
+                {{ time.name }} {{ time.startTime }} - {{ time.endTime }}
+              </div>
+            </template>
+            <template v-if="rowTitle.engTitle === 'stallDescribe'">
+              {{ shortenDescribe }} <strong v-if="shorten">...查看更多</strong>
+            </template>
+            <template v-if="rowTitle.engTitle === 'stallImages'">
               <q-btn
-                v-if="rowTitle.engTitle === 'stallImages'"
                 color="primary"
                 label="查看/编辑图片"
                 @click="showImageGallery = true"
               />
             </template>
             <template v-if="rowTitle.modifiable">
-              <q-popup-edit
+              <q-btn
                 v-if="rowTitle.engTitle === 'stallOperationtime'"
-                v-model="myStallDetails[rowTitle.engTitle]"
-                v-slot="scope"
-                auto-save
-              >
-                <q-select
-                  v-model="scope.value"
-                  :options="OPERATION_TIME_OPTIONS"
-                  label="请选择时段"
-                />
-              </q-popup-edit>
+                color="primary"
+                label="修改营业时间"
+                @click="modifyTime = true"
+              />
               <q-popup-edit
                 v-if="rowTitle.engTitle === 'stallDescribe'"
                 v-model="myStallDetails[rowTitle.engTitle]"
+                title="更新档口简介"
                 v-slot="scope"
                 auto-save
-                buttons
               >
                 <q-input
                   v-model="scope.value"
                   dense
                   autofocus
                   counter
+                  autogrow
+                  type="textarea"
                 />
               </q-popup-edit>
             </template>
@@ -71,14 +94,14 @@
       </tbody>
     </q-markup-table>
   </div>
-
 </template>
 
 <script>
-import {ref, reactive, watch, computed} from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import ImageGallery from "components/ImageGallery";
 import { STAFF_API_LINKS } from "app/api-links";
 import { useStore } from "vuex";
+import OperationTimeEditor from "components/OperationTimeEditor";
 
 const API_LINK = STAFF_API_LINKS.dashboard;
 
@@ -87,12 +110,10 @@ const STALL_DETAILS_COLUMNS = [
   { engTitle: "Attribute Name", title: "档口基本信息" },
   { engTitle: "Attribute", title: "属性" },
 ];
-//档口运营时间选项
-const OPERATION_TIME_OPTIONS = ["早上", "中午", "晚上"];
 
 export default {
   name: "StallDetailsTable",
-  components: { ImageGallery },
+  components: { OperationTimeEditor, ImageGallery },
   props: {
     rowsTitle: {
       type: Array,
@@ -104,16 +125,23 @@ export default {
     //myStallDetails: 重新复制档口信息，以直接修改档口信息
     const store = useStore();
     const showImageGallery = ref(false);
+    const modifyTime = ref(false);
     const myStallDetails = reactive({
       ...store.state.stallDetails.stallDetailsData,
     });
     const myImages = computed(() => store.state.stallDetails.stallImagesData);
     const newImage = ref(null);
+    const shortenDescribe = computed(() =>
+      myStallDetails.stallDescribe.slice(0, 14)
+    );
+    const shorten=computed(()=> shortenDescribe.value.length<myStallDetails.stallDescribe.length)
 
     function addImages(images) {
       newImage.value = images.value;
-      console.log(images.value[0]);
-      console.log(newImage.value.length);
+    }
+
+    function changeTime(newStallOperationTime){
+      myStallDetails.stallOperationtime=newStallOperationTime
     }
 
     //功能：在任一档口信息有修改后自动POST去后端
@@ -126,11 +154,14 @@ export default {
     );
     return {
       STALL_DETAILS_COLUMNS,
-      OPERATION_TIME_OPTIONS,
       myStallDetails,
       showImageGallery,
+      modifyTime,
       myImages,
+      shortenDescribe,
+      shorten,
       addImages,
+      changeTime
     };
   },
 };

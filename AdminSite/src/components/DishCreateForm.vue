@@ -59,7 +59,7 @@ export default {
     //newDishData: 创建菜品表单上的数据
     //imageUploader: 用来控制ImageUploader(template ref)
     const newDishData = reactive({ ...initialData });
-    const imageUploader = ref();
+    const imageUploader = ref(null);
     const newImages = ref(null);
     const store = useStore();
 

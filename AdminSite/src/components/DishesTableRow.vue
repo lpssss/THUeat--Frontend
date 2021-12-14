@@ -11,13 +11,12 @@
           v-model="myRowData.dishName"
           v-slot="scope"
           title="更新菜品名字"
-          buttons
+          auto-save
         >
           <q-input
             v-model="scope.value"
             dense
             autofocus
-            @keyup.enter="scope.set"
           />
         </q-popup-edit>
       </td>
@@ -27,23 +26,24 @@
           v-model="myRowData.dishPrice"
           v-slot="scope"
           title="更新菜品价格"
-          buttons
+          auto-save
         >
-          <q-input type="number" v-model="scope.value" dense autofocus />
+          <q-input type="number" v-model="scope.value" dense autofocus  />
         </q-popup-edit>
       </td>
       <td>
-        {{ myRowData.dishAvailableTime }}
+        {{sortedTime}}
         <q-popup-edit
           v-model="myRowData.dishAvailableTime"
           v-slot="scope"
           title="更新售卖时段"
-          buttons
+          auto-save
         >
           <q-select
             v-model="scope.value"
-            :options="DISH_AVAILABLE_TIME_OPTIONS"
+            :options="myRowData.stallOperationtime"
             label="请选择时段"
+            multiple
           />
         </q-popup-edit>
       </td>
@@ -51,14 +51,22 @@
         {{ myRowData.dishLikes }}
       </td>
       <td>
-        {{ myRowData.dishIntro }}
+        {{ shortenIntro }}
+        <strong v-if="shorten">...查看更多</strong>
         <q-popup-edit
           v-model="myRowData.dishIntro"
           v-slot="scope"
           title="更新菜品简介"
-          buttons
+          auto-save
         >
-          <q-input v-model="scope.value" dense autofocus autogrow />
+          <q-input
+            v-model="scope.value"
+            dense
+            autofocus
+            counter
+            autogrow
+            type="textarea"
+          />
         </q-popup-edit>
       </td>
       <td>
@@ -98,7 +106,6 @@ import { useStore } from "vuex";
 const API_LINK = STAFF_API_LINKS.dishes;
 
 //售卖时间选项
-const DISH_AVAILABLE_TIME_OPTIONS = ["早上", "中午", "晚上"];
 export default {
   name: "DishesTableRow",
   components: { ImageGallery },
@@ -123,9 +130,27 @@ export default {
     const myImages = computed(
       () => store.state.dishesDetails.dishesImagesData[dishidx.value]
     );
-    console.log(dishidx);
-    console.log(myImages);
-    console.log(myImages.value.dishImages)
+    const sortedTime=computed(
+      ()=>{
+        if(myRowData.dishAvailableTime[0]==="自定义"){
+          return myRowData.dishAvailableTime[0]
+        }
+        else{
+          const itemOrder=["早餐","午餐","晚餐","宵夜"]
+          const tempArr=[...myRowData.dishAvailableTime]
+          tempArr.sort((a,b)=>itemOrder.indexOf(a)-itemOrder.indexOf(b))
+          return tempArr.join(", ")
+        }
+      }
+    )
+
+    const shortenIntro = computed(() =>
+      myRowData.dishIntro.slice(0, 5)
+    );
+    const shorten=computed(()=> shortenIntro.value.length<myRowData.dishIntro.length)
+    // console.log(dishidx);
+    // console.log(myImages);
+    // console.log(myImages.value.dishImages)
     //输入2个数据：value为新state，evt为pointer event(这里没用到所以放"_")
     //功能：用户要调整激活状态时，会弹出确认窗口，确认后才更改激活状态
     function toggleStatus(value, _) {
@@ -152,12 +177,14 @@ export default {
       { deep: true }
     );
     return {
-      DISH_AVAILABLE_TIME_OPTIONS,
       myRowData,
       myImages,
       showImageGallery,
       toggleStatus,
-      dishidx
+      sortedTime,
+      dishidx,
+      shortenIntro,
+      shorten
     };
   },
 };
