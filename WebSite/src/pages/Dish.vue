@@ -23,7 +23,11 @@
           {{ dishData.data.dishPrice }}元
         </div>
         <q-icon name="schedule" style="font-size: 1.5rem" />
-          {{ dishData.data.dishAvailableTime }}
+          <div>菜品售卖时间</div>
+          <div v-for="time in dishData.data.dishAvailableTime.length" :key="time">
+            {{time}}
+          </div>
+
         <div>
 
         </div>
