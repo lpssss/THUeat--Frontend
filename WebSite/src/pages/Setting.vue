@@ -134,6 +134,7 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
+import { useQuasar } from "quasar";
 import useAppState from "src/store/userAppState.js";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import BannerSection from "components/Layout/BannerSection";
@@ -164,6 +165,7 @@ export default defineComponent({
     BannerSection
   },
   setup() {
+    const $q = useQuasar();
     const password = ref(null);
     const passwordOld = ref(null);
     const identityModel = ref("清华学生");
@@ -174,7 +176,7 @@ export default defineComponent({
     const imageUploader=ref(null)
     const newImage=ref(null)
 
-    const API_LINK = "users/details"; // 之后放真正的API
+    const API_LINK = "users/details";
     const userDetailData = reactive({ data: {} });
     const getUserData = async () => {
       try {
@@ -192,7 +194,7 @@ export default defineComponent({
 
     const postNewDetails = () => {
       //console.log(user.value)
-      let formData=new FormData()
+      let formData = new FormData()
       formData.append("userName",user.value)
       formData.append("userEmail",email.value)
       formData.append("userPhone",telephone.value)
@@ -201,20 +203,32 @@ export default defineComponent({
       else
         formData.append("userImage","")
       //用来检查formData里面的数据
-      // for (let pair of formData.entries()) {
-      //   console.log(pair[0] + ", " + pair[1]);
-      // }
+      for (let pair of formData.entries()) {
+         console.log(pair[0] + ", " + pair[1]);
+       }
+      //console.log(telephone.value)
+      //console.log(formData.entries())
       api.post(API_LINK, formData).then ((res) => {
         // TODO POST了过后怎么处理response 写在这里
-       if (res.status === 200 ) {
+       if (res.data.code === 200 ) {
           console.log(res)
-           updateToken(res.data.token);
-
+          console.log()
+          //updateToken(res.data.token);
+          getUserData();
            //上传成功后，清空Image Uploader包含的图片
-         imageUploader.value.clearInput()
+          imageUploader.value.clearInput()
+          $q.notify({
+            type: "success",
+            message: "修改个人信息成功",
+          });
        }
-      if (res.status === 404){
+      if (res.data.code !== 200){
          console.log('error')
+         console.log(res)
+         $q.notify({
+            type: "error",
+            message: res.data.message,
+          });
        }
       })
     };
@@ -226,10 +240,19 @@ export default defineComponent({
         oldPassword: passwordOld.value,
       }).then ((res) => {
         if (res.status === 200 ) {
-            updateToken(res.data.token);
+            //updateToken(res.data.token);
+            getUserData();
+            $q.notify({
+            type: "success",
+            message: "修改密码成功",
+          });
         }
         if (res.status === 404){
           console.log('error')
+          $q.notify({
+            type: "error",
+            message: res.data.message,
+          });
         }
       })
     };

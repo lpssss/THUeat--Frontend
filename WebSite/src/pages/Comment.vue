@@ -101,8 +101,8 @@ const dishOptions = ["宫保鸡丁", "鱼香茄子", "麻辣香锅", "北京烤�
 
 const options = [
   { label: "好吃", value: "好吃" },
-  { label: "太甜了", value: "太甜了" },
-  { label: "太咸了", value: "太咸了" },
+  { label: "不好吃", value: "不好吃" },
+  { label: "一般般", value: "一般般" },
 ];
 
 export default defineComponent({
@@ -196,11 +196,11 @@ export default defineComponent({
           formData.append("reviewImages", "");
         }
         // TODO POST 的API记得改，然后response要怎么处理记得加上
-        api.post("users/password", formData).then((res) => {
-          if (res.status === 200) {
+        api.post("reviews", formData).then((res) => {
+          if (res.data.code === 200) {
             updateToken(res.data.token);
           }
-          if (res.status === 404) {
+          if (res.data.code === 404) {
             console.log("error");
           }
         });
