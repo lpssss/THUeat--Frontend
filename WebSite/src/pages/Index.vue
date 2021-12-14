@@ -53,11 +53,11 @@ import BannerSection from "components/Layout/BannerSection";
 const homePageBanner = {
   stall:{
     content: "高分档口推荐",
-    change: true
+    change: false
   },
   dish:{
     content: "高点赞菜品",
-    change: true
+    change: false
   }
 };
 
