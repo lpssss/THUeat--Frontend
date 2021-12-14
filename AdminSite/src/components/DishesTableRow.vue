@@ -19,7 +19,7 @@
           autofocus
           :rules="[
             (val) => !!val || '* 不能为空',
-            (val) => val.length <= 10 || '最多10个字',
+            (val) => val.length <= 6 || '最多6个字',
           ]"
         />
       </q-popup-edit>
@@ -162,13 +162,10 @@ export default {
     const shorten = computed(
       () => shortenIntro.value.length < myRowData.dishIntro.length
     );
-    // console.log(dishidx);
-    // console.log(myImages);
-    // console.log(myImages.value.dishImages)
+
     //输入2个数据：value为新state，evt为pointer event(这里没用到所以放"_")
     //功能：用户要调整激活状态时，会弹出确认窗口，确认后才更改激活状态
     function toggleStatus(value, _) {
-      console.log(value);
       $q.dialog({
         title: "确认调整状态",
         message: "您是否确认要调整此菜品状态?",
