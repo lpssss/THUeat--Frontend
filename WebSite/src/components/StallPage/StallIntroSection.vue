@@ -5,11 +5,11 @@
       <br />
       营业时间：
       <br/>
-      <template v-for="time in stallOperationtime" :key="time.name">
+      <div v-for="time in stallOperationtime" :key="time.name">
         <div>
-          {{time.name}} {{time.startTime}} - {{time.endTime}}
+          {{time.startTime}} - {{time.endTime}}
         </div>
-      </template>
+      </div>
     </q-card-section>
       <q-card-section>
         <div class="row justify-center">
@@ -42,7 +42,7 @@ import {defineComponent } from 'vue'
 export default defineComponent({
     name: "StallIntroSection",
     props: {
-        score: {
+        stallRate: {
             type: Number,
             default: 5
         },
@@ -69,7 +69,7 @@ export default defineComponent({
     },
     setup(props) {
         return {
-            starscore: props.score,
+            starscore: props.stallRate,
         }
     },
 })
