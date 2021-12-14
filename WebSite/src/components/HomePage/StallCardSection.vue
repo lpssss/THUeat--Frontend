@@ -25,7 +25,7 @@
                 icon-half="star_half"
                 readonly
               />
-              <span class="text-caption text-grey q-ml-sm"> {{ stallRate }} ({{ rateAmount }})</span>
+              <span class="text-caption text-grey q-ml-sm"> {{ stallRate }} ({{ stallRateNumber }})</span>
             </div>
           </div>
         </q-card-section>
@@ -57,7 +57,7 @@ export default defineComponent({
             default: 5
         },
 
-        rateAmount: {
+        stallRateNumber: {
             type: Number,
             default: 1
         },

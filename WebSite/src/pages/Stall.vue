@@ -23,6 +23,7 @@
         :stallAddress="stallData.data.canteenName"
         :stallName="stallData.data.stallName"
         :stallFloor="stallData.data.stallFloor"
+        :stallRate="stallData.data.stallRate"
         :stallRateNumber="stallData.data.stallRateNumber"
         :stallOperationtime="stallData.data.stallOperationtime"
       />

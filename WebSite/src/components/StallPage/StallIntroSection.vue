@@ -24,7 +24,7 @@
         readonly
       />
       <!-- v-model无法传入prop的数据，需要修改 -->
-      <span class="text-caption text-grey q-ml-sm"> {{ score }} ({{ stallRateNumber }})</span>
+      <span class="text-caption text-grey q-ml-sm"> {{ stallRate }} ({{ stallRateNumber }})</span>
     </div>
         <div class="col-2">
       <q-btn color="purple-8"  icon-right="send" label="去评价" @click="$router.push({path:'/comment',query:{stallName:stallName}})">
@@ -44,7 +44,7 @@ export default defineComponent({
     props: {
         stallRate: {
             type: Number,
-            default: 5
+            default: 0,
         },
         stallRateNumber: {
             type: Number,
