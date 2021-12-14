@@ -33,8 +33,9 @@
         </div>
       </q-card-section>
     </q-card>
-    <div class="q-pa-md">
-      <div class="text-h6">用餐者评价</div>
+      <div class="q-pt-md q-gutter-sm">
+        <BannerSection content="用餐者评价" />
+      </div>
       <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
         <CommentCardSection
           v-for="review in dishData.data.reviews"
@@ -43,7 +44,6 @@
         />
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -54,12 +54,14 @@ import {useRoute, useRouter} from 'vue-router'
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
+import BannerSection from "components/Layout/BannerSection";
 
 export default {
   name: "Dish",
   components: {
     CommentCardSection,
     HomePageAnnouncementSection,
+    BannerSection,
     },
   setup() {
 
