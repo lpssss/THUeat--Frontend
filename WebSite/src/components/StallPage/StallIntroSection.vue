@@ -1,9 +1,15 @@
 <template>
     <q-card flat bordered style="width:100%">
     <q-card-section>
-      营业时间：{{ stallOperationtime }}
-      <br/>
       档口楼层：{{stallFloor}}
+      <br />
+      营业时间：
+      <br/>
+      <template v-for="time in stallOperationtime" :key="time.name">
+        <div>
+          {{time.name}} {{time.startTime}} - {{time.endTime}}
+        </div>
+      </template>
     </q-card-section>
       <q-card-section>
         <div class="row justify-center">
@@ -31,7 +37,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import {defineComponent } from 'vue'
 
 export default defineComponent({
     name: "StallIntroSection",
@@ -52,16 +58,12 @@ export default defineComponent({
           type: String,
           required: true
         },
-        stallRate: {
-          type: String,
-          required: true
-        },
         stallFloor: {
           type:Number,
           required: true
         },
         stallOperationtime: {
-          type:String,
+          type:Array,
           required:true
         }
     },
