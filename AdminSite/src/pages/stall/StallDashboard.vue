@@ -65,7 +65,6 @@ export default {
     // myDashboardData：整理后的统计数据
     // myStallDetailsData：整理后的档口信息(不包括图片）
     // myStallImages：整理后的图片链接
-    console.log(getToken().value);
     const store = useStore();
     const $q = useQuasar();
     const myDashboardData = ref([]);

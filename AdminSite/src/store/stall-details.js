@@ -20,7 +20,6 @@ const stallDetails = {
     },
     hideImage(state, { targetImg }) {
       const idx = state.stallImagesData.indexOf(targetImg);
-      console.log(idx);
       state.stallImagesData.splice(idx, 1);
     },
     addImages(state, images) {
@@ -42,8 +41,6 @@ const stallDetails = {
       });
     },
     saveImagesChanges({ state, dispatch }, { deleteImages, newImages }) {
-      console.log(deleteImages);
-      console.log(newImages);
       const message = {
         success: "编辑图片成功",
         error: "编辑图片失败，请刷新页面重试",
@@ -66,12 +63,8 @@ const stallDetails = {
         nImage,
         "stallImages"
       );
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
       try {
         const response = await staffapi.post(API_LINK, formData);
-        console.log(response);
         if (response.data.code === 200) {
           Notify.create({
             type: "success",
