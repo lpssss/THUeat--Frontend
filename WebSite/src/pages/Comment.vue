@@ -215,17 +215,25 @@ export default defineComponent({
         formData.append("rate", ratingModel.value);
         formData.append("reviewComment", text.value);
 
-        var selectTags = [];
-        for (var key in group.value) {
-          selectTags.push(group.value[key])
+        if (group.value !== null && group.value.length !== 0) {
+          var selectTags = [];
+          for (var key in group.value) {
+            selectTags.push(group.value[key])
+          }
+          // tag传一个array
+          formData.append("reviewTags", selectTags);
+        } else{
+          formData.append("reviewTags", "");
         }
-        // tag传一个array
-        formData.append("reviewTags", selectTags);
 
-        dishModel.value.forEach((item) =>
-          formData.append("dishID", dishes.getID[item])
-          //console.log(dishes.getID[item])
-        );
+        if (dishModel.value !== null && dishModel.value.length !== 0) {
+          dishModel.value.forEach((item) =>
+            formData.append("dishID", dishes.getID[item])
+            //console.log(dishes.getID[item])
+          );
+        } else {
+          formData.append("dishID", "");
+        }
 
         //添加图片进form data
         if (newImages.value !== null && newImages.value.length !== 0) {
