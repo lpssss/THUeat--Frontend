@@ -1,19 +1,21 @@
 <template>
   <q-page >
     <div v-if="Object.keys(noticeData).length">
-      <q-carousel
-        arrows
-        animated
-        v-model="slide"
-        height="400px"
-      >
-      <HomePageAnnouncementSection
-          v-for="notice in noticeData.data"
-          v-bind="notice"
-          :key="notice.name"
-        />
-      </q-carousel>
-
+      <div class="q-pa-md">
+        <q-carousel
+          arrows
+          animated
+          v-model="slide"
+          height="400px"
+        >
+        <HomePageAnnouncementSection
+            v-for="notice in noticeData.data"
+            v-bind="notice"
+            :key="notice.name"
+          />
+        </q-carousel>
+      </div>
+      
     <div class="q-pa-md q-gutter-sm">
       <BannerSection v-bind="homePageBanner.stall"/>
     </div>
