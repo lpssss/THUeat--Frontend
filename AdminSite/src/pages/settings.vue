@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import {defineComponent, onMounted, reactive, ref, watch} from "vue";
 import { api } from "boot/axios";
 import { useQuasar } from "quasar";
 import useAppState from "src/store/userAppState.js";
@@ -61,6 +61,7 @@ export default defineComponent({
     const $q = useQuasar();
     const token = ref(getToken().value);
     const DETAIL_LINK = ADMIN_API_LINKS.personalDetails;
+    const isLoading=ref(false)
 
     //用户资料模板
     const details = reactive({
@@ -95,10 +96,12 @@ export default defineComponent({
     //获取用户资料
     const getDetails = async () => {
       try {
+        isLoading.value=true
         const response = await api.get(DETAIL_LINK);
         details.validName = response.data.data.validName;
         details.name = response.data.data.name;
         details.phone = response.data.data.phone;
+        isLoading.value=false
       } catch (err) {
         $q.notify({
           type: "error",
@@ -199,6 +202,17 @@ export default defineComponent({
           }
         });
     };
+
+    watch(isLoading,(newState,_)=>{
+      if(newState){
+        $q.loading.show({
+          message: '页面加载中',
+        })
+      }
+      else{
+        $q.loading.hide()
+      }
+    })
 
     onMounted(() => {
       getDetails();
