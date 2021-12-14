@@ -67,7 +67,7 @@ const canteenPageBanner = {
   },
   stalls: {
     content: "档口",
-    change: true
+    change: false
   }
 };
 

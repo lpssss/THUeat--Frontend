@@ -8,10 +8,9 @@
           height="400px"
         >
           <HomePageAnnouncementSection
-            name="first"
-            :noticeTitle="stallData.data.stallName"
-            :noticeWords="stallData.data.stallDescribe"
-            :noticeImage="stallData.data.stallImages[0]"
+            v-for="notice in stallPictureData.data"
+            v-bind="notice"
+            :key="notice.name"
           />
         </q-carousel>
       </div>
@@ -23,6 +22,7 @@
         :stallAddress="stallData.data.canteenName"
         :stallName="stallData.data.stallName"
         :stallFloor="stallData.data.stallFloor"
+        :stallRate="stallData.data.stallRate"
         :stallRateNumber="stallData.data.stallRateNumber"
         :stallOperationtime="stallData.data.stallOperationtime"
       />
@@ -39,15 +39,14 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="dish" label="菜品" />
-          <q-tab name="comments" label="评价" />
+          <q-tab name="dish" label="推荐菜品" />
+          <q-tab name="comments" label="用餐者评价" />
         </q-tabs>
 
         <q-separator />
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="dish">
-            <div class="text-h6">推荐菜品</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <DishCardSection
                 v-for="dish in stallData.data.dishes"
@@ -59,7 +58,6 @@
           </q-tab-panel>
 
           <q-tab-panel name="comments">
-            <div class="text-h6">用餐者评价</div>
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
               <CommentCardSection
                 v-for="review in stallData.data.reviews"
@@ -89,7 +87,6 @@ import CommentCardSection from "components/StallPage/CommentCardSection";
 import Pagination from 'components/StallPage/Pagination.vue';
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 
-
 export default defineComponent({
   name: "Stall",
   components: {
@@ -110,11 +107,24 @@ export default defineComponent({
     let API_LINK = `stalls/${id}`; // 之后放真正的API
 
     const stallData = reactive({ data: {} });
+    const stallPictureData = reactive({ data: [] })
 
     const getStallData = async () => {
       try {
         const response = await api.get(API_LINK);
         stallData.data = response.data.data;
+        //stallData.data.stallName;
+        //stallData.data.stallDescribe
+        var i = 1
+        stallData.data.stallImages.forEach((item) => {
+          stallPictureData.data.push({
+            noticeTitle: stallData.data.stallName,
+            noticeWords: stallData.data.stallDescribe,
+            noticeImage: item,
+            name: i
+          })
+          i += 1
+        })
       } catch (err) {
         console.log(err.message);
       }
@@ -128,12 +138,14 @@ export default defineComponent({
     },{
       immediate:true
     });
-    //getStallData();
+    getStallData();
     //getDishData();
+    console.log(stallPictureData.data)
 
     return {
-      slide: ref('first'),
+      slide: ref(1),
       stallData,
+      stallPictureData,
     };
 },
 })

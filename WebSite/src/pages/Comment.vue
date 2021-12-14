@@ -4,9 +4,8 @@
       <BannerSection v-bind="commentBanner" />
     </div>
 
-    <div class="q-pt-none row justify-center items-center">
-      <div class="col-3 q-pa-md" align="right"></div>
-      <div class="col-3 q-pa-md" align="left">
+    <div class="q-pa-md row justify-center items-center">
+      <div class="col-6 q-pa-md" align="left">
         <div style="max-width: 200px">
           <q-select
             multiple
@@ -17,7 +16,7 @@
         </div>
       </div>
 
-      <div class="col-3 q-pa-md" align="right">
+      <div class="col-6 q-pa-md" align="right">
         <q-rating
           v-model="ratingModel"
           size="1.5em"
@@ -26,59 +25,31 @@
           icon-selected="star"
         />
       </div>
-      <div class="col-3 q-pa-md" align="left"></div>
 
-      <div class="col-3 q-pa-md" align="right"></div>
-      <div class="col-6 q-pa-md" align="center">
-        <div style="max-width: 800px">
+      <div class="col-12 q-pa-md" align="center">
           <q-input v-model="text" filled type="textarea" label="在此输入评价" />
-        </div>
       </div>
-      <div class="col-3 q-pa-md"></div>
 
-      <div class="col-3 q-pa-md" align="right"></div>
-      <div class="col-3 q-pa-md" align="left">
-        <div class="q-pl-none">
-          <div class="q-gutter-sm">
-            <!--
-            <q-checkbox keep-color v-for="label in labels" :key="label.label" :label="label.label" v-model="foodLabel"/>
-            -->
-            <!--
-            <LabelSection
-              v-for="label in labels"
-              v-bind="label"
-              :key="label.labelName"
-              @selectLabel="updateTags"
-            />
-            -->
+      <div class="col-6 q-pa-md" align="left">
             <q-option-group
               :options="options"
               type="checkbox"
               v-model="group"
             />
-          </div>
-        </div>
       </div>
-      <div class="col-3 q-pa-md" align="right"></div>
-      <div class="col-3 q-pa-md" align="left"></div>
-    </div>
-
-    <div class="q-pt-none row justify-center items-start">
-      <div class="col-3 q-pa-md" align="right"></div>
-      <div class="col-3 q-pa-md" align="left">
-        <div class="q-pl-none">
+      <div class="col-6 q-pa-md" align="right">
+        <q-btn @click="onComment">提交</q-btn>
+      </div>
+      <div class="col-12 q-pt-none" align="left">
           <ImagesUploader
             ref="imageUploader"
             @addedImages="addImages"
             multiple
           />
-        </div>
       </div>
-      <div class="col-3 q-pa-md" align="right">
-        <q-btn @click="onComment">提交</q-btn>
-      </div>
-      <div class="col-3 q-pa-md" align="left"></div>
     </div>
+
+      
   </q-page>
 </template>
 

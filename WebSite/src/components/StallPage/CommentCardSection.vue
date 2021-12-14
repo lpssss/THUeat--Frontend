@@ -26,9 +26,7 @@
       <q-card-section vertical class="q-pt-none" >
         <q-img :src="reviewImages" class="q-card-img"/>
       </q-card-section>
-
-
-
+      
       <q-card-section class="q-pt-none ">
         <q-btn size="sm" falt round color="primary" icon="thumb_up" @click="PostreviewLikes(reviewID)" />
         <span class="q-px-sm text-caption text-grey"> {{ reviewLikes }} </span>
