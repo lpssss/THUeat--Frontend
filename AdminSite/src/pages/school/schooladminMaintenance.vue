@@ -10,6 +10,7 @@
       :rows="admins"
       :columns="columns"
       row-key="name"
+      :loading="loading"
       binary-state-sort
     >
       <template v-slot:top-right>
@@ -31,6 +32,7 @@
         </q-td>
       </template>
     </q-table>
+
   </div>
 
   <!-- Create new admin -->
@@ -70,24 +72,26 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
-import {ADMIN_API_LINKS} from "app/api-links";
+import { ADMIN_API_LINKS } from "app/api-links";
 
 // Table columns title
 const columns = [
   { name: 'adminVaildName', align: 'left', label: '管理员姓名', field: 'adminValidName', sortable: true },
   { name: 'adminID', align: 'left', label: '管理员编号', field: 'adminID', sortable: true },
   { name: 'adminPhone', align: 'left', label: '联络号码', field: 'adminPhone' },
-  { name: 'status', align: 'left', label: '激活状态', field: 'adminStatus', sortable: true },
+  { name: 'status', align: 'left', label: '激活状态', field: 'adminStatus' },
 ]
 
 export default defineComponent({
   setup () {
+    const loading = ref(false)
     const $q = useQuasar();
     const creatable = ref(false);
     const orgAdmin = {
@@ -95,7 +99,7 @@ export default defineComponent({
       adminPhone: ''
     };
     const newAdmin = reactive({ ...orgAdmin });
-    const ADMIN_LINK=ADMIN_API_LINKS.admins
+    const ADMIN_LINK = ADMIN_API_LINKS.admins
 
     const add = () => {
       creatable.value = true;
@@ -120,11 +124,14 @@ export default defineComponent({
     const admins = ref([]);
     const getAdminsData = async () => {
       try {
+        loading.value = true;
         const response = await api.get(ADMIN_LINK);
         admins.value.splice(0, admins.value.length, ...response.data.data);
+        loading.value = false;
       } catch (err) {
+        loading.value = false;
         $q.notify({
-          type:"error",
+          type: "error",
           message: err.message,
         });
       }
@@ -138,7 +145,7 @@ export default defineComponent({
       } else {
 
         $q.notify({
-          type:"error",
+          type: "error",
           message: "姓名不能为空",
         });
       }
@@ -148,7 +155,7 @@ export default defineComponent({
         } else {
           readySubmit = false;
           $q.notify({
-            type:"error",
+            type: "error",
             message: "联络方式不能为空",
           });
         }
@@ -161,15 +168,15 @@ export default defineComponent({
         adminValidName: newAdmin.adminValidName,
         adminPhone: newAdmin.adminPhone
       }).then((res) => {
-        if (res.data !== undefined && res.data.code === 200 ) {
+        if (res.data !== undefined && res.data.code === 200) {
           $q.notify({
-            type:"success",
+            type: "success",
             message: "创建成功",
           });
         }
         if (res.status === 404) {
           $q.notify({
-            type:"error",
+            type: "error",
             message: res.data.message,
           });
         }
@@ -178,21 +185,32 @@ export default defineComponent({
 
     //更改管理员的状态
     const updateAdminStatus = (id, status) => {
-      api.post(ADMIN_LINK + '/' + id, {
-        adminStatus: status
-      }).then((res) => {
-        if (res.data !== undefined && res.data.code === 200 ) {
-          $q.notify({
-            type:"success",
-            message: "修改状态成功",
-          });
-        }
-        if (res.data.code !== 200) {
-          $q.notify({
-            type:"error",
-            message: res.data.message,
-          });
-        }
+      $q.dialog({
+        title: "确认调整状态",
+        message: "您是否确认要调整此状态?",
+        ok: { push: true, label: "确认" },
+        cancel: { push: true, label: "取消" },
+        persistent: true,
+      }).onOk(() => {
+        api.post(ADMIN_LINK + '/' + id, {
+          adminStatus: status
+        }).then((res) => {
+          if (res.data !== undefined && res.data.code === 200) {
+            getAdminsData()
+            $q.notify({
+              type: "success",
+              message: "修改状态成功",
+            });
+          }
+          if (res.data.code !== 200) {
+            $q.notify({
+              type: "error",
+              message: res.data.message,
+            });
+          }
+        })
+      }).onCancel(() => {
+        getAdminsData()
       })
     }
 
@@ -211,7 +229,8 @@ export default defineComponent({
       save,
       readySubmit,
       checkInput,
-      updateAdminStatus
+      updateAdminStatus,
+      loading
     }
   }
 })
