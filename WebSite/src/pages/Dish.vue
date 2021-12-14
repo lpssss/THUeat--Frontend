@@ -57,7 +57,6 @@ import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncemen
 
 export default {
   name: "Dish",
-  // Components需改名
   components: {
     CommentCardSection,
     HomePageAnnouncementSection,
