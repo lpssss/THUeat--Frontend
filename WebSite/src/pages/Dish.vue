@@ -52,7 +52,6 @@ import { watch } from 'vue';
 import { useStore } from 'vuex';
 import {useRoute, useRouter} from 'vue-router'
 import { api } from "boot/axios";
-import axios from "axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 
