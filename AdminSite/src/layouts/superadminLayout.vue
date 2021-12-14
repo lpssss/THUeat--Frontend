@@ -52,6 +52,7 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import useAppState from "src/store/userAppState.js";
 import { useRouter } from "vue-router"
+import {useQuasar} from "quasar";
 
 const { getName } = useAppState();
 const name = getName();
@@ -91,12 +92,21 @@ export default defineComponent({
   },
 
   setup () {
+    const $q=useQuasar()
     const leftDrawerOpen = ref(false)
     const { resetState } = useAppState();
     const router = useRouter();
     const logout = () => {
-      resetState();
-      router.push('/');
+      $q.dialog({
+        title: "确认登出",
+        message: "您是否确认要登出?",
+        ok: { push: true, label: "确认" },
+        cancel: { push: true, label: "取消" },
+        persistent: true,
+      }).onOk(() => {
+        resetState();
+        router.push('/');
+      });
     }
 
     return {
