@@ -8,10 +8,9 @@
           height="400px"
         >
           <HomePageAnnouncementSection
-            name="first"
-            :noticeTitle="stallData.data.stallName"
-            :noticeWords="stallData.data.stallDescribe"
-            :noticeImage="stallData.data.stallImages[0]"
+            v-for="notice in stallPictureData.data"
+            v-bind="notice"
+            :key="notice.name"
           />
         </q-carousel>
       </div>
@@ -108,11 +107,24 @@ export default defineComponent({
     let API_LINK = `stalls/${id}`; // 之后放真正的API
 
     const stallData = reactive({ data: {} });
+    const stallPictureData = reactive({ data: [] })
 
     const getStallData = async () => {
       try {
         const response = await api.get(API_LINK);
         stallData.data = response.data.data;
+        //stallData.data.stallName;
+        //stallData.data.stallDescribe
+        var i = 1
+        stallData.data.stallImages.forEach((item) => {
+          stallPictureData.data.push({
+            noticeTitle: stallData.data.stallName,
+            noticeWords: stallData.data.stallDescribe,
+            noticeImage: item,
+            name: i
+          })
+          i += 1
+        })
       } catch (err) {
         console.log(err.message);
       }
@@ -126,12 +138,14 @@ export default defineComponent({
     },{
       immediate:true
     });
-    //getStallData();
+    getStallData();
     //getDishData();
+    console.log(stallPictureData.data)
 
     return {
-      slide: ref('first'),
+      slide: ref(1),
       stallData,
+      stallPictureData,
     };
 },
 })

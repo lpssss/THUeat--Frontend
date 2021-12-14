@@ -7,10 +7,9 @@
       height="400px"
     >
       <HomePageAnnouncementSection
-        name="first"
-        :noticeTitle="dishData.data.dishName"
-        :noticeWords="dishData.data.dishIntro"
-        :noticeImage="dishData.data.dishImages"
+        v-for="notice in dishPictureData.data"
+        v-bind="notice"
+        :key="notice.name"
       />
     </q-carousel>
 
@@ -73,10 +72,22 @@ export default {
     let API_LINK = `dishes/${id}`; // 之后放真正的API
     //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
     const dishData = reactive({ data: {} });
+    const dishPictureData = reactive({ data: [] })
+
     const getDishData = async () => {
       try {
         const response = await api.get(API_LINK);
         dishData.data = response.data.data;
+        var i = 1
+        dishData.data.dishImages.forEach((item) => {
+          dishPictureData.data.push({
+            noticeTitle: dishData.data.dishName,
+            noticeWords: dishData.data.dishIntro,
+            noticeImage: item,
+            name: i
+          })
+          i += 1
+        })
       } catch (err) {
         console.log(err.message);
       }
@@ -103,9 +114,10 @@ export default {
     }
 
     return {
-      slide: ref('first'),
+      slide: ref(1),
       dishData,
-      postDishLikes
+      postDishLikes,
+      dishPictureData,
     };
   },
 };
