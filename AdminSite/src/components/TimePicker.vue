@@ -1,6 +1,6 @@
 <template>
-  <div class="row items-center q-gutter-sm no-wrap">
-    <div class="col-5">
+  <div class="row items-center">
+    <div class="col-auto">
       <q-btn
         :disable="!enable"
         outline
@@ -25,11 +25,7 @@
           </div>
         </q-time>
       </q-popup-proxy>
-    </div>
-    <div class="col-auto text-center">
-      <span>到</span>
-    </div>
-    <div class="col-5">
+      <span> 到 </span>
       <q-btn
         :disable="!enable"
         outline
