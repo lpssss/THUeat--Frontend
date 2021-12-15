@@ -18,7 +18,7 @@
 
     <q-card-section class="q-pt-none">
       <q-btn v-if="myDishLike == false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike == true" color="primary" size="sm" falt round  icon="thumb_up" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike == true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
       <span class="q-px-sm text-caption text-grey">{{ dishLikes }}</span>
     </q-card-section>
   </q-card>
@@ -26,7 +26,6 @@
 
 <script>
 import { ref, defineComponent, computed } from "vue";
-import axios from "axios";
 import { api } from "boot/axios";
 import userAppState from "src/store/userAppState";
 export default defineComponent({
@@ -107,8 +106,6 @@ export default defineComponent({
         //取消点赞
         api.delete(API_LINK).then(res => {
           if (res.data.code === 200) {
-            //reload 太慢了
-            //location.reload()
             this.$emit("likeChange");
             console.log("successfully delete thumb up");
           } else {
@@ -117,14 +114,6 @@ export default defineComponent({
         });
       }
     },
-    getThumbColor() {
-      if (this.myDishLike) {
-        return ["red"]
-      }
-      else {
-        return ["blue"]
-      }
-    }
   }
 });
 </script>

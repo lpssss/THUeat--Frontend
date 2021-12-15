@@ -9,24 +9,18 @@
 
       <q-item-section>
         <q-item-label>{{ userName }}</q-item-label>
-        <q-item-label caption>
-          {{ displayReviewDateTime }}
-        </q-item-label>
+        <q-item-label caption>{{ displayReviewDateTime }}</q-item-label>
       </q-item-section>
     </q-item>
 
     <q-separator />
 
     <q-card-section>
-      <div class="ellipsis-2-lines">
-        {{ shortenComment }}
-      </div>
-      <span v-if="needDialog"
-        ><strong>...</strong
-        ><q-btn flat color="grey" dense @click="dialog = true"
-          >查看完整评论</q-btn
-        ></span
-      >
+      <div class="ellipsis-2-lines">{{ shortenComment }}</div>
+      <span v-if="needDialog">
+        <strong>...</strong>
+        <q-btn flat color="grey" dense @click="dialog = true">查看完整评论</q-btn>
+      </span>
     </q-card-section>
 
     <q-card-section vertical class="q-pt-none">
@@ -39,14 +33,10 @@
         height="125px"
         padding
       >
-        <q-carousel-slide
-          v-for="idx in reviewImages.length"
-          :name="idx"
-          :key="idx"
-        >
-          <a :href="reviewImages[idx - 1]" target="_blank"
-            ><q-img fit="contain" height="100px" :src="reviewImages[idx - 1]"
-          /></a>
+        <q-carousel-slide v-for="idx in reviewImages.length" :name="idx" :key="idx">
+          <a :href="reviewImages[idx - 1]" target="_blank">
+            <q-img fit="contain" height="100px" :src="reviewImages[idx - 1]" />
+          </a>
         </q-carousel-slide>
       </q-carousel>
     </q-card-section>
@@ -70,42 +60,45 @@
           readonly
         />
       </div>
-
     </q-card-section>
     <q-separator />
 
     <q-card-section class="q-pt-none">
       <q-btn
+        v-if="myReviewLike === false"
         size="sm"
         falt
         round
         color="primary"
-        icon="thumb_up"
-        @click="PostreviewLikes(reviewID)"
+        icon="thumb_up_off_alt"
+        @click="postReviewLikes(reviewID)"
       />
-      <span class="q-px-sm text-caption text-grey"> {{ reviewLikes }} </span>
+      <q-btn
+        v-if="myReviewLike === true"
+        size="sm"
+        falt
+        round
+        color="primary"
+        icon="thumb_up_alt"
+        @click="postReviewLikes(reviewID)"
+      />
+      <span class="q-px-sm text-caption text-grey">{{ reviewLikes }}</span>
 
       <q-dialog v-model="dialog" persistent>
         <q-card>
           <q-card-section>
-            完整评论内容<br />
-            <q-item-label caption>
-              {{ displayReviewDateTime }}
-            </q-item-label>
+            完整评论内容
+            <br />
+            <q-item-label caption>{{ displayReviewDateTime }}</q-item-label>
             <q-separator />
-            <div class="ellipsis-2-lines">
-              {{ reviewComment }}
-            </div>
+            <div class="ellipsis-2-lines">{{ reviewComment }}</div>
           </q-card-section>
           <q-card-section>
-            档主回复<br />
-            <q-item-label caption>
-              {{ displayReplyDateTime }}
-            </q-item-label>
+            档主回复
+            <br />
+            <q-item-label caption>{{ displayReplyDateTime }}</q-item-label>
             <q-separator />
-            <div class="ellipsis-2-lines">
-              {{ replyComment }}
-            </div>
+            <div class="ellipsis-2-lines">{{ replyComment }}</div>
           </q-card-section>
 
           <!-- Notice v-close-popup -->
@@ -120,7 +113,7 @@
 
 <script>
 import { ref, defineComponent, computed } from "vue";
-import axios from "axios";
+import { api } from "boot/axios";
 import userAppState from "src/store/userAppState";
 
 export default defineComponent({
@@ -171,6 +164,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    myReviewLike: {
+      type: Boolean,
+      require: true
+    },
     userImage: {
       type: String,
       default: "#",
@@ -205,9 +202,10 @@ export default defineComponent({
     }
   },
   methods: {
-    PostreviewLikes(ID){
+    postReviewLikes(ID){
+      console.log(this.myReviewLike)
       var reviewID = ID;
-      var API_LINK = `http://localhost:3000/reviews/like/${reviewID}`
+      var API_LINK = `reviews/like/${reviewID}`
 
       //loginstatus相关
       const { getToken, resetState } = userAppState();
@@ -220,22 +218,25 @@ export default defineComponent({
       if(!loginStatus.value){
         this.$router.push('/login')
       }
-      else{
-        if(this.islike == true){
-          axios.delete(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
-            console.log(response.data)
-            this.islike = false
-            this.$router.go(0)
-          });
-        }
-        else if(this.islike == false){
-          axios.post(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
-            console.log(response.data)
-            this.islike = true
-
-            this.$router.go(0)
-          });
-        }
+      else if (this.myReviewLike === false) {
+        api.post(API_LINK).then(res => {
+          if (res.data.code === 200) {
+            this.$emit("likeChange");
+            console.log("successfully thumb up");
+          } else {
+            console.log("error")
+          }
+        });
+      }
+      else {
+        api.delete(API_LINK).then(res => {
+          if (res.data.code === 200) {
+            this.$emit("likeChange");
+            console.log("successfully delete thumb up");
+          } else {
+            console.log("error");
+          }
+        });
       }
     }
   },
