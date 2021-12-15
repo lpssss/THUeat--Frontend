@@ -2,10 +2,10 @@
 <q-page>
   <div class="background"></div>
   <q-page class="q-pa-md row items-center justify-center">
-    <q-card class="register-card ">
+    <q-card class="col-md-3 col-xs-10 ">
       <div class="q-pa-md ">
         <div class="row justify-center text-h5 q-pa-md">让我们加入吧！</div>
-        <q-form class="q-gutter-md" >
+        <q-form class="q-gutter-sm " >
           <q-input
             v-model="name"
             :rules="[(val) => (val && val.length > 0) || '请输入你的昵称']"
@@ -283,12 +283,4 @@ export default defineComponent({
   background-size: cover
   background-image: url("../assets/background.svg")
 
-.register-card
-  position: absolute
-  left: 50%
-  top: 50%
-  transform: translate(-50%, -50%)
-  width: 28rem
-  height: 41rem
-  border-radius: 10px
 </style>
