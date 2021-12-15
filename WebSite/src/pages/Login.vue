@@ -2,9 +2,9 @@
   <div>
     <div class="background"></div>
     <q-page padding class="row items-center justify-center">
-      <q-card class="login-card">
+      <q-card class="col-md-3 col-xs-10">
         <h6 class="text-center">让我们开始吧!</h6>
-        <div class="q-pa-md">
+        <div class="q-pa-md ">
           <q-form  class="q-gutter-md">
             <q-input
               v-model="name"
@@ -169,12 +169,4 @@ export default defineComponent({
   background-repeat: no-repeat
   background-size: cover
   background-image: url("../assets/background.svg")
-.login-card
-  position: absolute
-  left: 50%
-  top: 50%
-  transform: translate(-50%,-50%)
-  width: 28rem
-  height: 28rem
-  border-radius: 10px
 </style>
