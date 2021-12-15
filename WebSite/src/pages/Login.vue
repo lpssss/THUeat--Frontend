@@ -9,6 +9,8 @@
             <q-input
               v-model="name"
               label="用户名"
+              counter
+              maxlength="20"
               lazy-rules
               :rules="[(val) => (val && val.length > 0) || '用户名不能为空']"
             />
@@ -17,6 +19,8 @@
               :type="isPwd ? 'password' : 'text'"
               label="密码"
               lazy-rules
+              counter
+              maxlength="20"
               :rules="[(val) => (val && val.length >= 6) || '密码不能少于6位']"
             >
               <template v-slot:append>
@@ -64,7 +68,7 @@ export default defineComponent({
   setup () {
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('Alice');
+    const name = ref('Alice123');
     const password = ref('alicepassword');
     const isPwd = ref(true);
     const acceptclause = ref(false);
