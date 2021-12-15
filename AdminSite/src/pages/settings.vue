@@ -61,7 +61,10 @@ export default defineComponent({
     const $q = useQuasar();
     const token = ref(getToken().value);
     const DETAIL_LINK = ADMIN_API_LINKS.personalDetails;
-    const isLoading=ref(false)
+    const isLoading=ref(true)
+    $q.loading.show({
+      message: "页面加载中",
+    });
 
     //用户资料模板
     const details = reactive({
@@ -96,7 +99,6 @@ export default defineComponent({
     //获取用户资料
     const getDetails = async () => {
       try {
-        isLoading.value=true
         const response = await api.get(DETAIL_LINK);
         details.validName = response.data.data.validName;
         details.name = response.data.data.name;

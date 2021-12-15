@@ -233,7 +233,6 @@ export default {
     });
 
     //功能：将回复内容更新到后端，并显示状态（成功 & 失败）
-    //TODO
     function replyReview() {
       async function sendData() {
         const API_LINK = `reviews/${props.reviewID}`;
@@ -250,9 +249,10 @@ export default {
             context.emit("addReplyComment", {
               reviewID: props.reviewID,
               replyComment: reply.value,
-              replyDateTime: "2021-12-02T17:07:45.693639",
+              replyDateTime: res.data.data.replyDateTime
             });
             reply.value = "";
+            expanded.value=false
           } else {
             $q.notify({
               type: "error",

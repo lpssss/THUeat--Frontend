@@ -65,6 +65,7 @@ const stallDetails = {
       );
       try {
         const response = await staffapi.post(API_LINK, formData);
+        console.log(response)
         if (response.data.code === 200) {
           Notify.create({
             type: "success",

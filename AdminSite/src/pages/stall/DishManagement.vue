@@ -5,7 +5,7 @@
 <!--备注：由于API fetch有延时，因此为了避免warning，使用v-if在获得数据后才开始render-->
 <!--pending：创建新菜品的POST返回-->
 <template>
-  <template v-if="$store.state.dishesDetails.dishesDetailsData.length">
+  <template v-if="!isLoading">
     <DishCreateForm
       v-if="openDishCreateForm"
       ref="dishForm"
@@ -46,7 +46,10 @@ export default {
     const store = useStore();
     const openDishCreateForm = ref(false);
     const dishForm = ref();
-    const isLoading = ref(false);
+    const isLoading = ref(true);
+    $q.loading.show({
+      message: "页面加载中",
+    });
 
     function arrangeData(data) {
       let dishesDetails = [];
@@ -71,7 +74,6 @@ export default {
     //功能：获取所有菜品信息，失败则显示错误信息
     async function getDishData() {
       try {
-        isLoading.value = true;
         const response = await staffapi.get(API_LINK);
         const [dishesDetails, dishesImages] = arrangeData(response.data.data);
         store.commit("dishesDetails/initialize", {
@@ -92,6 +94,7 @@ export default {
     return {
       openDishCreateForm,
       dishForm,
+      isLoading
     };
   },
 };

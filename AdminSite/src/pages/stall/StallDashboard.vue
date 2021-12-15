@@ -3,7 +3,7 @@
 <!--所需Components：多张统计数据卡片DashboardCard，一个档口信息表格StallDetailsTable-->
 <!--备注：由于API fetch有延时，因此为了避免warning，使用v-if在获得数据后才开始render-->
 <template>
-  <div v-if="Object.keys(myStallDetailsData).length" class="q-pa-md">
+  <div v-if="!isLoading" class="q-pa-md">
     <h4 style="border-bottom: 1px solid">显示面板</h4>
     <div class="row q-mb-lg">
       <div class="col-12">
@@ -40,11 +40,11 @@ const DASHBOARD_DATA_TITLE_ICON = [
   { engTitle: "stallRate", title: "档口平均分", iconName: "star_rate" },
   { engTitle: "stallRateNumber", title: "档口评分数量", iconName: "numbers" },
   {
-    engTitle: "stallCommentNumber",
+    engTitle: "stallRateNumber",
     title: "档口评论数量",
     iconName: "numbers",
   },
-  { engTitle: "canteenAvgRate", title: "食堂平均分", iconName: "star_rate" },
+  { engTitle: "canteenRate", title: "食堂平均分", iconName: "star_rate" },
   { engTitle: "bestDishName", title: "最佳菜品", iconName: "thumb_up_alt" },
 ];
 
@@ -70,12 +70,14 @@ export default {
     const myDashboardData = ref([]);
     const myStallDetailsData = reactive({});
     const myStallImages = ref([]);
-    const isLoading=ref(false)
+    const isLoading=ref(true)
+    $q.loading.show({
+      message: "页面加载中",
+    });
 
     //输出1个数据：显示面板页面所需数据，Object
     //功能：从API 获取显示面板所需数据
     async function getDashboardData() {
-      isLoading.value=true
       const response = await staffapi.get(API_LINK);
       return response.data.data; //真实数据埋在第二个data内
     }
@@ -139,6 +141,7 @@ export default {
       STALL_DETAILS_TITLE,
       myDashboardData,
       myStallDetailsData,
+      isLoading
     };
   },
 };

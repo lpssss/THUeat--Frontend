@@ -148,11 +148,14 @@ export default {
       () => store.state.dishesDetails.dishesImagesData[dishidx.value]
     );
     const sortedTime = computed(() => {
+      if (myRowData.dishAvailableTime.length===0) {
+        return ""
+      }
       if (myRowData.dishAvailableTime[0] === "自定义") {
         return myRowData.dishAvailableTime[0];
       } else {
         const itemOrder = ["早餐", "午餐", "晚餐", "宵夜"];
-        const tempArr = [...myRowData.dishAvailableTime];
+        let tempArr=[...myRowData.dishAvailableTime]
         tempArr.sort((a, b) => itemOrder.indexOf(a) - itemOrder.indexOf(b));
         return tempArr.join(", ");
       }

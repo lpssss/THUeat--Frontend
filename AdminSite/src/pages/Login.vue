@@ -5,8 +5,8 @@
       padding
       class="row items-center justify-center"
     >
-      <q-card class="login-card">
-        <h6 align="center">乐吃管理系统</h6>
+      <q-card class="col-md-3 col-xs-10">
+        <h6 class="text-center">乐吃管理系统</h6>
         <div class="q-pa-md">
           <!-- <q-form class="q-gutter-md"> -->
           <div class="q-gutter-md">
@@ -34,7 +34,7 @@
             <div>
               <q-checkbox
                 v-model="acceptclause"
-                label="接受条款"
+                label="已阅读用户手册"
               />
             </div>
 
@@ -84,7 +84,7 @@ export default defineComponent({
           password: password.value
 
         }).then((res) => {
-          if (res.data.code === 200 && res.data !== undefined) {
+          if (res.data !== undefined && res.data.code === 200) {
             updateToken(res.data.data.token);
             updateType(res.data.data.type);
             updateName(res.data.data.name);
@@ -188,13 +188,5 @@ export default defineComponent({
   background-repeat: no-repeat
   background-size: cover
   background-image: url("../assets/background.svg")
-.login-card
-  position: absolute
-  left: 50%
-  top: 50%
-  transform: translate(-50%,-50%)
-  width: 28rem
-  height: 28rem
-  border-radius: 10px
 </style>
 
