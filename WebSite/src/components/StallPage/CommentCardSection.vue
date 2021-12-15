@@ -26,7 +26,7 @@
       <q-card-section vertical class="q-pt-none" >
         <q-img :src="reviewImages" class="q-card-img"/>
       </q-card-section>
-      
+
       <q-card-section class="q-pt-none ">
         <q-btn size="sm" falt round color="primary" icon="thumb_up" @click="PostreviewLikes(reviewID)" />
         <span class="q-px-sm text-caption text-grey"> {{ reviewLikes }} </span>
@@ -69,8 +69,9 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, computed } from 'vue'
 import axios from "axios";
+import userAppState from "src/store/userAppState";
 
 export default defineComponent({
 
@@ -126,8 +127,16 @@ export default defineComponent({
       PostreviewLikes(ID){
         var reviewID = ID;
         var API_LINK = `http://localhost:3000/reviews/like/${reviewID}`
+
+                    //loginstatus相关
+                    const { getToken, resetState } = userAppState();
+                    const loginStatus = computed(() => {
+                      const token = getToken().value;
+                      return token !== null;
+                    });
+
         console.log(this.islike)
-                    if(!this.$store.state.login.loginStatus){
+                    if(!loginStatus.value){
                       this.$router.push('/login')
                     }
                     else{
