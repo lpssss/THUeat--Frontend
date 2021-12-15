@@ -54,14 +54,12 @@ import { useQuasar } from "quasar";
 const homePageBanner = {
   stall: {
     content: "高分档口推荐",
-    change: false
-
+    change: false,
   },
   dish: {
     content: "高点赞菜品",
-    change: false
-  }
-
+    change: false,
+  },
 };
 
 export default defineComponent({
