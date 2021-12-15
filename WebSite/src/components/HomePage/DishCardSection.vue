@@ -1,113 +1,122 @@
 <template>
-    <q-card class="my-card">
-        <q-img :src="dishImages" :alt="dishName" class="q-card-img"/>
+  <q-card class="my-card">
+    <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
 
-        <q-card-section class="q-pb-none">
-          <div class="text-h6"><router-link :to="{path:'/dish',query:{dishID:dishID}}">{{ dishName }}</router-link></div>
-          <div class="text-subtitle2"> {{ canteenName }} </div>
-          价格：{{dishPrice}} <br/>售卖时间：{{ dishAvailableTime }}
-        </q-card-section>
+    <q-card-section class="q-pb-none">
+      <div class="text-h6">
+        <router-link :to="{path:'/dish',query:{dishID:dishID}}">{{ dishName }}</router-link>
+      </div>
+      <div class="text-subtitle2">{{ canteenName }}</div>
+      价格：{{dishPrice}}
+      <br />
+      售卖时间：{{ dishAvailableTime }}
+    </q-card-section>
 
-        <q-card-section>
-          <div class="ellipsis-2-lines" >
-              {{ dishBestComment }}
-          </div>
-        </q-card-section>
+    <q-card-section>
+      <div class="ellipsis-2-lines">{{ dishBestComment }}</div>
+    </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <q-btn size="sm" falt round color="primary" icon="thumb_up" @click="PostdishLikes(dishID)" />
-          <span class="q-px-sm text-caption text-grey"> {{ dishLikes }} </span>
-        </q-card-section>
-    </q-card>
+    <q-card-section class="q-pt-none">
+      <q-btn v-if="myDishLike == false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike == true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
+      <span class="q-px-sm text-caption text-grey">{{ dishLikes }}</span>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>
-import { ref, defineComponent, computed } from 'vue'
-import axios from "axios";
+import { ref, defineComponent, computed } from "vue";
 import { api } from "boot/axios";
 import userAppState from "src/store/userAppState";
 export default defineComponent({
-    setup () {
+  setup() {
     return {
       isDishLike: ref(false),
-      code:"",
+    };
+  },
+  name: "DishCardSection",
+  props: {
+    dishID: {
+      type: Number,
+      required: true
+    },
+    dishName: {
+      type: String,
+      required: true
+    },
+
+    canteenName: {
+      type: String,
+      default: ""
+    },
+
+    myDishLike: {
+      type: Boolean,
+      require: true
+    },
+
+    dishLikes: {
+      type: Number,
+      default: 5
+    },
+
+    dishPrice: {
+      type: String,
+      default: "0"
+    },
+    dishAvailableTime: {
+      type: Array
+    },
+    dishBestComment: {
+      type: String,
+      default: "No comment."
+    },
+
+    dishImages: {
+      type: String,
+      default: "#"
+    }
+  },
+  methods: {
+    postDishLikes(ID) {
+      let dishID = ID;
+      let API_LINK = `dishes/${dishID}`;
+      console.log(dishID);
+      let that = this;
+
+      //loginstatus相关
+      const { getToken, resetState } = userAppState();
+      const loginStatus = computed(() => {
+        const token = getToken().value;
+        return token !== null;
+      });
+      if (!loginStatus.value) {
+        this.$router.push("/login");
+      } else if (this.myDishLike === false) {
+        //点赞
+        api.post(API_LINK).then(res => {
+          if (res.data.code === 200) {
+            this.$emit("likeChange");
+            console.log("successfully thumb up");
+          } else {
+            console.log("error");
+          }
+        });
+      } else {
+        //取消点赞
+        api.delete(API_LINK).then(res => {
+          if (res.data.code === 200) {
+            this.$emit("likeChange");
+            console.log("successfully delete thumb up");
+          } else {
+            console.log("error");
+          }
+        });
       }
     },
-    name: "DishCardSection",
-    props: {
-        dishID: {
-          type: Number,
-          required: true
-        },
-        dishName: {
-            type: String,
-            required: true
-        },
-
-        canteenName: {
-            type: String,
-            default: ''
-        },
-
-        dishLikes: {
-            type: Number,
-            default: 5
-        },
-
-        dishPrice: {
-            type: Number,
-            default: 1
-        },
-        dishAvailableTime: {
-            type:String,
-            default:'#'
-        },
-        dishBestComment: {
-            type: String,
-            default: 'No comment.'
-        },
-
-        dishImages: {
-            type: String,
-            default: '#'
-        },
-    },
-    methods:{
-      PostdishLikes(ID){
-        var dishID = ID;
-        var API_LINK = `dishes/${dishID}`
-
-        var that=this;
-
-        //loginstatus相关
-        const { getToken, resetState } = userAppState();
-        const loginStatus = computed(() => {
-          const token = getToken().value;
-          return token !== null;
-        });
-        if(!loginStatus.value){
-          this.$router.push('/login')
-        }
-        else{
-          var req;
-          api.post(API_LINK,NaN).then(function(response){
-            that.code = response.data.code;
-            console.log("post ,Get data:"+that.code);
-          });
-
-          if(that.code == "400"){
-            api.delete(API_LINK,NaN).then(function(response){
-              console.log("Delete ,Get data:"+response.data.code)
-            });
-          }
-        }
-       
-      }
- 
-    }
-})
+  }
+});
 </script>
 
 <style>
-
 </style>

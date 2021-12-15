@@ -52,6 +52,7 @@
                 v-for="dish in stallData.data.dishes"
                 v-bind="dish"
                 :key="dish.dishID"
+                v-on:likeChange="refreshDishData($event)"
               />
             </div>
             <Pagination/>
@@ -63,6 +64,7 @@
                 v-for="review in stallData.data.reviews"
                 v-bind="review"
                 :key="review.reviewID"
+                v-on:likeChange="refreshDishData($event)"
               />
             </div>
             <Pagination/>
@@ -99,6 +101,11 @@ export default defineComponent({
   data(){
     return {
       tab: 'dish',
+    }
+  },
+  methods: {
+    refreshDishData() {
+      this.getStallData();
     }
   },
   setup (){
@@ -146,6 +153,7 @@ export default defineComponent({
       slide: ref(1),
       stallData,
       stallPictureData,
+      getStallData
     };
 },
 })

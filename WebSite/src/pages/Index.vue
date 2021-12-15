@@ -36,6 +36,7 @@
           v-for="dish in dishData.data"
           v-bind="dish"
           :key="dish.dishID"
+          v-on:likeChange="refreshDishData($event)"
         />
       </div>
     </div>
@@ -69,6 +70,11 @@ export default defineComponent({
     BannerSection,
     DishCardSection,
     StallCardSection,
+  },
+  methods: {
+    refreshDishData() {
+      this.getDishData();
+    }
   },
   setup() {
     const $q = useQuasar();
@@ -126,6 +132,7 @@ export default defineComponent({
     getNoticeData();
 
     return {
+      getDishData,
       homePageBanner: homePageBanner,
       dishData,
       stallData,

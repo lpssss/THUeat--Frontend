@@ -11,10 +11,19 @@
     <q-card flat bordered class="bg-purple-10086" style="width: 100%">
       <q-card-section class="q-pa-md">
         <q-btn
+          v-if="dishData.data.myDishLike == false"
           size="sm"
           round
           color="primary"
-          icon="thumb_up"
+          icon="thumb_up_off_alt"
+          @click="postDishLikes"
+        />
+        <q-btn
+          v-if="dishData.data.myDishLike == true"
+          size="sm"
+          round
+          color="primary"
+          icon="thumb_up_alt"
           @click="postDishLikes"
         />
         <span class="q-px-sm text-caption text-grey">
@@ -41,6 +50,7 @@
         v-for="review in dishData.data.reviews"
         v-bind="review"
         :key="review.reviewID"
+        v-on:likeChange="refreshDishData($event)"
       />
     </div>
   </div>
@@ -63,6 +73,49 @@ export default {
     CommentCardSection,
     HomePageAnnouncementSection,
     BannerSection,
+  },
+  methods: {
+    refreshDishData() {
+      this.getDishData();
+    },
+    postDishLikes(ID) {
+      const $q=useQuasar()
+      const route = useRoute();
+      const store = useStore();
+      const router = useRouter();
+
+      const { getToken, resetState } = userAppState();
+      const loginStatus = computed(() => {
+        const token = getToken().value;
+        return token !== null;
+      });
+
+
+      console.log(loginStatus.value);
+      if (!loginStatus.value) {
+        router.push("/login");
+      } else if (this.dishData.data.myDishLike === false) {
+        //点赞
+        api.post(this.API_LINK).then(res => {
+          if (res.data.code === 200) {
+            this.getDishData();
+            console.log("successfully thumb up");
+          } else {
+            console.log("error");
+          }
+        });
+      } else {
+        //取消点赞
+        api.delete(this.API_LINK).then(res => {
+          if (res.data.code === 200) {
+            this.getDishData();
+            console.log("successfully delete thumb up");
+          } else {
+            console.log("error");
+          }
+        });
+      }
+    }
   },
   setup() {
     const $q=useQuasar()
@@ -120,20 +173,12 @@ export default {
       }
     );
 
-    function postDishLikes(){
-      console.log(loginStatus.value);
-      if (!loginStatus.value) {
-        router.push("/login");
-      } else {
-        console.log("click thumb successfully");
-      }
-    }
-
     return {
       slide: ref(1),
       dishData,
-      postDishLikes,
       dishPictureData,
+      getDishData,
+      API_LINK,
     };
   },
 };
