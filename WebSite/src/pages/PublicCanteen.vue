@@ -47,14 +47,13 @@
 <script>
 import { defineComponent, reactive, watch  } from "vue";
 import { api } from "boot/axios";
-import axios from "axios";
 import {useRoute} from 'vue-router'
 import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetailSection";
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
 import CanteenStallSection from "components/CanteenPage/CanteenStallSection";
-import StallCardSection from "components/HomePage/StallCardSection";
 import BannerSection from "components/Layout/BannerSection";
+import {useQuasar} from "quasar";
 
 const canteenPageBanner = {
   information:{
@@ -82,27 +81,29 @@ export default defineComponent({
     CanteenBasicDetailSection,
   },
   setup() {
+    const $q=useQuasar()
     const route=useRoute()
     let id=route.query.canteenID
-    let API_LINK = `canteens/${id}`; 
+    let API_LINK = `canteens/${id}`;
     const canteenData = reactive({ data: {} });
     const getCanteenData = async () => {
       try {
         const response = await api.get(API_LINK);
         canteenData.data = response.data.data;
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          type:"error",
+          message: "获取食堂信息失败，请刷新重试",
+        });
       }
     };
     watch(()=>route.query,()=>{
       id=route.query.canteenID
       API_LINK=`canteens/${id}`
       getCanteenData()
-      console.log("watch",route.query.canteenID)
     },{
       immediate:true
     });
-    //getCanteenData();
 
     return {
       canteenData,

@@ -36,7 +36,6 @@ export default defineComponent({
     },
     rating:{
       type:Number,
-      required:true
     },
     canteenImg:{
       type:String,
@@ -45,6 +44,8 @@ export default defineComponent({
   },
   setup(props){
     const canteenRating=ref(props.rating)
+    if(canteenRating.value===null)
+      canteenRating.value=0
     return{
       canteenRating
     }
