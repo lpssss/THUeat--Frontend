@@ -47,9 +47,8 @@
 </template>
 
 <script>
-import { ref, reactive, computed， watch } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 import {useRoute, useRouter} from 'vue-router'
-import { watch } from "vue";
 import { useStore } from "vuex";
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
@@ -70,10 +69,7 @@ export default {
     const route = useRoute();
     const store = useStore();
     const router = useRouter();
-
-    const route=useRoute();
-    const router=useRouter();
-
+    
     let id=route.query.dishID
     let API_LINK = `dishes/${id}`; // 之后放真正的API
 
