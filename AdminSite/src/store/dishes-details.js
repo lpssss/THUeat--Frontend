@@ -102,7 +102,7 @@ const dishesDetails = {
         } else {
           Notify.create({
             type: "error",
-            message: message.error,
+            message: response.data.message,
           });
         }
       } catch (err) {

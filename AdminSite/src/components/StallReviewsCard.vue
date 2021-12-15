@@ -240,7 +240,6 @@ export default {
       }
       sendData()
         .then((res) => {
-          console.log(res)
           if (res.data.code === 200) {
             $q.notify({
               type: "success",
@@ -256,7 +255,7 @@ export default {
           } else {
             $q.notify({
               type: "error",
-              message: "回复失败，请重新回复",
+              message: res.data.message,
             });
           }
         })

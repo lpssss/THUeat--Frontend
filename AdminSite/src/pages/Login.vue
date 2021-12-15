@@ -139,7 +139,7 @@ export default defineComponent({
           color: "red-5",
           textColor: "white",
           icon: "warning",
-          message: "请接受条款",
+          message: "请先阅读用户手册",
           timeout: 1000,
         });
       }
@@ -148,7 +148,7 @@ export default defineComponent({
           color: "red-5",
           textColor: "white",
           icon: "warning",
-          message: "请填些用户名",
+          message: "请填写用户名",
           timeout: 1000
         });
       }
