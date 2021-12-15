@@ -8,6 +8,7 @@
       v-for="review in reviewsData"
       v-bind="review"
       :key="review.reviewID"
+      @addReplyComment="addReplyComment"
     />
   </div>
 </template>
@@ -34,6 +35,7 @@ export default {
       try {
         const response = await staffapi.get(API_LINK);
         reviewsData.value = response.data.data;
+        console.log(reviewsData.value)
       } catch (err) {
         $q.notify({
           type:"error",
@@ -41,10 +43,21 @@ export default {
         })
       }
     }
+    function addReplyComment({reviewID,replyComment,replyDateTime}){
+      for(let i=0;i<reviewsData.value.length;i++){
+        if(reviewsData.value[i].reviewID===reviewID){
+          reviewsData.value[i].replyComment=replyComment
+          reviewsData.value[i].replyDateTime=replyDateTime
+          break
+        }
+      }
+    }
     //运行获取评论信息
     getReviewsData();
+
     return {
-      reviewsData
+      reviewsData,
+      addReplyComment
     }
   }
 }

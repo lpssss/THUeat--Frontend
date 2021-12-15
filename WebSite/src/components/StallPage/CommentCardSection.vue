@@ -51,6 +51,29 @@
       </q-carousel>
     </q-card-section>
 
+    <q-separator />
+    <q-card-section>
+      <div>
+        <q-chip v-for="tag in reviewTags" :key="tag">{{ tag }}</q-chip>
+      </div>
+      <div>
+        <q-chip v-for="dish in dishes" :key="dish">{{ dish.dishName }}</q-chip>
+      </div>
+      <div>
+        <q-rating
+          v-model="displayRating"
+          size="1.5em"
+          color="primary"
+          icon="star_border"
+          icon-selected="star"
+          icon-half="star_half"
+          readonly
+        />
+      </div>
+
+    </q-card-section>
+    <q-separator />
+
     <q-card-section class="q-pt-none">
       <q-btn
         size="sm"
@@ -131,6 +154,7 @@ export default defineComponent({
       curSlide: ref(1),
       dialog: ref(false),
       islike: ref(false),
+      displayRating: ref(props.rate),
     };
   },
 
@@ -170,6 +194,15 @@ export default defineComponent({
     reviewImages: {
       type: Array,
     },
+    rate: {
+      type: Number,
+    },
+    reviewTags: {
+      type: Array,
+    },
+    dishes:{
+      type:Object
+    }
   },
   methods: {
     PostreviewLikes(ID){
@@ -186,7 +219,7 @@ export default defineComponent({
       console.log(this.islike)
       if(!loginStatus.value){
         this.$router.push('/login')
-      } 
+      }
       else{
         if(this.islike == true){
           axios.delete(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
