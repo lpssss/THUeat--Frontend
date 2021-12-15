@@ -87,10 +87,9 @@ export default defineComponent({
         const response = await api.get(DISH_API_LINK);
         dishData.data = response.data.data;
       } catch (err) {
-        console.log(err.message);
         $q.notify({
           type: "error",
-          message: "获取数据失败，请刷新页面重试",
+          message: "获取菜品数据失败，请刷新页面重试",
         });
       }
     };
@@ -100,7 +99,10 @@ export default defineComponent({
         const response = await api.get(STALL_API_LINK);
         stallData.data = response.data.data;
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          type: "error",
+          message: "获取档口数据失败，请刷新页面重试",
+        });
       }
     };
 
@@ -113,10 +115,11 @@ export default defineComponent({
           noticeData.data[key]["name"] = i;
           i += 1;
         }
-        console.log(noticeData.data);
-        //console.log(noticeData.data[0])
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          type: "error",
+          message: "获取公告数据失败，请刷新页面重试",
+        });
       }
     };
 
