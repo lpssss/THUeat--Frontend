@@ -1,6 +1,7 @@
 <template>
+<q-page>
   <div class="background"></div>
-  <q-page class="row items-center justify-center">
+  <q-page class="q-pa-md row items-center justify-center">
     <q-card class="register-card ">
       <div class="q-pa-md ">
         <div class="row justify-center text-h5 q-pa-md">让我们加入吧！</div>
@@ -10,6 +11,8 @@
             :rules="[(val) => (val && val.length > 0) || '请输入你的昵称']"
             label="昵称"
             lazy-rules
+            counter
+            maxlength="20"
           />
 
           <q-input
@@ -38,6 +41,8 @@
             :type="isPwd ? 'password' : 'text'"
             label="密码"
             lazy-rules
+            counter
+            maxlength="20"
           >
             <template v-slot:append>
               <q-icon
@@ -54,6 +59,8 @@
             :type="isPwd ? 'password' : 'text'"
             label="确认密码"
             lazy-rules
+            counter
+            maxlength="20"
           >
             <template v-slot:append>
               <q-icon
@@ -96,6 +103,7 @@
         </q-form>
       </div>
     </q-card>
+  </q-page>
   </q-page>
 </template>
 

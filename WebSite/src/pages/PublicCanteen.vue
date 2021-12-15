@@ -10,7 +10,7 @@
     </div>
 
     <div class="q-pa-md q-gutter-sm">
-      <BannerSection v-bind="canteenPageBanner.information"/>
+      <BannerSection v-bind="canteenPageBanner.information" />
     </div>
 
     <div class="q-pa-md">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="q-pa-md q-gutter-sm">
-      <BannerSection v-bind="canteenPageBanner.introduction"/>
+      <BannerSection v-bind="canteenPageBanner.introduction" />
     </div>
 
     <div class="q-pa-md">
@@ -30,60 +30,58 @@
     </div>
 
     <div class="q-pa-md q-gutter-sm">
-      <BannerSection v-bind="canteenPageBanner.stalls"/>
+      <BannerSection v-bind="canteenPageBanner.stalls" />
     </div>
 
     <div class="q-pa-md row items-start q-gutter-md">
-      <CanteenStallSection
+      <StallCardSection
         v-for="stall in canteenData.data.stalls"
         v-bind="stall"
         :key="stall.stallID"
       />
     </div>
-
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, watch  } from "vue";
+import { defineComponent, reactive, watch } from "vue";
 import { api } from "boot/axios";
-import {useRoute} from 'vue-router'
+import { useRoute } from "vue-router";
 import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetailSection";
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
-import CanteenStallSection from "components/CanteenPage/CanteenStallSection";
 import BannerSection from "components/Layout/BannerSection";
-import {useQuasar} from "quasar";
+import { useQuasar } from "quasar";
+import StallCardSection from "components/HomePage/StallCardSection";
 
 const canteenPageBanner = {
-  information:{
+  information: {
     content: "基本信息",
-    change: false
+    change: false,
   },
-  introduction:{
+  introduction: {
     content: "食堂简介",
-    change: false
+    change: false,
   },
   stalls: {
     content: "档口",
-    change: false
-  }
+    change: false,
+  },
 };
-
 
 export default defineComponent({
   name: "PublicCanteen",
   components: {
+    StallCardSection,
     BannerSection,
-    CanteenStallSection,
     CanteenTitleSection,
     CanteenIntroSection,
     CanteenBasicDetailSection,
   },
   setup() {
-    const $q=useQuasar()
-    const route=useRoute()
-    let id=route.query.canteenID
+    const $q = useQuasar();
+    const route = useRoute();
+    let id = route.query.canteenID;
     let API_LINK = `canteens/${id}`;
     const canteenData = reactive({ data: {} });
     const getCanteenData = async () => {
@@ -92,18 +90,24 @@ export default defineComponent({
         canteenData.data = response.data.data;
       } catch (err) {
         $q.notify({
-          type:"error",
+          type: "error",
           message: "获取食堂信息失败，请刷新重试",
         });
       }
     };
-    watch(()=>route.query,()=>{
-      id=route.query.canteenID
-      API_LINK=`canteens/${id}`
-      getCanteenData()
-    },{
-      immediate:true
-    });
+    watch(
+      () => route.query,
+      () => {
+        id = route.query.canteenID;
+        if (id !== undefined) {
+          API_LINK = `canteens/${id}`;
+          getCanteenData();
+        }
+      },
+      {
+        immediate: true,
+      }
+    );
 
     return {
       canteenData,
