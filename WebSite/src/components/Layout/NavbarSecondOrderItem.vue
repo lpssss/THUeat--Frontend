@@ -1,32 +1,34 @@
 <template>
   <q-item clickable v-ripple>
     <q-item-section>
-        <div> <router-link :to="{path:'/canteen',query:{canteenID:canteenID}}">{{ canteenName }}</router-link> </div>
+      <router-link
+        style="text-decoration: none; color:black"
+        :to="{ path: '/canteen', query: { canteenID: canteenID } }"
+        >{{ canteenName }}</router-link
+      >
     </q-item-section>
   </q-item>
 </template>
 
 <script>
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 export default defineComponent({
   name: "NavbarSecondOrderItem",
   props: {
     canteenID: {
       type: Number,
-      required: true
+      required: true,
     },
     canteenName: {
       type: String,
-      required: true
+      required: true,
     },
     canteenType: {
       type: Number,
-      required: true
+      required: true,
     },
-  }
-})
+  },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

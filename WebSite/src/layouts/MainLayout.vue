@@ -68,16 +68,16 @@ import { useQuasar } from "quasar";
 
 const firstOrderTitle = [
   {
-    titleId: "f1",
+    titleId: "t1",
     title: "教工餐厅",
-    titleEng: 2,
+    canteenType: 2,
     icon: "school",
     secondOrderStatus: true,
   },
   {
-    titleId: "f2",
+    titleId: "t2",
     title: "学生餐厅",
-    titleEng: 1,
+    canteenType: 1,
     icon: "face",
     secondOrderStatus: true,
   },
@@ -95,7 +95,7 @@ export default defineComponent({
       const token = getToken().value;
       return token !== null;
     });
-    console.log(loginStatus.value);
+
     const API_LINK = "users/details";
     const userDetailData = reactive({ data: {} });
     const getUserData = async () => {
@@ -104,11 +104,8 @@ export default defineComponent({
         userDetailData.data = response.data.data;
       } catch (err) {
         $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
+          type:"error",
           message: "获取个人信息失败，请刷新重试",
-          timeout: 1000,
         });
       }
     };
