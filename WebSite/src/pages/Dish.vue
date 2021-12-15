@@ -46,14 +46,14 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { watch } from 'vue';
-import { useStore } from 'vuex';
 import {useRoute, useRouter} from 'vue-router'
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import BannerSection from "components/Layout/BannerSection";
+import userAppState from "src/store/userAppState";
 
 export default {
   name: "Dish",
@@ -65,7 +65,6 @@ export default {
   setup() {
 
     const route=useRoute();
-    const store=useStore();
     const router=useRouter();
 
     let id=route.query.dishID
@@ -73,6 +72,13 @@ export default {
     //const API_LINK = "http://localhost:3000/dish"; // 之后放真正的API
     const dishData = reactive({ data: {} });
     const dishPictureData = reactive({ data: [] })
+
+    //loginstatus相关
+    const { getToken, resetState } = userAppState();
+    const loginStatus = computed(() => {
+      const token = getToken().value;
+      return token !== null;
+    });
 
     const getDishData = async () => {
       try {
@@ -103,8 +109,8 @@ export default {
     });
 
     function postDishLikes(){
-      console.log(store._state.data.login.loginStatus);
-      if (!store._state.data.login.loginStatus) {
+      console.log(loginStatus.value);
+      if (!loginStatus.value) {
         router.push("/login");
       }
       else {
