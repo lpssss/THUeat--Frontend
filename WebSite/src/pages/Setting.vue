@@ -14,8 +14,8 @@
     </div>
 
     <div class="q-pt-none row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">用户名</div>
-      <div class="col-4 q-pt-md">
+      <div class="col-3 q-pr-lg text-subtitle1" align="right">用户名</div>
+      <div class="col-7 q-pt-md">
         <q-input
           v-model="user"
           counter
@@ -29,12 +29,12 @@
           </template>
         </q-input>
       </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
  
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">电话</div>
-      <div class="col-4">
+      <div class="col-3 q-pr-lg text-subtitle1" align="right">电话</div>
+      <div class="col-7">
         <q-input v-model="telephone" type="tel" :dense="dense">
           <template v-slot:append>
             <q-icon
@@ -45,16 +45,16 @@
           </template>
         </q-input>
       </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
 
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">邮箱</div>
-      <div class="col-4">
+      <div class="col-3 q-pr-lg text-subtitle1" align="right">邮箱</div>
+      <div class="col-7">
         <q-input v-model="email" type="email" :dense="dense" readonly>
         </q-input>
       </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
 
     <div class="q-pb-lg text-black" align="center">
@@ -64,8 +64,8 @@
     </div>
 
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">原密码</div>
-      <div class="col-4">
+      <div class="col-3 q-pr-lg text-subtitle1" align="right">原密码</div>
+      <div class="col-7">
         <q-input
           v-model="passwordOld"
           standard
@@ -80,12 +80,12 @@
           </template>
         </q-input>
       </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
 
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-4 q-pr-lg text-subtitle1" align="right">新密码</div>
-      <div class="col-4">
+      <div class="col-3 q-pr-lg text-subtitle1" align="right">新密码</div>
+      <div class="col-7">
         <q-input
           v-model="password"
           standard
@@ -104,7 +104,7 @@
           </template>
         </q-input>
       </div>
-      <div class="col-4 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
 
     <div class="q-pb-lg text-black" align="center">

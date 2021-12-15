@@ -19,7 +19,7 @@
         <BannerSection v-bind="homePageBanner.stall" />
       </div>
 
-      <div class="q-pa-md row items-start q-gutter-md">
+      <div class="q-pa-md row items-start q-gutter-md justify-center">
         <StallCardSection
           v-for="stall in stallData.data"
           v-bind="stall"
@@ -31,7 +31,7 @@
         <BannerSection v-bind="homePageBanner.dish" />
       </div>
 
-      <div class="q-pa-md row items-start q-gutter-md">
+      <div class="q-pa-md row items-start q-gutter-md justify-center">
         <DishCardSection
           v-for="dish in dishData.data"
           v-bind="dish"
