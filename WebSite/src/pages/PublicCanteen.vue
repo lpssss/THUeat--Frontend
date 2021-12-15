@@ -51,9 +51,9 @@ import {useRoute} from 'vue-router'
 import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetailSection";
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
-import StallCardSection from "components/HomePage/StallCardSection";
 import BannerSection from "components/Layout/BannerSection";
 import {useQuasar} from "quasar";
+import StallCardSection from "components/HomePage/StallCardSection";
 
 const canteenPageBanner = {
   information:{
@@ -70,14 +70,15 @@ const canteenPageBanner = {
   }
 };
 
+
 export default defineComponent({
   name: "PublicCanteen",
   components: {
+    StallCardSection,
     BannerSection,
     CanteenTitleSection,
     CanteenIntroSection,
     CanteenBasicDetailSection,
-    StallCardSection,
   },
   setup() {
     const $q=useQuasar()
