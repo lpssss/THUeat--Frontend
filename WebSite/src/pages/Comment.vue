@@ -49,7 +49,7 @@
       </div>
     </div>
 
-      
+
   </q-page>
 </template>
 
@@ -58,10 +58,10 @@ import { defineComponent, ref, reactive, computed, watch } from "vue";
 import { useQuasar, colors } from "quasar";
 import axios from "axios";
 import BannerSection from "components/Layout/BannerSection";
-import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import { api } from "boot/axios";
 import ImagesUploader from "components/ImagesUploader";
+import userAppState from "src/store/userAppState";
 
 const commentBanner = {
   content: "评价页",
@@ -98,7 +98,6 @@ export default defineComponent({
 
   setup() {
     const $q = useQuasar();
-    const store = useStore();
     const router = useRouter();
 
     const dishModel = ref(null);
@@ -118,6 +117,13 @@ export default defineComponent({
       newImages.value = images.value;
     };
 
+    //loginstatus相关
+    const { getToken, resetState } = userAppState();
+    const loginStatus = computed(() => {
+      const token = getToken().value;
+      return token !== null;
+    });
+
     watch(
       () => route.query,
       () => {
@@ -133,8 +139,8 @@ export default defineComponent({
     );
 
     //获取stall的所有菜品数据
-    //let STALL_API_LINK = `stalls/${stall_id}`; 
-    const dishes = reactive({ 
+    //let STALL_API_LINK = `stalls/${stall_id}`;
+    const dishes = reactive({
       data: [],
       getID: {},
     });
@@ -165,82 +171,85 @@ export default defineComponent({
 
     //点击提交评论按钮后确认是否是登录状态，如果不是，跳转到登陆页面
     function onComment() {
-      console.log(store._state.data.login.loginStatus);
-      if (!store._state.data.login.loginStatus) {
+      console.log(loginStatus.value);
+      if (!loginStatus.value) {
         router.push("/login");
       }
-      if (ratingModel.value === 0) {
-        $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
-          message: "请先对档口进行打分",
-          timeout: 500,
-        });
-      } else {
-        const date = new Date();
-
-        //生成form data
-        let formData = new FormData();
-        formData.append("reviewDateTime", date);
-        formData.append("rate", ratingModel.value);
-        formData.append("reviewComment", text.value);
-
-        if (group.value !== null && group.value.length !== 0) {
-          var selectTags = [];
-          for (var key in group.value) {
-            selectTags.push(group.value[key])
-          }
-          // tag传一个array
-          formData.append("reviewTags", selectTags);
-        } else{
-          formData.append("reviewTags", "");
-        }
-
-        if (dishModel.value !== null && dishModel.value.length !== 0) {
-          dishModel.value.forEach((item) =>
-            formData.append("dishID", dishes.getID[item])
-            //console.log(dishes.getID[item])
-          );
+      else{
+        if (ratingModel.value === 0) {
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "请先对档口进行打分",
+            timeout: 500,
+          });
         } else {
-          formData.append("dishID", "");
-        }
+          const date = new Date();
 
-        //添加图片进form data
-        if (newImages.value !== null && newImages.value.length !== 0) {
-          newImages.value.forEach((item) =>
-            formData.append("reviewImages", item)
-          );
-        } else {
-          formData.append("reviewImages", "");
-        }
+          //生成form data
+          let formData = new FormData();
+          formData.append("reviewDateTime", date);
+          formData.append("rate", ratingModel.value);
+          formData.append("reviewComment", text.value);
 
-        console.log('*** formdata content ***')
-        for (let pair of formData.entries()) {
-         console.log(pair[0] + ", " + pair[1]);
-        }
-        // TODO POST 的API记得改，然后response要怎么处理记得加上
-
-        //console.log(stall_id)
-        api.post(`reviews?stallID=${stall_id}`, formData).then((res) => {
-          if (res.data.code === 200) {
-            //updateToken(res.data.token);
-            console.log(res.data)
-            $q.notify({
-              type: "success",
-              message: "评论成功",
-            });
+          if (group.value !== null && group.value.length !== 0) {
+            var selectTags = [];
+            for (var key in group.value) {
+              selectTags.push(group.value[key])
+            }
+            // tag传一个array
+            formData.append("reviewTags", selectTags);
+          } else{
+            formData.append("reviewTags", "");
           }
-          if (res.data.code !== 200) {
-            console.log(res.data)
-            $q.notify({
-              type: "error",
-              message: "评论失败",
-            });
-            console.log("error");
+
+          if (dishModel.value !== null && dishModel.value.length !== 0) {
+            dishModel.value.forEach((item) =>
+                formData.append("dishID", dishes.getID[item])
+              //console.log(dishes.getID[item])
+            );
+          } else {
+            formData.append("dishID", "");
           }
-        });
+
+          //添加图片进form data
+          if (newImages.value !== null && newImages.value.length !== 0) {
+            newImages.value.forEach((item) =>
+              formData.append("reviewImages", item)
+            );
+          } else {
+            formData.append("reviewImages", "");
+          }
+
+          console.log('*** formdata content ***')
+          for (let pair of formData.entries()) {
+            console.log(pair[0] + ", " + pair[1]);
+          }
+          // TODO POST 的API记得改，然后response要怎么处理记得加上
+
+          //console.log(stall_id)
+          api.post(`reviews?stallID=${stall_id}`, formData).then((res) => {
+            if (res.data.code === 200) {
+              //updateToken(res.data.token);
+              console.log(res.data)
+              $q.notify({
+                type: "success",
+                message: "评论成功",
+              });
+            }
+            if (res.data.code !== 200) {
+              console.log(res.data)
+              $q.notify({
+                type: "error",
+                message: "评论失败",
+              });
+              console.log("error");
+            }
+          });
+        }
       }
+
     }
 
     return {

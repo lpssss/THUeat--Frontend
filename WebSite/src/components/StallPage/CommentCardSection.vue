@@ -98,6 +98,7 @@
 <script>
 import { ref, defineComponent, computed } from "vue";
 import axios from "axios";
+import userAppState from "src/store/userAppState";
 
 export default defineComponent({
   setup(props) {
@@ -171,39 +172,39 @@ export default defineComponent({
     },
   },
   methods: {
-    // TODO 函数名首字母放小写比较好
-    PostreviewLikes(ID) {
+    PostreviewLikes(ID){
       var reviewID = ID;
-      var API_LINK = `http://localhost:3000/reviews/like/${reviewID}`;
-      console.log(this.islike);
-      if (!this.$store.state.login.loginStatus) {
-        this.$router.push("/login");
-      } else {
-        if (this.islike == true) {
-          axios
-            .delete(API_LINK, NaN, {
-              headers: { Authorization: "token 9944b09199c62b4bbdfc6ee4b" },
-            })
-            .then(function (response) {
-              console.log(response.data);
-              this.islike = false;
+      var API_LINK = `http://localhost:3000/reviews/like/${reviewID}`
 
-              this.$router.go(0);
-            });
-        } else if (this.islike == false) {
-          axios
-            .post(API_LINK, NaN, {
-              headers: { Authorization: "token 9944b09199c62b4bbdfc6ee4b" },
-            })
-            .then(function (response) {
-              console.log(response.data);
-              this.islike = true;
+      //loginstatus相关
+      const { getToken, resetState } = userAppState();
+      const loginStatus = computed(() => {
+        const token = getToken().value;
+        return token !== null;
+      });
 
-              this.$router.go(0);
-            });
+      console.log(this.islike)
+      if(!loginStatus.value){
+        this.$router.push('/login')
+      } 
+      else{
+        if(this.islike == true){
+          axios.delete(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
+            console.log(response.data)
+            this.islike = false
+            this.$router.go(0)
+          });
+        }
+        else if(this.islike == false){
+          axios.post(API_LINK,NaN,{headers:{Authorization:"token 9944b09199c62b4bbdfc6ee4b"}}).then(function(response){
+            console.log(response.data)
+            this.islike = true
+
+            this.$router.go(0)
+          });
         }
       }
-    },
+    }
   },
 });
 </script>

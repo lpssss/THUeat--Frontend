@@ -47,14 +47,15 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, computed， watch } from "vue";
+import {useRoute, useRouter} from 'vue-router'
 import { watch } from "vue";
 import { useStore } from "vuex";
-import { useRoute, useRouter } from "vue-router";
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import BannerSection from "components/Layout/BannerSection";
+import userAppState from "src/store/userAppState";
 import {useQuasar} from "quasar";
 
 export default {
@@ -70,11 +71,21 @@ export default {
     const store = useStore();
     const router = useRouter();
 
-    let id = route.query.dishID;
+    const route=useRoute();
+    const router=useRouter();
+
+    let id=route.query.dishID
     let API_LINK = `dishes/${id}`; // 之后放真正的API
 
     const dishData = reactive({ data: {} });
     const dishPictureData = reactive({ data: [] });
+
+    //loginstatus相关
+    const { getToken, resetState } = userAppState();
+    const loginStatus = computed(() => {
+      const token = getToken().value;
+      return token !== null;
+    });
 
     const getDishData = async () => {
       try {
@@ -113,9 +124,9 @@ export default {
       }
     );
 
-    function postDishLikes() {
-      console.log(store._state.data.login.loginStatus);
-      if (!store._state.data.login.loginStatus) {
+    function postDishLikes(){
+      console.log(loginStatus.value);
+      if (!loginStatus.value) {
         router.push("/login");
       } else {
         console.log("click thumb successfully");

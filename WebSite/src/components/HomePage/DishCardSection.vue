@@ -22,9 +22,10 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, computed } from 'vue'
 import axios from "axios";
 import { api } from "boot/axios";
+import userAppState from "src/store/userAppState";
 export default defineComponent({
     setup () {
     return {
@@ -77,11 +78,18 @@ export default defineComponent({
         var API_LINK = `dishes/${dishID}`
 
         var that=this;
-        if(!this.$store.state.login.loginStatus){
+
+        //loginstatus相关
+        const { getToken, resetState } = userAppState();
+        const loginStatus = computed(() => {
+          const token = getToken().value;
+          return token !== null;
+        });
+        if(!loginStatus.value){
           this.$router.push('/login')
         }
         else{
-          var req; 
+          var req;
           api.post(API_LINK,NaN).then(function(response){
             that.code = response.data.code;
             console.log("post ,Get data:"+that.code);
