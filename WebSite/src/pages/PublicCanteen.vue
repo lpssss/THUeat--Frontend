@@ -34,7 +34,7 @@
     </div>
 
     <div class="q-pa-md row items-start q-gutter-md">
-      <CanteenStallSection
+      <StallCardSection
         v-for="stall in canteenData.data.stalls"
         v-bind="stall"
         :key="stall.stallID"
@@ -51,7 +51,7 @@ import {useRoute} from 'vue-router'
 import CanteenBasicDetailSection from "components/CanteenPage/CanteenBasicDetailSection";
 import CanteenIntroSection from "components/CanteenPage/CanteenIntroSection";
 import CanteenTitleSection from "components/CanteenPage/CanteenTitleSection";
-import CanteenStallSection from "components/CanteenPage/CanteenStallSection";
+import StallCardSection from "components/HomePage/StallCardSection";
 import BannerSection from "components/Layout/BannerSection";
 import {useQuasar} from "quasar";
 
@@ -70,15 +70,14 @@ const canteenPageBanner = {
   }
 };
 
-
 export default defineComponent({
   name: "PublicCanteen",
   components: {
     BannerSection,
-    CanteenStallSection,
     CanteenTitleSection,
     CanteenIntroSection,
     CanteenBasicDetailSection,
+    StallCardSection,
   },
   setup() {
     const $q=useQuasar()
