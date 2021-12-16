@@ -57,6 +57,7 @@
         filled
         v-model="newAdmin.adminPhone"
         label="管理员联络号码"
+        v-on:keypress="isPhoneNumber($event)"
         stack-label
       />
       <div style="margin-left:45%;">
@@ -76,7 +77,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
+import { defineComponent, ref, reactive, onMounted, watch } from 'vue';
 import { useQuasar } from "quasar";
 import { api } from 'boot/axios'
 import { ADMIN_API_LINKS } from "app/api-links";
@@ -109,6 +110,29 @@ export default defineComponent({
     const cancel = () => {
       creatable.value = false
     };
+
+    //检查输入是否是数字
+    const isPhoneNumber = (e) => {
+      let char = String.fromCharCode(e.keyCode);
+      if (/^[+\d](?:.*\d)?$/.test(char)) return true;
+      else e.preventDefault();
+    }
+
+    watch(newAdmin, (currentValue) => {
+      let output = ''
+      for (var i = 0; i < currentValue.adminPhone.length; i++) {
+        if (i == 0) {
+          if (currentValue.adminPhone[0] == '+') {
+            output = output + currentValue.adminPhone[0]
+          }
+        }
+        if (currentValue.adminPhone[i] >= '0' && currentValue.adminPhone[i] <= '9') {
+          output = output + currentValue.adminPhone[i]
+        }
+      }
+      newAdmin.adminPhone = output
+    },
+      { deep: true });
 
     //上传功能
     const save = () => {
@@ -219,6 +243,7 @@ export default defineComponent({
     })
 
     return {
+      isPhoneNumber,
       columns,
       admins,
       orgAdmin,
