@@ -19,7 +19,7 @@
             <q-avatar>
               <img :src="userDetailData.data.userImage" alt="userAvatar" />
             </q-avatar>
-            用户名
+            {{ userDetailData.data.userName }}
           </q-chip>
           <q-btn-dropdown color="primary">
             <q-list>
