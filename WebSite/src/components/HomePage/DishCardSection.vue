@@ -17,6 +17,7 @@
     </q-card-section>
 
     <q-card-section class="q-pt-none">
+      <q-btn v-if="myDishLike == null" color="primary" size="sm" falt round icon="thumb_up_alt" @click="postDishLikes(dishID)" />
       <q-btn v-if="myDishLike == false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
       <q-btn v-if="myDishLike == true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
       <span class="q-px-sm text-caption text-grey">{{ dishLikes }}</span>

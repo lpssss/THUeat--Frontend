@@ -11,6 +11,14 @@
     <q-card flat bordered class="bg-purple-10086" style="width: 100%">
       <q-card-section class="q-pa-md">
         <q-btn
+          v-if="dishData.data.myDishLike == null"
+          size="sm"
+          round
+          color="primary"
+          icon="thumb_up_alt"
+          @click="postDishLikes"
+        />
+        <q-btn
           v-if="dishData.data.myDishLike == false"
           size="sm"
           round

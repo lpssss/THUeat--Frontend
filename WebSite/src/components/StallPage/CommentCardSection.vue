@@ -61,9 +61,17 @@
         />
       </div>
     </q-card-section>
-    <q-separator />
 
     <q-card-section class="q-pt-none">
+      <q-btn
+        v-if="myReviewLike === null"
+        size="sm"
+        falt
+        round
+        color="primary"
+        icon="thumb_up_alt"
+        @click="postReviewLikes(reviewID)"
+      />
       <q-btn
         v-if="myReviewLike === false"
         size="sm"
