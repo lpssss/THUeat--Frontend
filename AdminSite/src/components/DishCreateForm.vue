@@ -28,23 +28,22 @@
       <q-select
         filled
         v-model="newDishData.dishAvailableTime"
-        :options="
-          $store.state.dishesDetails.dishesDetailsData[0].stallOperationtime
-        "
+        :options="$store.state.dishesDetails.stallOperationtime"
         hint="*必填"
         label="售卖时段"
         multiple
-        :rules="[(val) => val.length>=1 || '* 不能为空']"
+        :rules="[(val) => val.length >= 1 || '* 不能为空']"
       />
       <q-input
-        v-model.number="newDishData.dishPrice"
+        v-model="newDishData.dishPrice"
         filled
         style="max-width: 200px"
         label="菜品价格"
-        hint="*两位小数点"
+        hint="*两位小数点，不能多于6位数字"
         fill-mask="0"
         mask="#.##"
         reverse-fill-mask
+        :rules="[(val) => val.length <= 7 || '最多6个数字']"
       />
       <ImagesUploader ref="imageUploader" @addedImages="addImages" multiple />
       <div style="margin-left: 45%">
@@ -106,10 +105,11 @@ export default {
         .then((status) => {
           if (status === 200) {
             imageUploader.value.clearInput();
-            resetForm();
+            context.emit("closeForm");
           }
         });
     }
+    resetForm()
     return {
       newDishData,
       imageUploader,

@@ -1,22 +1,30 @@
 <template>
-  <div class="q-pa-md" style="margin-left: 10%; margin-right: 10%">
+  <div
+    class="q-pa-md"
+    style="margin-left: 10%; margin-right: 10%"
+  >
     <h4 style="border-bottom: 0.1px solid">设置</h4>
-    <div class="q-gutter-md" style="max-width: 100%">
-      <q-input filled label="真实姓名" disable v-model="details.validName" />
+    <div
+      class="q-gutter-md"
+      style="max-width: 100%"
+    >
+      <q-input
+        filled
+        label="真实姓名"
+        disable
+        v-model="details.validName"
+      />
       <q-input
         filled
         label="用户名"
         v-model="details.name"
-        lazy-rules
-        :rules="[(val) => (val && val.length > 0) || '用户名不能为空']"
       />
       <q-input
         filled
         label="联络号码"
         stack-label
         v-model="details.phone"
-        lazy-rules
-        :rules="[(val) => (val && val.length > 0) || '联络号码不能为空']"
+        v-on:keypress="isPhoneNumber($event)"
       />
       <q-input
         filled
@@ -38,17 +46,22 @@
       />
 
       <div style="margin-left: 45%">
-        <q-btn style="margin-right: 10px" color="red" @click="cancel"
-          >取消</q-btn
-        >
-        <q-btn color="green" @click="save">保存</q-btn>
+        <q-btn
+          style="margin-right: 10px"
+          color="red"
+          @click="cancel"
+        >取消</q-btn>
+        <q-btn
+          color="green"
+          @click="save"
+        >保存</q-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref, watch} from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { api } from "boot/axios";
 import { useQuasar } from "quasar";
 import useAppState from "src/store/userAppState.js";
@@ -57,11 +70,21 @@ import { ADMIN_API_LINKS } from "app/api-links";
 const { getToken } = useAppState();
 
 export default defineComponent({
-  setup() {
+  setup () {
     const $q = useQuasar();
     const token = ref(getToken().value);
     const DETAIL_LINK = ADMIN_API_LINKS.personalDetails;
-    const isLoading=ref(false)
+    const isLoading = ref(true)
+    $q.loading.show({
+      message: "页面加载中",
+    });
+
+    //检查输入是否是数字
+    const isPhoneNumber = (e) => {
+      let char = String.fromCharCode(e.keyCode);
+      if (/^[+\d](?:.*\d)?$/.test(char)) return true;
+      else e.preventDefault();
+    }
 
     //用户资料模板
     const details = reactive({
@@ -72,6 +95,22 @@ export default defineComponent({
       password: "",
       confirmPassword: "",
     });
+
+    watch(details, (currentValue) => {
+      let output = ''
+      for (var i = 0; i < currentValue.phone.length; i++) {
+        if (i === 0) {
+          if (currentValue.phone[0] === '+') {
+            output = output + currentValue.phone[0]
+          }
+        }
+        if (currentValue.phone[i] >= '0' && currentValue.phone[i] <= '9') {
+          output = output + currentValue.phone[i]
+        }
+      }
+      details.phone = output
+    }, { deep: true });
+
 
     //还原版面
     const cancel = () => {
@@ -96,17 +135,17 @@ export default defineComponent({
     //获取用户资料
     const getDetails = async () => {
       try {
-        isLoading.value=true
         const response = await api.get(DETAIL_LINK);
         details.validName = response.data.data.validName;
         details.name = response.data.data.name;
         details.phone = response.data.data.phone;
-        isLoading.value=false
+        isLoading.value = false
       } catch (err) {
         $q.notify({
           type: "error",
           message: err.message,
         });
+        isLoading.value=false
       }
     };
 
@@ -203,13 +242,13 @@ export default defineComponent({
         });
     };
 
-    watch(isLoading,(newState,_)=>{
-      if(newState){
+    watch(isLoading, (newState, _) => {
+      if (newState) {
         $q.loading.show({
           message: '页面加载中',
         })
       }
-      else{
+      else {
         $q.loading.hide()
       }
     })
@@ -225,6 +264,7 @@ export default defineComponent({
       readySubmit,
       checkInput,
       postNewDetails,
+      isPhoneNumber
     };
   },
 });

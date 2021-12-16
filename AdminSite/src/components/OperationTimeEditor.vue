@@ -97,6 +97,7 @@
 <script>
 import { computed, ref } from "vue";
 import TimePicker from "components/TimePicker";
+import {useQuasar} from "quasar";
 //档口运营时间选项
 const STANDARD_OPERATION_TIME_OPTIONS = {
   breakfast: {
@@ -146,6 +147,7 @@ export default {
     },
   },
   setup(props, context) {
+    const $q=useQuasar()
     //标准或自定义
     const oriTimeType = computed(() => {
       if (props.myStallDetails.stallOperationtime[0].name === "自定义")
@@ -223,8 +225,14 @@ export default {
         obj.endTime = customTime.value.endTime;
         newStallOperationTime.push({ ...obj });
       }
-      console.log(newStallOperationTime);
-      context.emit("changeTime", newStallOperationTime);
+      if(newStallOperationTime.length===0){
+        $q.notify({
+          type: "error",
+          message: "档口营业时段不能为空",
+        });
+      }
+      else
+        context.emit("changeTime", newStallOperationTime);
     }
 
     return {

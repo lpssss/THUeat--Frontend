@@ -4,7 +4,7 @@
 <!--所需Props: 所有菜品信息-->
 <!--接收&发送Emit：来自DishesTableRow的UpdateRow-->
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md" v-if="dishesDetails.length">
     <q-markup-table>
       <thead>
         <tr>
@@ -20,6 +20,7 @@
       />
     </q-markup-table>
   </div>
+  <h5 v-else class="absolute-center" style="opacity: 0.5">暂无菜品</h5>
 </template>
 
 <script>

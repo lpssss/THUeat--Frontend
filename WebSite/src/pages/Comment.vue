@@ -241,6 +241,7 @@ export default defineComponent({
                 icon: "cloud_done",
                 timeout: 500,
               });
+              router.push(`/stall?stallID=${stall_id}`);
             }
             if (res.data.code !== 200) {
               console.log(res.data)

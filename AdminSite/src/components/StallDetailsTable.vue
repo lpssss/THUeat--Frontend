@@ -14,7 +14,10 @@
   </q-dialog>
   <q-dialog v-model="modifyTime" persistent>
     <q-card class="my-card">
-      <OperationTimeEditor :my-stall-details="myStallDetails" @changeTime="changeTime" />
+      <OperationTimeEditor
+        :my-stall-details="myStallDetails"
+        @changeTime="changeTime"
+      />
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat label="返回" v-close-popup />
       </q-card-actions>
@@ -86,6 +89,7 @@
                   counter
                   autogrow
                   type="textarea"
+                  :rules="[(val) => !!val || '* 不能为空']"
                 />
               </q-popup-edit>
             </template>
@@ -134,14 +138,16 @@ export default {
     const shortenDescribe = computed(() =>
       myStallDetails.stallDescribe.slice(0, 14)
     );
-    const shorten=computed(()=> shortenDescribe.value.length<myStallDetails.stallDescribe.length)
+    const shorten = computed(
+      () => shortenDescribe.value.length < myStallDetails.stallDescribe.length
+    );
 
     function addImages(images) {
       newImage.value = images.value;
     }
 
-    function changeTime(newStallOperationTime){
-      myStallDetails.stallOperationtime=newStallOperationTime
+    function changeTime(newStallOperationTime) {
+      myStallDetails.stallOperationtime = newStallOperationTime;
     }
 
     //功能：在任一档口信息有修改后自动POST去后端
@@ -161,7 +167,7 @@ export default {
       shortenDescribe,
       shorten,
       addImages,
-      changeTime
+      changeTime,
     };
   },
 };

@@ -19,7 +19,7 @@
           autofocus
           :rules="[
             (val) => !!val || '* 不能为空',
-            (val) => val.length <= 6 || '最多6个字',
+            (val) => val.length <= 10 || '最多10个字',
           ]"
         />
       </q-popup-edit>
@@ -39,6 +39,7 @@
           fill-mask="0"
           mask="#.##"
           reverse-fill-mask
+          :rules="[(val) => val.length <= 7 || '最多6个数字']"
         />
       </q-popup-edit>
     </td>
@@ -55,7 +56,7 @@
       >
         <q-select
           v-model="scope.value"
-          :options="myRowData.stallOperationtime"
+          :options="$store.state.dishesDetails.stallOperationtime"
           label="请选择时段"
           multiple
           :rules="[(val) => val.length >= 1 || '* 不能为空']"
@@ -148,11 +149,14 @@ export default {
       () => store.state.dishesDetails.dishesImagesData[dishidx.value]
     );
     const sortedTime = computed(() => {
+      if (myRowData.dishAvailableTime.length === 0) {
+        return "";
+      }
       if (myRowData.dishAvailableTime[0] === "自定义") {
         return myRowData.dishAvailableTime[0];
       } else {
         const itemOrder = ["早餐", "午餐", "晚餐", "宵夜"];
-        const tempArr = [...myRowData.dishAvailableTime];
+        let tempArr = [...myRowData.dishAvailableTime];
         tempArr.sort((a, b) => itemOrder.indexOf(a) - itemOrder.indexOf(b));
         return tempArr.join(", ");
       }

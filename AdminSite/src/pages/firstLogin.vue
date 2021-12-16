@@ -124,7 +124,7 @@ export default defineComponent({
             color: "red-5",
             textColor: "white",
             icon: "warning",
-            message: "新密码与旧密码不相同",
+            message: "新密码与确定新密码不相同",
             timeout: 1000,
           });
         }
@@ -151,7 +151,7 @@ export default defineComponent({
         password: password.value
 
       }).then((res) => {
-        if (res.data.code === 200 && res.data !== undefined) {
+        if (res.data !== undefined && res.data.code === 200) {
           $q.notify({
             color: "green-4",
             textColor: "white",
