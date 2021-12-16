@@ -1,19 +1,14 @@
 <template>
   <div v-if="Object.keys(stallData.data).length">
     <div class="q-pa-md">
-        <q-carousel
-          arrows
-          animated
-          v-model="slide"
-          height="400px"
-        >
-          <HomePageAnnouncementSection
-            v-for="notice in stallPictureData.data"
-            v-bind="notice"
-            :key="notice.name"
-          />
-        </q-carousel>
-      </div>
+      <q-carousel arrows animated v-model="slide" height="400px">
+        <HomePageAnnouncementSection
+          v-for="notice in stallPictureData.data"
+          v-bind="notice"
+          :key="notice.name"
+        />
+      </q-carousel>
+    </div>
 
     <div class="q-pa-md">
       <StallIntroSection
@@ -29,7 +24,7 @@
     </div>
 
     <div class="q-pa-md">
-      <div class="q-gutter-y-md" style="width:100%">
+      <div class="q-gutter-y-md" style="width: 100%">
         <q-tabs
           v-model="tab"
           dense
@@ -47,7 +42,16 @@
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="dish">
-            <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
+            <div
+              class="
+                q-pa-md
+                row
+                items-start
+                q-gutter-md
+                justify-center
+                col-md-4
+              "
+            >
               <DishCardSectionStall
                 v-for="dish in stallData.data.dishes"
                 v-bind="dish"
@@ -58,7 +62,16 @@
           </q-tab-panel>
 
           <q-tab-panel name="comments">
-            <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
+            <div
+              class="
+                q-pa-md
+                row
+                items-start
+                q-gutter-md
+                justify-center
+                col-md-4
+              "
+            >
               <CommentCardSection
                 v-for="review in stallData.data.reviews"
                 v-bind="review"
@@ -70,22 +83,19 @@
         </q-tab-panels>
       </div>
     </div>
-
   </div>
-
 </template>
 
 <script>
 import { ref, defineComponent, reactive, watch } from "vue";
-import axios from "axios";
 import { api } from "boot/axios";
-import {useRoute} from 'vue-router'
-import StallPictureSection from  "components/StallPage/StallPictureSection";
+import { useRoute } from "vue-router";
 import StallIntroSection from "components/StallPage/StallIntroSection";
 import DishCardSectionStall from "components/HomePage/DishCardSectionStall";
 import CommentCardSection from "components/StallPage/CommentCardSection";
-import Pagination from 'components/StallPage/Pagination.vue';
+import Pagination from "components/StallPage/Pagination.vue";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
   name: "Stall",
@@ -96,23 +106,24 @@ export default defineComponent({
     //Pagination,
     HomePageAnnouncementSection,
   },
-  data(){
+  data() {
     return {
-      tab: 'dish',
-    }
+      tab: "dish",
+    };
   },
   methods: {
     refreshDishData() {
       this.getStallData();
-    }
+    },
   },
-  setup (){
-    const route=useRoute()
-    let id=route.query.stallID
+  setup() {
+    const $q = useQuasar();
+    const route = useRoute();
+    let id = route.query.stallID;
     let API_LINK = `stalls/${id}`; // 之后放真正的API
 
     const stallData = reactive({ data: {} });
-    const stallPictureData = reactive({ data: [] })
+    const stallPictureData = reactive({ data: [] });
 
     const getStallData = async () => {
       try {
@@ -120,43 +131,46 @@ export default defineComponent({
         stallData.data = response.data.data;
         //stallData.data.stallName;
         //stallData.data.stallDescribe
-        var i = 1
+        let i = 1;
         stallData.data.stallImages.forEach((item) => {
           stallPictureData.data.push({
             noticeTitle: stallData.data.stallName,
             noticeWords: stallData.data.stallDescribe,
             noticeImage: item,
-            name: i
-          })
-          i += 1
-        })
+            name: i,
+          });
+          i += 1;
+        });
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          type: "error",
+          message: "获取食堂信息失败，请刷新重试",
+        });
       }
     };
 
-    watch(()=>route.query,()=>{
-      id=route.query.stallID
-      API_LINK=`stalls/${id}`
-      getStallData();
-      console.log("watch",route.query.stallID)
-    },{
-      immediate:true
-    });
-    getStallData();
-    //getDishData();
-    console.log(stallPictureData.data)
+    watch(
+      () => route.query,
+      () => {
+        id = route.query.stallID;
+        if (id !== undefined) {
+          API_LINK = `stalls/${id}`;
+          getStallData();
+        }
+      },
+      {
+        immediate: true,
+      }
+    );
 
     return {
       slide: ref(1),
       stallData,
       stallPictureData,
-      getStallData
+      getStallData,
     };
-},
-})
+  },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
