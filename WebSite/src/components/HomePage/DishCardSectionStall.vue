@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card-dish">
+  <q-card class="my-card">
     <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
 
     <q-card-section class="q-pb-none">
@@ -35,7 +35,7 @@ export default defineComponent({
       isDishLike: ref(false),
     };
   },
-  name: "DishCardSection",
+  name: "DishCardSectionStall",
   props: {
     dishID: {
       type: Number,

@@ -48,14 +48,13 @@
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="dish">
             <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
-              <DishCardSection
+              <DishCardSectionStall
                 v-for="dish in stallData.data.dishes"
                 v-bind="dish"
                 :key="dish.dishID"
                 v-on:likeChange="refreshDishData($event)"
               />
             </div>
-            <Pagination/>
           </q-tab-panel>
 
           <q-tab-panel name="comments">
@@ -67,7 +66,6 @@
                 v-on:likeChange="refreshDishData($event)"
               />
             </div>
-            <Pagination/>
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -84,7 +82,7 @@ import { api } from "boot/axios";
 import {useRoute} from 'vue-router'
 import StallPictureSection from  "components/StallPage/StallPictureSection";
 import StallIntroSection from "components/StallPage/StallIntroSection";
-import DishCardSection from "components/HomePage/DishCardSection";
+import DishCardSectionStall from "components/HomePage/DishCardSectionStall";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import Pagination from 'components/StallPage/Pagination.vue';
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
@@ -93,9 +91,9 @@ export default defineComponent({
   name: "Stall",
   components: {
     StallIntroSection,
-    DishCardSection,
+    DishCardSectionStall,
     CommentCardSection,
-    Pagination,
+    //Pagination,
     HomePageAnnouncementSection,
   },
   data(){
