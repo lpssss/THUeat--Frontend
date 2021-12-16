@@ -23,6 +23,7 @@
   </q-carousel>
   <div class="q-pa-xm row justify-center">
     <q-btn
+      v-if="imagesCount"
       color="red"
       label="删除"
       @click="confirmDeleteImage(myImages[curSlide - 1])"
@@ -108,6 +109,7 @@ export default {
     return {
       curSlide,
       imageUploader,
+      imagesCount,
       confirmDeleteImage,
       addImages,
       saveChanges,

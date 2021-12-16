@@ -10,11 +10,13 @@ const dishesDetails = {
   state: {
     dishesDetailsData: [],
     dishesImagesData: [],
+    stallOperationtime: []
   },
   mutations: {
-    initialize(state, { details, images }) {
+    initialize(state, { details, images, stallOperationtime }) {
       state.dishesDetailsData = [...details];
       state.dishesImagesData = [...images];
+      state.stallOperationtime=[...stallOperationtime]
     },
     updateDishDetails(state, { details, dishidx }) {
       state.dishesDetailsData[dishidx] = details;
