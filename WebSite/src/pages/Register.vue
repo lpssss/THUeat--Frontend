@@ -123,11 +123,11 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('liwei');
-    const email= ref('1249103659@qq.com');
-    const tel = ref('18234684756');
-    const password = ref('liweipassword');
-    const repeat_password = ref('liweipassword');
+    const name = ref('');
+    const email= ref('');
+    const tel = ref('');
+    const password = ref('');
+    const repeat_password = ref('');
     const isPwd = ref(true);
     const acceptclause = ref(false);
     let authForm= ref(false)

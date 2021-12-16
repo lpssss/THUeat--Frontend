@@ -90,7 +90,6 @@ export default defineComponent({
             updateName(res.data.data.name);
             updatevalidName(res.data.data.validName)
 
-
             if (res.data.data.firstLogin === true) {
               // Route to First login page
               router.push("/firstLoginSettings");
