@@ -56,6 +56,7 @@
           filled
           v-model="newStaff.staffPhone"
           label="档主联络号码"
+          v-on:keypress="isPhoneNumber($event)"
           stack-label
         />
         <q-select
@@ -142,6 +143,28 @@ export default defineComponent({
     const selectedFloor = ref(null);
     const selectedStall = ref(null);
     const canteens = ref([]);
+
+    //检查输入是否是数字
+    const isPhoneNumber = (e) => {
+      let char = String.fromCharCode(e.keyCode);
+      if (/^[+\d](?:.*\d)?$/.test(char)) return true;
+      else e.preventDefault();
+    }
+
+    watch(newStaff, (currentValue) => {
+      let output = ''
+      for (var i = 0; i < currentValue.staffPhone.length; i++) {
+        if (i == 0) {
+          if (currentValue.staffPhone[0] == '+') {
+            output = output + currentValue.staffPhone[0]
+          }
+        }
+        if (currentValue.staffPhone[i] >= '0' && currentValue.staffPhone[i] <= '9') {
+          output = output + currentValue.staffPhone[i]
+        }
+      }
+      newStaff.staffPhone = output
+    }, { deep: true });
 
     watch(selectedCanteen, (currentValue, oldValue) => {
       if (currentValue != null) {
@@ -345,6 +368,7 @@ export default defineComponent({
     })
 
     return {
+      isPhoneNumber,
       loading,
       columns,
       staffs,
