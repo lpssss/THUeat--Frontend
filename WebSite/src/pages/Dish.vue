@@ -128,9 +128,7 @@ export default {
   setup() {
     const $q=useQuasar()
     const route = useRoute();
-    const store = useStore();
-    const router = useRouter();
-    
+
     let id=route.query.dishID
     let API_LINK = `dishes/${id}`; // 之后放真正的API
 
@@ -148,6 +146,7 @@ export default {
       try {
         const response = await api.get(API_LINK);
         dishData.data = response.data.data;
+        // console.log(dishData.data.reviews)
         let i = 1;
         dishData.data.dishImages.forEach((item) => {
           dishPictureData.data.push({
@@ -174,7 +173,6 @@ export default {
           API_LINK = `dishes/${id}`;
           getDishData();
         }
-        console.log("watch", route.query.dishID);
       },
       {
         immediate: true,

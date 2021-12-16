@@ -20,10 +20,10 @@
     <q-separator />
 
     <q-card-section>
-      <div class="ellipsis-2-lines">
+      <div>
         {{ shortenComment }}
       </div>
-      <span v-if="needDialog"
+      <span
         ><strong>...</strong
         ><q-btn flat color="grey" dense @click="dialog = true"
           >查看完整评论</q-btn
@@ -31,48 +31,16 @@
       >
     </q-card-section>
     <q-card-section vertical class="q-pt-none">
-      <q-carousel
-        v-model="curSlide"
-        arrows
-        infinite
-        animated
-        control-color="black"
-        height="125px"
-        padding
-      >
-        <q-carousel-slide
-          v-for="idx in reviewImages.length"
-          :name="idx"
-          :key="idx"
-        >
-          <a :href="reviewImages[idx - 1]" target="_blank"
-            ><q-img fit="contain" height="100px" :src="reviewImages[idx - 1]"
-          /></a>
-        </q-carousel-slide>
-      </q-carousel>
+      <template v-if="reviewImages.length">
+        <a :href="reviewImages[0]" target="_blank"
+          ><q-img fit="contain" height="100px" :src="reviewImages[0]"
+        /></a>
+      </template>
+      <div v-else class="relative-position" style="height: 100px">
+        <div class="absolute-center" style="opacity: 0.5">无图片</div>
+      </div>
     </q-card-section>
 
-    <q-separator />
-    <q-card-section>
-      <div>
-        <q-chip v-for="tag in reviewTags" :key="tag">{{ tag }}</q-chip>
-      </div>
-      <div>
-        <q-chip v-for="dish in dishes" :key="dish">{{ dish.dishName }}</q-chip>
-      </div>
-      <div>
-        <q-rating
-          v-model="displayRating"
-          size="1.5em"
-          color="primary"
-          icon="star_border"
-          icon-selected="star"
-          icon-half="star_half"
-          readonly
-        />
-      </div>
-
-    </q-card-section>
     <q-separator />
 
     <q-card-section>
@@ -118,32 +86,100 @@
     </q-slide-transition>
   </q-card>
 
-  <q-dialog v-model="dialog" persistent>
+  <q-dialog v-model="dialog" full-width persistent>
     <q-card>
       <q-card-section>
-        完整评论内容<br />
-        <q-item-label caption>
-          {{ displayReviewDateTime }}
-        </q-item-label>
-        <q-separator />
-        <div class="ellipsis-2-lines">
-          {{ reviewComment }}
+        <div class="q-pa-sm">
+          <div class="text-h6">评分</div>
+          <q-rating
+            v-model="displayRating"
+            size="1.5em"
+            color="primary"
+            icon="star_border"
+            icon-selected="star"
+            icon-half="star_half"
+            readonly
+          />
+        </div>
+        <div class="q-pa-sm" v-if="reviewTags.length">
+          <div class="text-h6">标签</div>
+          <q-chip
+            v-for="tag in reviewTags"
+            :key="tag"
+            color="primary"
+            text-color="white"
+            >{{ tag }}</q-chip
+          >
+        </div>
+        <div class="q-pa-sm" v-if="dishes.length">
+          <div class="text-h6">菜品</div>
+          <q-chip
+            v-for="dish in dishes"
+            :key="dish"
+            color="teal"
+            text-color="white"
+            >{{ dish.dishName }}</q-chip
+          >
         </div>
       </q-card-section>
       <q-card-section>
-        档主回复<br />
-        <q-item-label caption>
-          {{ displayReplyDateTime }}
-        </q-item-label>
-        <q-separator />
-        <div class="ellipsis-2-lines">
-          {{ replyComment }}
+        <div class="q-pa-sm">
+          <div class="text-h5">完整评论内容</div>
+          <q-item-label caption>
+            {{ displayReviewDateTime }}
+          </q-item-label>
+          <q-separator />
+          <div class="text-body1">
+            {{ reviewComment }}
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="q-pa-sm">
+          <div class="text-h5">档主回复</div>
+          <q-item-label caption>
+            {{ displayReplyDateTime }}
+          </q-item-label>
+          <q-separator />
+          <template v-if="replyComment.length">
+            <div class="text-body1">
+              {{ replyComment }}
+            </div>
+          </template>
+          <div v-else style="opacity: 0.5">暂无回复</div>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="q-pa-sm">
+          <div class="text-h5">图片</div>
+          <q-separator />
+          <template v-if="reviewImages.length">
+            <div class="row items-start q-gutter-xm">
+              <q-card
+                v-for="idx in reviewImages.length"
+                :key="idx"
+                class="my-card-picture"
+              >
+                <q-card-section>
+                  <a :href="reviewImages[idx - 1]" target="_blank"
+                    ><q-img
+                      fit="contain"
+                      height="100px"
+                      :src="reviewImages[idx - 1]"
+                  /></a>
+                </q-card-section>
+              </q-card>
+            </div>
+          </template>
+          <div v-else style="opacity: 0.5">无图片</div>
         </div>
       </q-card-section>
 
       <!-- Notice v-close-popup -->
       <q-card-actions align="right">
-        <q-btn flat label="Close" color="primary" v-close-popup />
+        <q-btn flat label="关闭" color="primary" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -196,26 +232,21 @@ export default {
     reviewTags: {
       type: Array,
     },
-    dishes:{
-      type:Object
-    }
+    dishes: {
+      type: Object,
+    },
   },
   emits: ["addReplyComment"],
   setup(props, context) {
     //reply: 回复内容
     //expanded: 控制回复框的开关
     const $q = useQuasar();
-    const curSlide = ref(1);
     const reply = ref("");
     const expanded = ref(false);
     const dialog = ref(false);
     const displayRating = ref(props.rate);
-    const shortenComment = computed(() => props.reviewComment.slice(0, 50));
-    const needDialog = computed(
-      () =>
-        props.replyDateTime.length !== 0 ||
-        shortenComment.value.length < props.reviewComment.length
-    );
+    const shortenComment = computed(() => props.reviewComment.slice(0, 25));
+
     function processDateTime(datetime) {
       const temp = datetime.split("T");
       const temp1 = temp[1].split(":");
@@ -248,10 +279,10 @@ export default {
             context.emit("addReplyComment", {
               reviewID: props.reviewID,
               replyComment: reply.value,
-              replyDateTime: res.data.data.replyDateTime
+              replyDateTime: res.data.data.replyDateTime,
             });
+            expanded.value = false;
             reply.value = "";
-            expanded.value=false
           } else {
             $q.notify({
               type: "error",
@@ -268,14 +299,12 @@ export default {
     }
     return {
       displayRating,
-      needDialog,
       shortenComment,
       displayReviewDateTime,
       displayReplyDateTime,
       expanded,
       reply,
       dialog,
-      curSlide,
       replyReview,
     };
   },
@@ -283,6 +312,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.my-card-picture
+  width: 100%
+  max-width: 250px
 .my-card-comment
   width: 100%
   max-width: 250px
