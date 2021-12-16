@@ -68,8 +68,8 @@ export default defineComponent({
   setup () {
     const router = useRouter();
     const $q = useQuasar();
-    const name = ref('Alice123');
-    const password = ref('alicepassword');
+    const name = ref('');
+    const password = ref('');
     const isPwd = ref(true);
     const acceptclause = ref(false);
 

@@ -90,7 +90,6 @@ export default defineComponent({
             updateName(res.data.data.name);
             updatevalidName(res.data.data.validName)
 
-
             if (res.data.data.firstLogin === true) {
               // Route to First login page
               router.push("/firstLoginSettings");
@@ -148,7 +147,7 @@ export default defineComponent({
           color: "red-5",
           textColor: "white",
           icon: "warning",
-          message: "请填些用户名",
+          message: "请填写用户名",
           timeout: 1000
         });
       }
