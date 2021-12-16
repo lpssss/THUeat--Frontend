@@ -8,6 +8,7 @@
   <template v-if="!isLoading">
     <DishCreateForm
       v-if="openDishCreateForm"
+      :stall-operationtime="stallOperationTime"
       ref="dishForm"
       @closeForm="openDishCreateForm = false"
     />
@@ -46,6 +47,7 @@ export default {
     const store = useStore();
     const openDishCreateForm = ref(false);
     const dishForm = ref();
+    const stallOperationTime=ref([])  //给菜品创建表单使用
     const isLoading = ref(true);
     $q.loading.show({
       message: "页面加载中",
@@ -75,7 +77,8 @@ export default {
     async function getDishData() {
       try {
         const response = await staffapi.get(API_LINK);
-        const [dishesDetails, dishesImages] = arrangeData(response.data.data);
+        stallOperationTime.value=response.data.data.stallOperationtime
+        const [dishesDetails, dishesImages] = arrangeData(response.data.data.dishes);
         store.commit("dishesDetails/initialize", {
           details: dishesDetails,
           images: dishesImages,
@@ -94,7 +97,8 @@ export default {
     return {
       openDishCreateForm,
       dishForm,
-      isLoading
+      isLoading,
+      stallOperationTime
     };
   },
 };

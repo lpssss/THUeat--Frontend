@@ -28,13 +28,11 @@
       <q-select
         filled
         v-model="newDishData.dishAvailableTime"
-        :options="
-          $store.state.dishesDetails.dishesDetailsData[0].stallOperationtime
-        "
+        :options="stallOperationtime"
         hint="*必填"
         label="售卖时段"
         multiple
-        :rules="[(val) => val.length>=1 || '* 不能为空']"
+        :rules="[(val) => val.length >= 1 || '* 不能为空']"
       />
       <q-input
         v-model.number="newDishData.dishPrice"
@@ -76,6 +74,11 @@ const initialData = {
 export default {
   name: "DishCreateForm",
   components: { ImagesUploader },
+  props:{
+    stallOperationtime:{
+      type:Array
+    }
+  },
   emits: ["createDish", "closeForm"],
   setup(props, context) {
     //newDishData: 创建菜品表单上的数据
