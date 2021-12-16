@@ -88,7 +88,7 @@ export default {
       //准备myDashboardData
       myDashboardData.value = DASHBOARD_DATA_TITLE_ICON.map((item) => {
         const target = item.engTitle;
-        if (target === "canteenAvgRate")
+        if (target === "canteenRate")
           return {
             ...item,
             displayedData: apiDashboardData[target],
