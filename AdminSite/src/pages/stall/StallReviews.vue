@@ -45,6 +45,7 @@ export default {
           type:"error",
           message: "获取数据失败，请刷新页面重试",
         })
+        isLoading.value=false
       }
     }
     function addReplyComment({reviewID,replyComment,replyDateTime}){

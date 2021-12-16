@@ -129,12 +129,12 @@ export default {
         });
         isLoading.value=false
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((_) => {
         $q.notify({
           type: "error",
           message: "获取数据失败，请刷新页面重试",
         });
+        isLoading.value=false
       });
 
     return {

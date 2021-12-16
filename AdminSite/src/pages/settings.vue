@@ -99,8 +99,8 @@ export default defineComponent({
     watch(details, (currentValue) => {
       let output = ''
       for (var i = 0; i < currentValue.phone.length; i++) {
-        if (i == 0) {
-          if (currentValue.phone[0] == '+') {
+        if (i === 0) {
+          if (currentValue.phone[0] === '+') {
             output = output + currentValue.phone[0]
           }
         }
@@ -145,6 +145,7 @@ export default defineComponent({
           type: "error",
           message: err.message,
         });
+        isLoading.value=false
       }
     };
 
