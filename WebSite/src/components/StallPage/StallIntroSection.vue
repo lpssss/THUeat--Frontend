@@ -27,7 +27,7 @@
       <span class="text-caption text-grey q-ml-sm"> {{ stallRate }} ({{ stallRateNumber }})</span>
     </div>
         <div class="col-2">
-      <q-btn color="purple-8"  icon-right="send" label="去评价" @click="$router.push({path:'/comment',query:{stallName:stallName}})">
+      <q-btn color="purple-8"  icon-right="send" label="去评价" @click="toComment">
 
       </q-btn>
     </div>
@@ -37,7 +37,9 @@
 </template>
 
 <script>
-import {defineComponent } from 'vue'
+import {defineComponent, computed } from 'vue'
+import userAppState from "src/store/userAppState";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
     name: "StallIntroSection",
@@ -68,8 +70,24 @@ export default defineComponent({
         }
     },
     setup(props) {
+        const router = useRouter();
+        //loginstatus相关
+        const { getToken, resetState } = userAppState();
+        const loginStatus = computed(() => {
+          const token = getToken().value;
+          return token !== null;
+        });
+        function toComment(){
+          if (!loginStatus.value) {
+            router.push("/login");
+          }
+          else{
+            router.push({path:'/comment',query:{stallName:props.stallName}})
+          }
+        }
         return {
             starscore: props.stallRate,
+            toComment,
         }
     },
 })
