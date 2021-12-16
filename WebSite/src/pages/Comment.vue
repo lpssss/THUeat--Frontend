@@ -237,6 +237,7 @@ export default defineComponent({
                 type: "success",
                 message: "评论成功",
               });
+              router.push(`/stall?stallID=${stall_id}`);
             }
             if (res.data.code !== 200) {
               console.log(res.data)
