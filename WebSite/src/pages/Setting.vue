@@ -260,7 +260,6 @@ export default defineComponent({
             console.log("error");
             $q.notify({
               type: "error",
-              type: "error",
               message: res.data.message,
               color: "red-5",
               textColor: "white",

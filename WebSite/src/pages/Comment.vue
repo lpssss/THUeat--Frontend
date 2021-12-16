@@ -236,6 +236,10 @@ export default defineComponent({
               $q.notify({
                 type: "success",
                 message: "评论成功",
+                color: "green-4",
+                textColor: "white",
+                icon: "cloud_done",
+                timeout: 500,
               });
               router.push(`/stall?stallID=${stall_id}`);
             }
@@ -243,7 +247,11 @@ export default defineComponent({
               console.log(res.data)
               $q.notify({
                 type: "error",
-                message: "评论失败",
+                message: res.data.message,
+                color: "red-5",
+                textColor: "white",
+                icon: "warning",
+                timeout: 1000,
               });
               console.log("error");
             }
