@@ -12,7 +12,7 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="ellipsis-2-lines">
+      <div class="ellipsis">
         {{ stallBestComment }}
       </div>
     </q-card-section>

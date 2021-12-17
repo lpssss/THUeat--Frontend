@@ -13,7 +13,7 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="ellipsis-2-lines">{{ dishBestComment }}</div>
+      <div class="ellipsis">{{ dishBestComment }}</div>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
