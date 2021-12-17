@@ -134,6 +134,7 @@ export default defineComponent({
             cancel: { push: true, label: "取消" },
             persistent: true,
           }).onOk(() => {
+            loginStatus.value=false
             resetState();
             $q.notify({
               type:"success",
