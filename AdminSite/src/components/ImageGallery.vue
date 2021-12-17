@@ -12,14 +12,23 @@
     animated
     control-color="primary"
   >
-    <q-carousel-slide v-for="idx in myImages.length" :name="idx" :key="idx">
-      <a :href="myImages[idx - 1]" target="_blank"
-        ><q-img
-          class="rounded-borders full-height"
-          fit="contain"
-          :src="myImages[idx - 1]"
-      /></a>
-    </q-carousel-slide>
+    <template v-if="myImages.length">
+      <q-carousel-slide v-for="idx in myImages.length" :name="idx" :key="idx">
+        <a :href="myImages[idx - 1]" target="_blank"
+          ><q-img
+            class="rounded-borders full-height"
+            fit="contain"
+            :src="myImages[idx - 1]"
+        /></a>
+      </q-carousel-slide>
+    </template>
+    <template v-else>
+      <q-carousel-slide :name="1" class="column no-wrap flex-center">
+        <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+          暂无图片
+        </div>
+      </q-carousel-slide>
+    </template>
   </q-carousel>
   <div class="q-pa-xm row justify-center">
     <q-btn
@@ -44,18 +53,18 @@ import { useStore } from "vuex";
 export default {
   name: "ImageGallery",
   components: { ImagesUploader },
-  props:{
-    myImages:{
-      type:Array,
-      required:true
+  props: {
+    myImages: {
+      type: Array,
+      required: true,
     },
-    type:{
-      type:String,
-      required:true
+    type: {
+      type: String,
+      required: true,
     },
-    args:{
-      type:Object
-    }
+    args: {
+      type: Object,
+    },
   },
   setup(props) {
     //curSlide：控制图片库滑动窗口的页面号码
@@ -84,7 +93,10 @@ export default {
       }).onOk(() => {
         console.log("delete: ", link);
         hiddenImages.value.push(link);
-        store.commit(`${props.type}/hideImage`, {targetImg:link,...props.args});
+        store.commit(`${props.type}/hideImage`, {
+          targetImg: link,
+          ...props.args,
+        });
       });
     }
     function addImages(images) {
@@ -94,7 +106,7 @@ export default {
       store.dispatch(`${props.type}/saveImagesChanges`, {
         deleteImages: hiddenImages.value,
         newImages: newImages.value,
-        ...props.args
+        ...props.args,
       });
       imageUploader.value.clearInput();
     }
