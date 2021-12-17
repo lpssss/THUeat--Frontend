@@ -17,9 +17,9 @@
     </q-card-section>
 
     <q-card-section class="q-pt-none">
-      <q-btn v-if="myDishLike == null" color="primary" size="sm" falt round icon="thumb_up_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike == false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike == true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike === null" color="primary" size="sm" falt round icon="thumb_up_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike === false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike === true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
       <span class="q-px-sm text-caption text-grey">{{ dishLikes }}</span>
     </q-card-section>
   </q-card>
@@ -83,10 +83,9 @@ export default defineComponent({
       let dishID = ID;
       let API_LINK = `dishes/${dishID}`;
       console.log(dishID);
-      let that = this;
 
       //loginstatus相关
-      const { getToken, resetState } = userAppState();
+      const { getToken } = userAppState();
       const loginStatus = computed(() => {
         const token = getToken().value;
         return token !== null;

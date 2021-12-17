@@ -93,7 +93,6 @@ import { useRoute } from "vue-router";
 import StallIntroSection from "components/StallPage/StallIntroSection";
 import DishCardSectionStall from "components/HomePage/DishCardSectionStall";
 import CommentCardSection from "components/StallPage/CommentCardSection";
-import Pagination from "components/StallPage/Pagination.vue";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import { useQuasar } from "quasar";
 
@@ -103,7 +102,6 @@ export default defineComponent({
     StallIntroSection,
     DishCardSectionStall,
     CommentCardSection,
-    //Pagination,
     HomePageAnnouncementSection,
   },
   data() {

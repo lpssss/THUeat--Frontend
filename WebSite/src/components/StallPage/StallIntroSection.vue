@@ -72,7 +72,7 @@ export default defineComponent({
     setup(props) {
         const router = useRouter();
         //loginstatus相关
-        const { getToken, resetState } = userAppState();
+        const { getToken } = userAppState();
         const loginStatus = computed(() => {
           const token = getToken().value;
           return token !== null;

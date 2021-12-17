@@ -171,8 +171,8 @@
 </template>
 
 <script>
-import { ref, defineComponent, computed } from "vue";
-import { api } from "boot/axios";
+import {computed, defineComponent, ref} from "vue";
+import {api} from "boot/axios";
 import userAppState from "src/store/userAppState";
 
 export default defineComponent({
@@ -254,15 +254,23 @@ export default defineComponent({
     dishes: {
       type: Object,
     },
+    reply:{
+      type:Boolean
+    },
+    stallID:{
+      type:Number
+    },
+    stallName:{
+      type:String
+    }
   },
   methods: {
     postReviewLikes(ID) {
       console.log(this.myReviewLike);
-      var reviewID = ID;
-      var API_LINK = `reviews/like/${reviewID}`;
+      let API_LINK = `reviews/like/${ID}`;
 
       //loginstatus相关
-      const { getToken, resetState } = userAppState();
+      const { getToken } = userAppState();
       const loginStatus = computed(() => {
         const token = getToken().value;
         return token !== null;

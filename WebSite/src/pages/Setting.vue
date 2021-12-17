@@ -4,9 +4,9 @@
       <BannerSection v-bind="settingPageBanners.setting" />
     </div>
 
-    <div class="q-pa-md" align="center">
+    <div class="q-pa-md text-center">
       <q-avatar size="100px" font-size="52px" text-color="white">
-        <img :src="userDetailData.data.userImage" alt="头像" />
+        <img :src="image" alt="头像" />
       </q-avatar>
       <div class="q-pt-md row justify-center items-center">
         <ImagesUploader ref="imageUploader" @addedImages="addImages" />
@@ -14,13 +14,13 @@
     </div>
 
     <div class="q-pt-none row justify-start items-center">
-      <div class="col-3 q-pr-lg text-subtitle1" align="right">用户名</div>
+      <div class="col-3 q-pr-lg text-subtitle1 text-right">用户名</div>
       <div class="col-7 q-pt-md">
         <q-input
           v-model="user"
           counter
           maxlength="20"
-          :dense="dense"
+          dense
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || '用户名不能为空']"
         >
@@ -29,13 +29,12 @@
           </template>
         </q-input>
       </div>
-      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
- 
+
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-3 q-pr-lg text-subtitle1" align="right">电话</div>
+      <div class="col-3 q-pr-lg text-subtitle1 text-right">电话</div>
       <div class="col-7">
-        <q-input v-model="telephone" type="tel" :dense="dense">
+        <q-input v-model="telephone" type="tel" dense>
           <template v-slot:append>
             <q-icon
               name="close"
@@ -45,26 +44,24 @@
           </template>
         </q-input>
       </div>
-      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
 
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-3 q-pr-lg text-subtitle1" align="right">邮箱</div>
+      <div class="col-3 q-pr-lg text-subtitle1 text-right" >邮箱</div>
       <div class="col-7">
-        <q-input v-model="email" type="email" :dense="dense" readonly>
+        <q-input v-model="email" type="email" dense readonly>
         </q-input>
       </div>
-      <div class="col-2 text-h6 q-pr-md" align="right"></div>
     </div>
 
-    <div class="q-pb-lg text-black" align="center">
+    <div class="q-pb-lg text-black text-center">
       <div class="q-pt-md">
         <q-btn @click="postNewDetails">确认更改个人信息</q-btn>
       </div>
     </div>
 
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-3 q-pr-lg text-subtitle1" align="right">原密码</div>
+      <div class="col-3 q-pr-lg text-subtitle1 text-right">原密码</div>
       <div class="col-7">
         <q-input
           v-model="passwordOld"
@@ -80,11 +77,11 @@
           </template>
         </q-input>
       </div>
-      <div class="col-2 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md text-right"></div>
     </div>
 
     <div class="q-pa-md row justify-start items-center">
-      <div class="col-3 q-pr-lg text-subtitle1" align="right">新密码</div>
+      <div class="col-3 q-pr-lg text-subtitle1 text-right">新密码</div>
       <div class="col-7">
         <q-input
           v-model="password"
@@ -104,10 +101,10 @@
           </template>
         </q-input>
       </div>
-      <div class="col-2 text-h6 q-pr-md" align="right"></div>
+      <div class="col-2 text-h6 q-pr-md text-right"></div>
     </div>
 
-    <div class="q-pb-lg text-black" align="center">
+    <div class="q-pb-lg text-black text-center">
       <div class="q-pt-md">
         <q-btn @click="postNewPassword">确认更改密码</q-btn>
       </div>
@@ -122,6 +119,8 @@
         <CommentCardSection
           v-for="review in userDetailData.data.myReviews"
           v-bind="review"
+          :user-image="image"
+          :user-name="user"
           :key="review.title"
         />
       </div>
@@ -135,7 +134,6 @@ import { useQuasar } from "quasar";
 import useAppState from "src/store/userAppState.js";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import BannerSection from "components/Layout/BannerSection";
-import StallCardSection from "components/HomePage/StallCardSection";
 import { api } from "boot/axios";
 import ImagesUploader from "components/ImagesUploader";
 
@@ -179,11 +177,15 @@ export default defineComponent({
         userDetailData.data = response.data.data;
         email.value = userDetailData.data.userEmail;
         user.value = userDetailData.data.userName;
+        image.value=userDetailData.data.userImage
         telephone.value = userDetailData.data.userPhone;
         password.value = null;
         passwordOld.value = null;
       } catch (err) {
-        console.log(err.message);
+        $q.notify({
+          type:"error",
+          message: "获取个人信息失败，请刷新重试",
+        });
       }
     };
 
@@ -199,14 +201,10 @@ export default defineComponent({
       formData.append("userPhone", telephone.value);
       if (newImage.value !== null) formData.append("userImage", newImage.value);
       else formData.append("userImage", "");
-      //用来检查formData里面的数据
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+
       //console.log(telephone.value)
       //console.log(formData.entries())
       api.post(API_LINK, formData).then((res) => {
-        // TODO POST了过后怎么处理response 写在这里
         if (res.data.code === 200) {
           getUserData();
           //上传成功后，清空Image Uploader包含的图片
@@ -221,8 +219,6 @@ export default defineComponent({
           });
         }
         if (res.data.code !== 200) {
-          console.log("error");
-          console.log(res);
           $q.notify({
             type: "error",
             message: res.data.message,
@@ -257,7 +253,6 @@ export default defineComponent({
             });
           }
           if (res.data.code !== 200) {
-            console.log("error");
             $q.notify({
               type: "error",
               message: res.data.message,

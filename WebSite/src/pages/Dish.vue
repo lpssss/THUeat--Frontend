@@ -11,7 +11,7 @@
     <q-card flat bordered class="bg-purple-10086" style="width: 100%">
       <q-card-section class="q-pa-md">
         <q-btn
-          v-if="dishData.data.myDishLike == null"
+          v-if="dishData.data.myDishLike === null"
           size="sm"
           round
           color="primary"
@@ -19,7 +19,7 @@
           @click="postDishLikes"
         />
         <q-btn
-          v-if="dishData.data.myDishLike == false"
+          v-if="dishData.data.myDishLike === false"
           size="sm"
           round
           color="primary"
@@ -27,7 +27,7 @@
           @click="postDishLikes"
         />
         <q-btn
-          v-if="dishData.data.myDishLike == true"
+          v-if="dishData.data.myDishLike === true"
           size="sm"
           round
           color="primary"
@@ -67,7 +67,6 @@
 <script>
 import { ref, reactive, computed, watch } from "vue";
 import {useRoute, useRouter} from 'vue-router'
-import { useStore } from "vuex";
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
@@ -86,18 +85,14 @@ export default {
     refreshDishData() {
       this.getDishData();
     },
-    postDishLikes(ID) {
-      const $q=useQuasar()
-      const route = useRoute();
-      const store = useStore();
+    postDishLikes() {
       const router = useRouter();
 
-      const { getToken, resetState } = userAppState();
+      const { getToken } = userAppState();
       const loginStatus = computed(() => {
         const token = getToken().value;
         return token !== null;
       });
-
 
       console.log(loginStatus.value);
       if (!loginStatus.value) {
@@ -136,12 +131,6 @@ export default {
     const dishPictureData = reactive({ data: [] });
 
     //loginstatus相关
-    const { getToken, resetState } = userAppState();
-    const loginStatus = computed(() => {
-      const token = getToken().value;
-      return token !== null;
-    });
-
     const getDishData = async () => {
       try {
         const response = await api.get(API_LINK);
