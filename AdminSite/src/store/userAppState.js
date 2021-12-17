@@ -17,7 +17,7 @@ const getDefaultStatus = () => {
   return defaultState;
 };
 
-const state = reactive(getDefaultStatus());
+const state = reactive({...getDefaultStatus()});
 
 const getters = {
   getToken: () => {
