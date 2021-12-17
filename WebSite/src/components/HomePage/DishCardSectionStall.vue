@@ -9,7 +9,7 @@
       <div class="text-subtitle2">{{ canteenName }}</div>
       价格：{{dishPrice}}
       <br />
-      售卖时间：{{ dishAvailableTime }}
+      售卖时间：{{ displayAvailableTime}}
     </q-card-section>
 
     <q-card-section>
@@ -30,9 +30,11 @@ import { ref, defineComponent, computed } from "vue";
 import { api } from "boot/axios";
 import userAppState from "src/store/userAppState";
 export default defineComponent({
-  setup() {
+  setup(props) {
+    const displayAvailableTime=computed(()=>props.dishAvailableTime.join(', '))
     return {
       isDishLike: ref(false),
+      displayAvailableTime
     };
   },
   name: "DishCardSectionStall",
