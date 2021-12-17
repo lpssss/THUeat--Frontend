@@ -25,7 +25,7 @@
 
     <q-card-section>
       <template v-if="dishBestComment.length">
-        <div class="ellipsis-2-lines">{{ displayBestComment }}</div>
+        <div class="ellipsis">{{ displayBestComment }}</div>
       </template>
       <template v-else>
         <div class="text-center" style="opacity: 0.5">此菜品暂无评价</div>

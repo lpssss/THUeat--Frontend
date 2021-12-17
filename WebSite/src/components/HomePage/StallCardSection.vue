@@ -21,7 +21,7 @@
 
     <q-card-section>
       <template v-if="stallBestComment.length">
-        <div class="ellipsis-2-lines">
+        <div class="ellipsis">
           {{ displayBestComment }}
         </div>
       </template>
