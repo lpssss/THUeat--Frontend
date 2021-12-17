@@ -288,18 +288,18 @@ export default defineComponent({
           staffStatus: status,
         }).then((res) => {
           if (res.data !== undefined && res.data.code === 200) {
-            getstaffsData()
             $q.notify({
               type: "success",
               message: "修改状态成功",
             });
-
+            getstaffsData()
           }
           if (res.data.code !== 200) {
             $q.notify({
               type: "error",
               message: res.data.data.message,
             });
+            getstaffsData()
           }
         })
       }).onCancel(() => {
@@ -351,12 +351,14 @@ export default defineComponent({
             type: "success",
             message: "档主创建成功",
           });
+          getstaffsData()
         }
         if (res.data.code !== 200) {
           $q.notify({
             type: "error",
             message: res.data.message,
           });
+          getstaffsData()
         }
 
       })
