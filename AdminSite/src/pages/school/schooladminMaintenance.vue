@@ -197,12 +197,14 @@ export default defineComponent({
             type: "success",
             message: "创建成功",
           });
+          getAdminsData();
         }
         if (res.status === 404) {
           $q.notify({
             type: "error",
             message: res.data.message,
           });
+          getAdminsData();
         }
       })
     }
@@ -220,17 +222,18 @@ export default defineComponent({
           adminStatus: status
         }).then((res) => {
           if (res.data !== undefined && res.data.code === 200) {
-            getAdminsData()
             $q.notify({
               type: "success",
               message: "修改状态成功",
             });
+            getAdminsData()
           }
           if (res.data.code !== 200) {
             $q.notify({
               type: "error",
               message: res.data.message,
             });
+            getAdminsData()
           }
         })
       }).onCancel(() => {
