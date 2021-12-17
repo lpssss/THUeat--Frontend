@@ -1,7 +1,15 @@
 <template>
   <q-card class="my-card">
-    <q-img :src="stallImages" :alt="stallName" class="q-card-img" />
-
+    <template v-if="stallImages.length">
+      <q-img :src="stallImages" :alt="stallName" class="q-card-img" />
+    </template>
+    <template v-else>
+      <div class="q-card-img relative-position">
+        <div class="text-center q-pa-md absolute-center" style="opacity: 0.5">
+          暂无图片
+        </div>
+      </div>
+    </template>
     <q-card-section class="q-pb-none">
       <div class="text-h6">
         <router-link :to="{ path: '/stall', query: { stallID: stallID } }">
@@ -12,9 +20,16 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="ellipsis">
-        {{ stallBestComment }}
-      </div>
+      <template v-if="stallBestComment.length">
+        <div class="ellipsis">
+          {{ displayBestComment }}
+        </div>
+      </template>
+      <template v-else>
+        <div class="text-center" style="opacity: 0.5">
+          "此档口暂无评价"
+        </div>
+      </template>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
@@ -39,7 +54,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from "vue";
+import {ref, defineComponent, computed} from "vue";
 export default defineComponent({
   name: "StallCardSection",
   props: {
@@ -51,11 +66,6 @@ export default defineComponent({
     stallName: {
       type: String,
       required: true,
-    },
-
-    canteenName: {
-      type: String,
-      default: "",
     },
 
     stallRate: {
@@ -74,14 +84,18 @@ export default defineComponent({
 
     stallImages: {
       type: String,
-      default: "#",
     },
+    canteenName:{
+      type:String
+    }
   },
   setup(props) {
     const ratingModel = ref(props.stallRate);
+    const displayBestComment=computed(()=>'"'+props.stallBestComment+'"')
     if (ratingModel.value === null) ratingModel.value = 0;
     return {
       ratingModel,
+      displayBestComment
     };
   },
 });

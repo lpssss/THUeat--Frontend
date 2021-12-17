@@ -1,6 +1,15 @@
 <template>
   <q-card class="my-card">
-    <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
+    <template v-if="dishImages.length">
+      <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
+    </template>
+    <template v-else>
+      <div class="q-card-img relative-position">
+        <div class="text-center q-pa-md absolute-center" style="opacity: 0.5">
+          暂无图片
+        </div>
+      </div>
+    </template>
 
     <q-card-section class="q-pb-none">
       <div class="text-h6">
@@ -13,7 +22,12 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="ellipsis-2-lines">{{ dishBestComment }}</div>
+      <template v-if="dishBestComment.length">
+        <div class="ellipsis-2-lines">{{ displayBestComment }}</div>
+      </template>
+      <template v-else>
+        <div class="text-center" style="opacity: 0.5">此菜品暂无评价</div>
+      </template>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
@@ -32,10 +46,12 @@ import userAppState from "src/store/userAppState";
 
 export default defineComponent({
   setup(props) {
+    const displayBestComment=computed(()=>'"'+props.dishBestComment+'"')
     const displayAvailableTime=computed(()=>props.dishAvailableTime.join(', '))
     return {
       isDishLike: ref(false),
-      displayAvailableTime
+      displayAvailableTime,
+      displayBestComment
     };
   },
   name: "DishCardSectionStall",
@@ -73,12 +89,10 @@ export default defineComponent({
     },
     dishBestComment: {
       type: String,
-      default: "No comment."
     },
 
     dishImages: {
       type: String,
-      default: "#"
     }
   },
   methods: {
