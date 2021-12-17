@@ -103,7 +103,8 @@ export default {
 
       // console.log(loginStatus.value);
       if (!loginStatus.value) {
-        router.push("/login");
+        this.$router.push("/login")
+        // router.push("/login");
       } else if (this.dishData.data.myDishLike === false) {
         //点赞
         api.post(this.API_LINK).then((res) => {
