@@ -23,6 +23,7 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
       'axios',
+      'notification'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
