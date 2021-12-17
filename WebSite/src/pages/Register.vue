@@ -72,7 +72,7 @@
           </q-input>
 
           <div>
-            <q-checkbox v-model="acceptclause" label="接受条款" />
+            <q-checkbox v-model="acceptclause" label="已阅读用户手册" />
           </div>
 
           <div class="row justify-evenly">

@@ -22,12 +22,12 @@
     <q-card-section>
       <template v-if="stallBestComment.length">
         <div class="ellipsis-2-lines">
-          {{ stallBestComment }}
+          {{ displayBestComment }}
         </div>
       </template>
       <template v-else>
         <div class="text-center" style="opacity: 0.5">
-          此菜品暂无评价
+          "此档口暂无评价"
         </div>
       </template>
     </q-card-section>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from "vue";
+import {ref, defineComponent, computed} from "vue";
 export default defineComponent({
   name: "StallCardSection",
   props: {
@@ -91,9 +91,11 @@ export default defineComponent({
   },
   setup(props) {
     const ratingModel = ref(props.stallRate);
+    const displayBestComment=computed(()=>'"'+props.stallBestComment+'"')
     if (ratingModel.value === null) ratingModel.value = 0;
     return {
       ratingModel,
+      displayBestComment
     };
   },
 });

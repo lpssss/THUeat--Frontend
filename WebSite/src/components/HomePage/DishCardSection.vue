@@ -25,7 +25,7 @@
 
     <q-card-section>
       <template v-if="dishBestComment.length">
-        <div class="ellipsis-2-lines">{{ dishBestComment }}</div>
+        <div class="ellipsis-2-lines">{{ displayBestComment }}</div>
       </template>
       <template v-else>
         <div class="text-center" style="opacity: 0.5">此菜品暂无评价</div>
@@ -72,12 +72,14 @@ import userAppState from "src/store/userAppState";
 
 export default defineComponent({
   setup(props) {
+    const displayBestComment=computed(()=>'"'+props.dishBestComment+'"')
     const displayAvailableTime = computed(() =>
       props.dishAvailableTime.join(", ")
     );
     return {
       displayAvailableTime,
       isDishLike: ref(false),
+      displayBestComment
     };
   },
   name: "DishCardSection",
