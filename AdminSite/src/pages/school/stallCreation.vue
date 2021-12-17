@@ -277,12 +277,14 @@ export default defineComponent({
             type: "success",
             message: "创建档口成功",
           });
+          getstallsData();
         }
         if (res.data.code !== 200) {
           $q.notify({
             type: "error",
             message: res.data.message,
           });
+          getstallsData();
         }
       })
     }

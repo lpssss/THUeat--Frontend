@@ -9,7 +9,7 @@
       <div class="text-subtitle2">{{ canteenName }}</div>
       价格：{{dishPrice}}
       <br />
-      售卖时间：{{ dishAvailableTime }}
+      售卖时间：{{ displayAvailableTime}}
     </q-card-section>
 
     <q-card-section>
@@ -17,22 +17,25 @@
     </q-card-section>
 
     <q-card-section class="q-pt-none">
-      <q-btn v-if="myDishLike == null" color="primary" size="sm" falt round icon="thumb_up_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike == false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike == true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike === null" color="primary" size="sm" falt round icon="thumb_up_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike === false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
+      <q-btn v-if="myDishLike === true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
       <span class="q-px-sm text-caption text-grey">{{ dishLikes }}</span>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
-import { ref, defineComponent, computed } from "vue";
-import { api } from "boot/axios";
+import {computed, defineComponent, ref} from "vue";
+import {api} from "boot/axios";
 import userAppState from "src/store/userAppState";
+
 export default defineComponent({
-  setup() {
+  setup(props) {
+    const displayAvailableTime=computed(()=>props.dishAvailableTime.join(', '))
     return {
       isDishLike: ref(false),
+      displayAvailableTime
     };
   },
   name: "DishCardSectionStall",
@@ -80,13 +83,11 @@ export default defineComponent({
   },
   methods: {
     postDishLikes(ID) {
-      let dishID = ID;
-      let API_LINK = `dishes/${dishID}`;
-      console.log(dishID);
-      let that = this;
+      let API_LINK = `dishes/${ID}`;
+      // console.log(dishID);
 
       //loginstatus相关
-      const { getToken, resetState } = userAppState();
+      const { getToken } = userAppState();
       const loginStatus = computed(() => {
         const token = getToken().value;
         return token !== null;
@@ -98,9 +99,23 @@ export default defineComponent({
         api.post(API_LINK).then(res => {
           if (res.data.code === 200) {
             this.$emit("likeChange");
-            console.log("successfully thumb up");
+            // console.log("successfully thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "点赞失败，请刷新重试",
+            });
           }
         });
       } else {
@@ -108,9 +123,23 @@ export default defineComponent({
         api.delete(API_LINK).then(res => {
           if (res.data.code === 200) {
             this.$emit("likeChange");
-            console.log("successfully delete thumb up");
+            // console.log("successfully delete thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "取消点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "取消点赞失败，请刷新重试",
+            });
           }
         });
       }

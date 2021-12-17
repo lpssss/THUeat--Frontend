@@ -11,7 +11,7 @@
     <q-card flat bordered class="bg-purple-10086" style="width: 100%">
       <q-card-section class="q-pa-md">
         <q-btn
-          v-if="dishData.data.myDishLike == null"
+          v-if="dishData.data.myDishLike === null"
           size="sm"
           round
           color="primary"
@@ -19,7 +19,7 @@
           @click="postDishLikes"
         />
         <q-btn
-          v-if="dishData.data.myDishLike == false"
+          v-if="dishData.data.myDishLike === false"
           size="sm"
           round
           color="primary"
@@ -27,7 +27,7 @@
           @click="postDishLikes"
         />
         <q-btn
-          v-if="dishData.data.myDishLike == true"
+          v-if="dishData.data.myDishLike === true"
           size="sm"
           round
           color="primary"
@@ -54,26 +54,32 @@
       <BannerSection content="用餐者评价" />
     </div>
     <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
-      <CommentCardSection
-        v-for="review in dishData.data.reviews"
-        v-bind="review"
-        :key="review.reviewID"
-        v-on:likeChange="refreshDishData($event)"
-      />
+      <template v-if="dishData.data.reviews.length">
+        <CommentCardSection
+          v-for="review in dishData.data.reviews"
+          v-bind="review"
+          :key="review.reviewID"
+          v-on:likeChange="refreshDishData($event)"
+        />
+      </template>
+      <template v-else>
+        <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+          暂无评价
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { ref, reactive, computed, watch } from "vue";
-import {useRoute, useRouter} from 'vue-router'
-import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import BannerSection from "components/Layout/BannerSection";
 import userAppState from "src/store/userAppState";
-import {useQuasar} from "quasar";
+import { useQuasar } from "quasar";
 
 export default {
   name: "Dish",
@@ -86,68 +92,87 @@ export default {
     refreshDishData() {
       this.getDishData();
     },
-    postDishLikes(ID) {
-      const $q=useQuasar()
-      const route = useRoute();
-      const store = useStore();
+    postDishLikes() {
       const router = useRouter();
 
-      const { getToken, resetState } = userAppState();
+      const { getToken } = userAppState();
       const loginStatus = computed(() => {
         const token = getToken().value;
         return token !== null;
       });
 
-
-      console.log(loginStatus.value);
+      // console.log(loginStatus.value);
       if (!loginStatus.value) {
-        router.push("/login");
+        this.$router.push("/login")
+        // router.push("/login");
       } else if (this.dishData.data.myDishLike === false) {
         //点赞
-        api.post(this.API_LINK).then(res => {
+        api.post(this.API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.getDishData();
-            console.log("successfully thumb up");
+            // console.log("successfully thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "点赞失败，请刷新重试",
+            });
           }
         });
       } else {
         //取消点赞
-        api.delete(this.API_LINK).then(res => {
+        api.delete(this.API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.getDishData();
-            console.log("successfully delete thumb up");
+            //console.log("successfully delete thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "取消点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "取消点赞失败，请刷新重试",
+            });
           }
         });
       }
-    }
+    },
   },
   setup() {
-    const $q=useQuasar()
+    const $q = useQuasar();
     const route = useRoute();
-    const store = useStore();
-    const router = useRouter();
-    
-    let id=route.query.dishID
+
+    let id = route.query.dishID;
     let API_LINK = `dishes/${id}`; // 之后放真正的API
 
     const dishData = reactive({ data: {} });
     const dishPictureData = reactive({ data: [] });
 
     //loginstatus相关
-    const { getToken, resetState } = userAppState();
-    const loginStatus = computed(() => {
-      const token = getToken().value;
-      return token !== null;
-    });
-
     const getDishData = async () => {
       try {
         const response = await api.get(API_LINK);
         dishData.data = response.data.data;
+        console.log(dishData.data)
+        // console.log(dishData.data.reviews)
         let i = 1;
         dishData.data.dishImages.forEach((item) => {
           dishPictureData.data.push({
@@ -160,8 +185,11 @@ export default {
         });
       } catch (err) {
         $q.notify({
-          type: "error",
-          message: "获取食堂信息失败，请刷新重试",
+          color: "red-4",
+          textColor: "white",
+          icon: "error",
+          timeout: 1000,
+          message: "获取菜品信息失败，请刷新重试",
         });
       }
     };
@@ -174,7 +202,6 @@ export default {
           API_LINK = `dishes/${id}`;
           getDishData();
         }
-        console.log("watch", route.query.dishID);
       },
       {
         immediate: true,

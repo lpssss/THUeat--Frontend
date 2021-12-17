@@ -1,19 +1,19 @@
 <template>
     <q-banner inline-actions class="text-black bg-grey-3">
-          {{ content }}  
+          {{ content }}
           <template v-slot:action>
-          <q-btn 
+          <q-btn
           v-if="change"
-          flat 
-          color="black" 
-          label="换一批" 
+          flat
+          color="black"
+          label="换一批"
           />
         </template>
       </q-banner>
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 export default defineComponent({
     name: "BannerSection",
     props: {

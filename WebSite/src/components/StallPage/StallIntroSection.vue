@@ -44,6 +44,10 @@ import { useRouter } from "vue-router";
 export default defineComponent({
     name: "StallIntroSection",
     props: {
+        stallID: {
+          type:String,
+          required:true
+        },
         stallRate: {
             type: Number,
             default: 0,
@@ -72,7 +76,7 @@ export default defineComponent({
     setup(props) {
         const router = useRouter();
         //loginstatus相关
-        const { getToken, resetState } = userAppState();
+        const { getToken } = userAppState();
         const loginStatus = computed(() => {
           const token = getToken().value;
           return token !== null;
@@ -82,7 +86,8 @@ export default defineComponent({
             router.push("/login");
           }
           else{
-            router.push({path:'/comment',query:{stallName:props.stallName}})
+            router.push({path:'/comment',query:{stallID:props.stallID}})
+            // console.log(props.stallID)
           }
         }
         return {

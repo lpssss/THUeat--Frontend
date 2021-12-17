@@ -20,6 +20,7 @@
         :stallRate="stallData.data.stallRate"
         :stallRateNumber="stallData.data.stallRateNumber"
         :stallOperationtime="stallData.data.stallOperationtime"
+        :stallID="id"
       />
     </div>
 
@@ -52,12 +53,17 @@
                 col-md-4
               "
             >
+              <template v-if="stallData.data.dishes.length">
               <DishCardSectionStall
                 v-for="dish in stallData.data.dishes"
                 v-bind="dish"
                 :key="dish.dishID"
                 v-on:likeChange="refreshDishData($event)"
               />
+              </template>
+              <template v-else>
+                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">暂无菜品</div>
+              </template>
             </div>
           </q-tab-panel>
 
@@ -72,12 +78,17 @@
                 col-md-4
               "
             >
+              <template v-if="stallData.data.reviews.length">
               <CommentCardSection
                 v-for="review in stallData.data.reviews"
                 v-bind="review"
                 :key="review.reviewID"
                 v-on:likeChange="refreshDishData($event)"
               />
+              </template>
+              <template v-else>
+                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">暂无评价</div>
+              </template>
             </div>
           </q-tab-panel>
         </q-tab-panels>
@@ -93,7 +104,6 @@ import { useRoute } from "vue-router";
 import StallIntroSection from "components/StallPage/StallIntroSection";
 import DishCardSectionStall from "components/HomePage/DishCardSectionStall";
 import CommentCardSection from "components/StallPage/CommentCardSection";
-import Pagination from "components/StallPage/Pagination.vue";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import { useQuasar } from "quasar";
 
@@ -103,7 +113,6 @@ export default defineComponent({
     StallIntroSection,
     DishCardSectionStall,
     CommentCardSection,
-    //Pagination,
     HomePageAnnouncementSection,
   },
   data() {
@@ -143,8 +152,11 @@ export default defineComponent({
         });
       } catch (err) {
         $q.notify({
-          type: "error",
-          message: "获取食堂信息失败，请刷新重试",
+          color: "red-4",
+          textColor: "white",
+          icon: "error",
+          timeout: 1000,
+          message: "获取档口信息失败，请刷新重试",
         });
       }
     };
@@ -165,6 +177,7 @@ export default defineComponent({
 
     return {
       slide: ref(1),
+      id,
       stallData,
       stallPictureData,
       getStallData,

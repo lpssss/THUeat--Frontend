@@ -34,11 +34,18 @@
     </div>
 
     <div class="q-pa-md row items-start q-gutter-md">
-      <StallCardSection
-        v-for="stall in canteenData.data.stalls"
-        v-bind="stall"
-        :key="stall.stallID"
-      />
+      <template v-if="canteenData.data.stalls.length">
+        <StallCardSection
+          v-for="stall in canteenData.data.stalls"
+          v-bind="stall"
+          :key="stall.stallID"
+        />
+      </template>
+      <template v-else>
+        <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+          暂无档口
+        </div>
+      </template>
     </div>
   </div>
 </template>

@@ -113,14 +113,11 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import useAppState from "src/store/userAppState.js";
 import axios from "axios";
-import { api } from "boot/axios";
-import { useStore } from "vuex";
 
 const { updateToken, updateType, resetState, getToken } = useAppState();
 
 export default defineComponent({
   setup () {
-    const store = useStore();
     const router = useRouter();
     const $q = useQuasar();
     const name = ref('');
