@@ -1,38 +1,80 @@
 <template>
   <q-card class="my-card-dish">
-    <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
+    <template v-if="dishImages.length">
+      <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
+    </template>
+    <template v-else>
+      <div class="q-card-img relative-position">
+        <div class="text-center q-pa-md absolute-center" style="opacity: 0.5">
+          暂无图片
+        </div>
+      </div>
+    </template>
 
     <q-card-section class="q-pb-none">
       <div class="text-h6">
-        <router-link :to="{path:'/dish',query:{dishID:dishID}}">{{ dishName }}</router-link>
+        <router-link :to="{ path: '/dish', query: { dishID: dishID } }">
+          {{ dishName }}
+        </router-link>
       </div>
       <div class="text-subtitle2">{{ canteenName }}</div>
-      价格：{{dishPrice}}
+      价格：{{ dishPrice }}
       <br />
-      售卖时间：{{ displayAvailableTime}}
+      售卖时间：{{ displayAvailableTime }}
     </q-card-section>
 
     <q-card-section>
-      <div class="ellipsis-2-lines">{{ dishBestComment }}</div>
+      <template v-if="dishBestComment.length">
+        <div class="ellipsis-2-lines">{{ dishBestComment }}</div>
+      </template>
+      <template v-else>
+        <div class="text-center" style="opacity: 0.5">此菜品暂无评价</div>
+      </template>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
-      <q-btn v-if="myDishLike === null" color="primary" size="sm" falt round icon="thumb_up_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike === false" color="primary" size="sm" falt round icon="thumb_up_off_alt" @click="postDishLikes(dishID)" />
-      <q-btn v-if="myDishLike === true" color="primary" size="sm" falt round  icon="thumb_up_alt" @click="postDishLikes(dishID)" />
+      <q-btn
+        v-if="myDishLike === null"
+        color="primary"
+        size="sm"
+        falt
+        round
+        icon="thumb_up_alt"
+        @click="postDishLikes(dishID)"
+      />
+      <q-btn
+        v-if="myDishLike === false"
+        color="primary"
+        size="sm"
+        falt
+        round
+        icon="thumb_up_off_alt"
+        @click="postDishLikes(dishID)"
+      />
+      <q-btn
+        v-if="myDishLike === true"
+        color="primary"
+        size="sm"
+        falt
+        round
+        icon="thumb_up_alt"
+        @click="postDishLikes(dishID)"
+      />
       <span class="q-px-sm text-caption text-grey">{{ dishLikes }}</span>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
-import {computed, defineComponent, ref} from "vue";
-import {api} from "boot/axios";
+import { computed, defineComponent, ref } from "vue";
+import { api } from "boot/axios";
 import userAppState from "src/store/userAppState";
 
 export default defineComponent({
   setup(props) {
-    const displayAvailableTime=computed(()=>props.dishAvailableTime.join(', '))
+    const displayAvailableTime = computed(() =>
+      props.dishAvailableTime.join(", ")
+    );
     return {
       displayAvailableTime,
       isDishLike: ref(false),
@@ -42,44 +84,42 @@ export default defineComponent({
   props: {
     dishID: {
       type: Number,
-      required: true
+      required: true,
     },
     dishName: {
       type: String,
-      required: true
+      required: true,
     },
 
     canteenName: {
       type: String,
-      default: ""
+      default: "",
     },
 
     myDishLike: {
       type: Boolean,
-      require: true
+      require: true,
     },
 
     dishLikes: {
       type: Number,
-      default: 5
+      default: 5,
     },
 
     dishPrice: {
       type: String,
-      default: "0"
+      default: "0",
     },
     dishAvailableTime: {
-      type: Array
+      type: Array,
     },
     dishBestComment: {
       type: String,
-      default: "No comment."
     },
 
     dishImages: {
       type: String,
-      default: "#"
-    }
+    },
   },
   methods: {
     postDishLikes(ID) {
@@ -96,7 +136,7 @@ export default defineComponent({
         this.$router.push("/login");
       } else if (this.myDishLike === false) {
         //点赞
-        api.post(API_LINK).then(res => {
+        api.post(API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.$emit("likeChange");
             // console.log("successfully thumb up");
@@ -120,7 +160,7 @@ export default defineComponent({
         });
       } else {
         //取消点赞
-        api.delete(API_LINK).then(res => {
+        api.delete(API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.$emit("likeChange");
             // console.log("successfully delete thumb up");
@@ -144,9 +184,8 @@ export default defineComponent({
         });
       }
     },
-  }
+  },
 });
 </script>
 
-<style>
-</style>
+<style></style>

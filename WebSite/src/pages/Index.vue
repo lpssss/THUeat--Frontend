@@ -113,7 +113,6 @@ export default defineComponent({
       try {
         const response = await api.get(DISH_API_LINK);
         dishData.data = response.data.data;
-        console.log(response);
         dishLoading.value = false;
       } catch (err) {
         $q.notify({
@@ -128,7 +127,6 @@ export default defineComponent({
         const response = await api.get(STALL_API_LINK);
         stallData.data = response.data.data;
         stallLoading.value = false;
-        console.log(response);
       } catch (err) {
         $q.notify({
           type: "error",
@@ -142,7 +140,6 @@ export default defineComponent({
         const response = await api.get(NOTICE_API_LINK);
         noticeData.data = response.data.data;
         noticeLoading.value = false;
-        console.log(response);
         let i = 1;
         for (let key in noticeData.data) {
           noticeData.data[key]["name"] = i;

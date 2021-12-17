@@ -1,7 +1,15 @@
 <template>
   <q-card class="my-card">
-    <q-img :src="stallImages" :alt="stallName" class="q-card-img" />
-
+    <template v-if="stallImages.length">
+      <q-img :src="stallImages" :alt="stallName" class="q-card-img" />
+    </template>
+    <template v-else>
+      <div class="q-card-img relative-position">
+        <div class="text-center q-pa-md absolute-center" style="opacity: 0.5">
+          暂无图片
+        </div>
+      </div>
+    </template>
     <q-card-section class="q-pb-none">
       <div class="text-h6">
         <router-link :to="{ path: '/stall', query: { stallID: stallID } }">
@@ -12,9 +20,16 @@
     </q-card-section>
 
     <q-card-section>
-      <div class="ellipsis-2-lines">
-        {{ stallBestComment }}
-      </div>
+      <template v-if="stallBestComment.length">
+        <div class="ellipsis-2-lines">
+          {{ stallBestComment }}
+        </div>
+      </template>
+      <template v-else>
+        <div class="text-center" style="opacity: 0.5">
+          此菜品暂无评价
+        </div>
+      </template>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
@@ -53,11 +68,6 @@ export default defineComponent({
       required: true,
     },
 
-    canteenName: {
-      type: String,
-      default: "",
-    },
-
     stallRate: {
       type: Number,
     },
@@ -74,8 +84,10 @@ export default defineComponent({
 
     stallImages: {
       type: String,
-      default: "#",
     },
+    canteenName:{
+      type:String
+    }
   },
   setup(props) {
     const ratingModel = ref(props.stallRate);

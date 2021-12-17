@@ -1,11 +1,24 @@
 <template>
   <div v-if="Object.keys(dishData.data).length" class="q-pa-md">
     <q-carousel arrows animated v-model="slide" height="400px">
+      <template v-if="dishPictureData.data.length">
       <HomePageAnnouncementSection
         v-for="notice in dishPictureData.data"
         v-bind="notice"
         :key="notice.name"
       />
+      </template>
+      <template v-else>
+        <q-carousel-slide :name="1" class="column no-wrap flex-center">
+          <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+            暂无图片
+          </div>
+          <div class="absolute-bottom custom-caption">
+            <div class="text-h5">{{ dishData.data.dishName }}</div>
+            <div class="text-subtitle2">{{ dishData.data.dishIntro }}</div>
+          </div>
+        </q-carousel-slide>
+      </template>
     </q-carousel>
 
     <q-card flat bordered class="bg-purple-10086" style="width: 100%">

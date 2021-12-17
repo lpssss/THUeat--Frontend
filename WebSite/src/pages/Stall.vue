@@ -2,11 +2,24 @@
   <div v-if="Object.keys(stallData.data).length">
     <div class="q-pa-md">
       <q-carousel arrows animated v-model="slide" height="400px">
-        <HomePageAnnouncementSection
-          v-for="notice in stallPictureData.data"
-          v-bind="notice"
-          :key="notice.name"
-        />
+        <template v-if="stallPictureData.data.length">
+          <HomePageAnnouncementSection
+            v-for="notice in stallPictureData.data"
+            v-bind="notice"
+            :key="notice.name"
+          />
+        </template>
+        <template v-else>
+          <q-carousel-slide :name="1" class="column no-wrap flex-center">
+            <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+              暂无图片
+            </div>
+            <div class="absolute-bottom custom-caption">
+              <div class="text-h5">{{ stallData.data.stallName }}</div>
+              <div class="text-subtitle2">{{ stallData.data.stallDescribe }}</div>
+            </div>
+          </q-carousel-slide>
+        </template>
       </q-carousel>
     </div>
 
@@ -54,15 +67,17 @@
               "
             >
               <template v-if="stallData.data.dishes.length">
-              <DishCardSectionStall
-                v-for="dish in stallData.data.dishes"
-                v-bind="dish"
-                :key="dish.dishID"
-                v-on:likeChange="refreshDishData($event)"
-              />
+                <DishCardSectionStall
+                  v-for="dish in stallData.data.dishes"
+                  v-bind="dish"
+                  :key="dish.dishID"
+                  v-on:likeChange="refreshDishData($event)"
+                />
               </template>
               <template v-else>
-                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">暂无菜品</div>
+                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+                  暂无菜品
+                </div>
               </template>
             </div>
           </q-tab-panel>
@@ -79,15 +94,17 @@
               "
             >
               <template v-if="stallData.data.reviews.length">
-              <CommentCardSection
-                v-for="review in stallData.data.reviews"
-                v-bind="review"
-                :key="review.reviewID"
-                v-on:likeChange="refreshDishData($event)"
-              />
+                <CommentCardSection
+                  v-for="review in stallData.data.reviews"
+                  v-bind="review"
+                  :key="review.reviewID"
+                  v-on:likeChange="refreshDishData($event)"
+                />
               </template>
               <template v-else>
-                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">暂无评价</div>
+                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+                  暂无评价
+                </div>
               </template>
             </div>
           </q-tab-panel>

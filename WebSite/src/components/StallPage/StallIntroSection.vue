@@ -74,6 +74,7 @@ export default defineComponent({
         }
     },
     setup(props) {
+        console.log(props)
         const router = useRouter();
         //loginstatus相关
         const { getToken } = userAppState();

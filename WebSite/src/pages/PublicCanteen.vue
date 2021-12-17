@@ -38,6 +38,7 @@
         <StallCardSection
           v-for="stall in canteenData.data.stalls"
           v-bind="stall"
+          :canteen-name="canteenData.data.canteenName"
           :key="stall.stallID"
         />
       </template>
