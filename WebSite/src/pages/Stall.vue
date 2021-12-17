@@ -52,12 +52,17 @@
                 col-md-4
               "
             >
+              <template v-if="stallData.data.dishes.length">
               <DishCardSectionStall
                 v-for="dish in stallData.data.dishes"
                 v-bind="dish"
                 :key="dish.dishID"
                 v-on:likeChange="refreshDishData($event)"
               />
+              </template>
+              <template v-else>
+                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">暂无菜品</div>
+              </template>
             </div>
           </q-tab-panel>
 
@@ -72,12 +77,17 @@
                 col-md-4
               "
             >
+              <template v-if="stallData.data.reviews.length">
               <CommentCardSection
                 v-for="review in stallData.data.reviews"
                 v-bind="review"
                 :key="review.reviewID"
                 v-on:likeChange="refreshDishData($event)"
               />
+              </template>
+              <template v-else>
+                <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">暂无评价</div>
+              </template>
             </div>
           </q-tab-panel>
         </q-tab-panels>
@@ -141,8 +151,11 @@ export default defineComponent({
         });
       } catch (err) {
         $q.notify({
-          type: "error",
-          message: "获取食堂信息失败，请刷新重试",
+          color: "red-4",
+          textColor: "white",
+          icon: "error",
+          timeout: 1000,
+          message: "获取档口信息失败，请刷新重试",
         });
       }
     };
