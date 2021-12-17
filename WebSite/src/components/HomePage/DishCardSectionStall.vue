@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card">
+  <q-card class="my-card-stall-dish">
     <template v-if="dishImages.length">
       <q-img :src="dishImages" :alt="dishName" class="q-card-img" />
     </template>
@@ -23,7 +23,7 @@
 
     <q-card-section>
       <template v-if="dishBestComment.length">
-        <div class="ellipsis-2-lines">{{ displayBestComment }}</div>
+        <div class="ellipsis">{{ displayBestComment }}</div>
       </template>
       <template v-else>
         <div class="text-center" style="opacity: 0.5">此菜品暂无评价</div>
@@ -163,4 +163,9 @@ export default defineComponent({
 </script>
 
 <style>
+.my-card-stall-dish{
+  width: 100%;
+  max-width: 250px;
+  height: 380px
+}
 </style>
