@@ -135,6 +135,10 @@ export default defineComponent({
             persistent: true,
           }).onOk(() => {
             resetState();
+            $q.notify({
+              type:"success",
+              message: "登出成功",
+            });
             router.push("/");
           });
         }
