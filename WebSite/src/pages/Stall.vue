@@ -20,6 +20,7 @@
         :stallRate="stallData.data.stallRate"
         :stallRateNumber="stallData.data.stallRateNumber"
         :stallOperationtime="stallData.data.stallOperationtime"
+        :stallID="id"
       />
     </div>
 
@@ -176,6 +177,7 @@ export default defineComponent({
 
     return {
       slide: ref(1),
+      id,
       stallData,
       stallPictureData,
       getStallData,
