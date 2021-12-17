@@ -18,6 +18,7 @@
         filled
         label="用户名"
         v-model="details.name"
+        hint="必填"
       />
       <q-input
         filled
@@ -25,24 +26,28 @@
         stack-label
         v-model="details.phone"
         v-on:keypress="isPhoneNumber($event)"
+        hint="必填"
       />
       <q-input
         filled
         label="输入旧密码"
         v-model="details.oldPassword"
         type="password"
+        hint="改密码必填"
       />
       <q-input
         filled
         label="输入新密码"
         v-model="details.password"
         type="password"
+        hint="改密码必填"
       />
       <q-input
         filled
         label="确定新密码"
         v-model="details.confirmPassword"
         type="password"
+        hint="改密码必填"
       />
 
       <div style="margin-left: 45%">
@@ -179,7 +184,7 @@ export default defineComponent({
       }
 
       if (readySubmit === true) {
-        if (details.oldPassword.length > 0) {
+        if (details.oldPassword.length > 0 || details.password.length > 0 || details.confirmPassword.length > 0) {
           if (details.oldPassword.length < 6) {
             readySubmit = false;
             $q.notify({
@@ -191,24 +196,29 @@ export default defineComponent({
       }
 
       if (readySubmit === true) {
-        if (details.password.length > 0) {
-          if (details.password.length < 6) {
-            readySubmit = false;
-            $q.notify({
-              type: "error",
-              message: "新密码不能小于6位数",
-            });
+        if (details.oldPassword.length > 0 || details.password.length > 0 || details.confirmPassword.length > 0) {
+          if (details.password.length === 0) {
+            if (details.password.length < 6) {
+              readySubmit = false;
+              $q.notify({
+                type: "error",
+                message: "新密码不能小于6位数",
+              });
+            }
           }
         }
       }
+
       if (readySubmit === true) {
-        if (details.password.length > 0) {
-          if (details.password !== details.confirmPassword) {
-            readySubmit = false;
-            $q.notify({
-              type: "error",
-              message: "新密码与确定密码不相等",
-            });
+        if (details.oldPassword.length > 0 || details.password.length > 0 || details.confirmPassword.length > 0) {
+          if (details.password.length > 0) {
+            if (details.password !== details.confirmPassword) {
+              readySubmit = false;
+              $q.notify({
+                type: "error",
+                message: "新密码与确定密码不相等",
+              });
+            }
           }
         }
       }
