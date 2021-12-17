@@ -54,25 +54,32 @@
       <BannerSection content="用餐者评价" />
     </div>
     <div class="q-pa-md row items-start q-gutter-md justify-center col-md-4">
-      <CommentCardSection
-        v-for="review in dishData.data.reviews"
-        v-bind="review"
-        :key="review.reviewID"
-        v-on:likeChange="refreshDishData($event)"
-      />
+      <template v-if="dishData.data.reviews.length">
+        <CommentCardSection
+          v-for="review in dishData.data.reviews"
+          v-bind="review"
+          :key="review.reviewID"
+          v-on:likeChange="refreshDishData($event)"
+        />
+      </template>
+      <template v-else>
+        <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
+          暂无评价
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { ref, reactive, computed, watch } from "vue";
-import {useRoute, useRouter} from 'vue-router'
+import { useRoute, useRouter } from "vue-router";
 import { api } from "boot/axios";
 import CommentCardSection from "components/StallPage/CommentCardSection";
 import HomePageAnnouncementSection from "components/HomePage/HomePageAnnouncementSection";
 import BannerSection from "components/Layout/BannerSection";
 import userAppState from "src/store/userAppState";
-import {useQuasar} from "quasar";
+import { useQuasar } from "quasar";
 
 export default {
   name: "Dish",
@@ -99,7 +106,7 @@ export default {
         router.push("/login");
       } else if (this.dishData.data.myDishLike === false) {
         //点赞
-        api.post(this.API_LINK).then(res => {
+        api.post(this.API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.getDishData();
             console.log("successfully thumb up");
@@ -109,7 +116,7 @@ export default {
         });
       } else {
         //取消点赞
-        api.delete(this.API_LINK).then(res => {
+        api.delete(this.API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.getDishData();
             console.log("successfully delete thumb up");
@@ -118,13 +125,13 @@ export default {
           }
         });
       }
-    }
+    },
   },
   setup() {
-    const $q=useQuasar()
+    const $q = useQuasar();
     const route = useRoute();
 
-    let id=route.query.dishID
+    let id = route.query.dishID;
     let API_LINK = `dishes/${id}`; // 之后放真正的API
 
     const dishData = reactive({ data: {} });
