@@ -95,9 +95,7 @@ export default defineComponent({
     const group = ref([]);
 
     const route = useRoute();
-    let name = route.query.stallName;
-    let stall_id = route.query.stallID;
-    //let API_LINK = `stallData/?stallName=${name}`; // 之后放真正的API
+    let stall_id=route.query.stallID
 
     //Image Uploader 相关
     const imageUploader = ref(null);
@@ -116,11 +114,8 @@ export default defineComponent({
     watch(
       () => route.query,
       () => {
-        name = route.query.stallName;
-        stall_id = route.query.stallID;
-        //API_LINK=`stallData/?stallName=${name}`
-        // console.log("watch", route.query.stallName);
-        //console.log("watch", route.query.stallID);
+        stall_id=route.query.stallID
+        // console.log("watch", route.query);
       },
       {
         immediate: true,
@@ -136,14 +131,6 @@ export default defineComponent({
     const stallDishesData = reactive({ data: {} });
     const getStallData = async () => {
       try {
-        const response = await api.get("stalls");
-        for (let key in response.data.data) {
-          if (response.data.data[key].stallName === name) {
-            //console.log(response.data.data[key])
-            stall_id = response.data.data[key].stallID;
-            break;
-          }
-        }
         const response2 = await api.get(`stalls/${stall_id}`);
         stallDishesData.data = response2.data.data.dishes;
         for (let key in stallDishesData.data) {
