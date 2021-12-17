@@ -43,7 +43,7 @@
         />
       </template>
       <template v-else>
-        <div style="opacity: 0.5">
+        <div class="text-center text-h5 q-pa-md" style="opacity: 0.5">
           暂无档口
         </div>
       </template>
