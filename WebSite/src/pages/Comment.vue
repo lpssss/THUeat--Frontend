@@ -211,10 +211,10 @@ export default defineComponent({
             formData.append("reviewImages", "");
           }
 
-          console.log("*** formdata content ***");
-          for (let pair of formData.entries()) {
-            console.log(pair[0] + ", " + pair[1]);
-          }
+          // console.log("*** formdata content ***");
+          // for (let pair of formData.entries()) {
+          //   console.log(pair[0] + ", " + pair[1]);
+          // }
 
           //console.log(stall_id)
           api.post(`reviews?stallID=${stall_id}`, formData).then((res) => {

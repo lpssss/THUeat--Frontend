@@ -266,7 +266,7 @@ export default defineComponent({
   },
   methods: {
     postReviewLikes(ID) {
-      console.log(this.myReviewLike);
+      // console.log(this.myReviewLike);
       let API_LINK = `reviews/like/${ID}`;
 
       //loginstatus相关
@@ -276,25 +276,53 @@ export default defineComponent({
         return token !== null;
       });
 
-      console.log(this.islike);
+      // console.log(this.islike);
       if (!loginStatus.value) {
         this.$router.push("/login");
       } else if (this.myReviewLike === false) {
         api.post(API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.$emit("likeChange");
-            console.log("successfully thumb up");
+            // console.log("successfully thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "点赞失败，请刷新重试",
+            });
           }
         });
       } else {
         api.delete(API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.$emit("likeChange");
-            console.log("successfully delete thumb up");
+            // console.log("successfully delete thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "取消点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "取消点赞失败，请刷新重试",
+            });
           }
         });
       }
