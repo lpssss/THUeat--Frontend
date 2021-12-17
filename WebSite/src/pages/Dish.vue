@@ -101,7 +101,7 @@ export default {
         return token !== null;
       });
 
-      console.log(loginStatus.value);
+      // console.log(loginStatus.value);
       if (!loginStatus.value) {
         router.push("/login");
       } else if (this.dishData.data.myDishLike === false) {
@@ -109,9 +109,23 @@ export default {
         api.post(this.API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.getDishData();
-            console.log("successfully thumb up");
+            // console.log("successfully thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "点赞失败，请刷新重试",
+            });
           }
         });
       } else {
@@ -119,9 +133,23 @@ export default {
         api.delete(this.API_LINK).then((res) => {
           if (res.data.code === 200) {
             this.getDishData();
-            console.log("successfully delete thumb up");
+            //console.log("successfully delete thumb up");
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              timeout: 500,
+              message: "取消点赞成功",
+            });
           } else {
-            console.log("error");
+            // console.log("error");
+            this.$q.notify({
+              color: "red-4",
+              textColor: "white",
+              icon: "error",
+              timeout: 1000,
+              message: "取消点赞失败，请刷新重试",
+            });
           }
         });
       }
@@ -142,6 +170,7 @@ export default {
       try {
         const response = await api.get(API_LINK);
         dishData.data = response.data.data;
+        console.log(dishData.data)
         // console.log(dishData.data.reviews)
         let i = 1;
         dishData.data.dishImages.forEach((item) => {
@@ -155,8 +184,11 @@ export default {
         });
       } catch (err) {
         $q.notify({
-          type: "error",
-          message: "获取食堂信息失败，请刷新重试",
+          color: "red-4",
+          textColor: "white",
+          icon: "error",
+          timeout: 1000,
+          message: "获取菜品信息失败，请刷新重试",
         });
       }
     };

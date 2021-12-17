@@ -151,8 +151,11 @@ export default defineComponent({
         });
       } catch (err) {
         $q.notify({
-          type: "error",
-          message: "获取食堂信息失败，请刷新重试",
+          color: "red-4",
+          textColor: "white",
+          icon: "error",
+          timeout: 1000,
+          message: "获取档口信息失败，请刷新重试",
         });
       }
     };
